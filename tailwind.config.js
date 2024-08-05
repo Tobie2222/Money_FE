@@ -6,7 +6,12 @@ module.exports = {
       colors: {
         "primaryColor": "#438883",
         "textColor": "#666666",
-        
+        "borderColor": "#DCDFE3",
+        "warningColor": "#EF4E4E",
+        "clickButton": "#41C867",
+        "backGroundColor": "#F5F4FB",
+        "iconColor": "#AAAAAA",
+        "backGroundColorWarning": "#FFD7D7"
       }
     },
   },
