@@ -5,7 +5,12 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import ButtonCom from '../components/ButtonCom'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
-import { login } from '../data/Api'
+import {useDispatch,useSelector} from 'react-redux'
+import { loginUser } from '../redux/action/auth'
+import { selectIsAuthenticated, selectToken } from '../redux/authSlice'
+import { saveData } from '../utils/storage'
+import { useEffect } from 'react'
+
 
 const validationSchema = Yup.object().shape({
     // email: Yup.string().email('Email không hợp lệ').required('Email là bắt buộc'),
@@ -14,31 +19,20 @@ const validationSchema = Yup.object().shape({
 
 export default function LoginScreen() {
     const navigation = useNavigation()
-
+    const dispatch=useDispatch()
+    const token=useSelector(selectToken)
+    const isAuthenticated=useSelector(selectIsAuthenticated)
 
     const handleLogin=async(values)=>{
-            console.log(values)
-            try {
-                const response=await login(values)
-                console.log(response.token)
-                if (response.status===200) {
-                    console.log("thành công")
-                } else {
-                    console.log("Thất bại")
-                }
-            } catch(err) {
-                if (err.response) {
-                    console.error("Error Response Data:", err.response.data)
-                    console.error("Error Response Status:", err.response.status)
-                    console.error("Error Response Headers:", err.response.headers)
-                } else if (err.request) {
-                    console.error("Error Request Data:", err.request)
-                } else {
-                    console.error("Error Message:", err.message)
-                }
-                console.error("Error Config:", err.config)
-            }
+        dispatch(loginUser(values))
+        //saveData("token",token)
     }
+    useEffect(()=>{
+        if (token) {
+            saveData("token",token)
+            navigation.navigate("homeScreen")
+        }
+    },[isAuthenticated])
     return (
         <View className="flex-1">
             <StatusBar

@@ -2,8 +2,15 @@ import { View ,Image,Text } from 'react-native'
 import ButtonCom from '../components/ButtonCom'
 import AbstractShape from '../components/AbstractShape'
 import { useNavigation } from '@react-navigation/native'
+import { readData } from '../utils/storage'
 
 export default function StartScreens() {
+    const updateToken=async(key)=>{
+        const token=await readData(key)
+        return token
+    }
+    const tokenValue=updateToken("token")
+    console.log(tokenValue)
     const navigation = useNavigation()
     return (
         <View className="flex-1">
