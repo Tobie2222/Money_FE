@@ -2,16 +2,32 @@ import { View ,Image,Text } from 'react-native'
 import ButtonCom from '../components/ButtonCom'
 import AbstractShape from '../components/AbstractShape'
 import { useNavigation } from '@react-navigation/native'
-import { readData } from '../utils/storage'
+import { readData,saveData } from '../utils/storage'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectIsAuthenticated } from '../redux/authSlice'
 
 export default function StartScreens() {
-    const updateToken=async(key)=>{
-        const token=await readData(key)
-        return token
-    }
-    const tokenValue=updateToken("token")
-    console.log(tokenValue)
+    const [token,setToken]=useState("")
     const navigation = useNavigation()
+    const dispatch=useDispatch()
+    // const isAuthenticated=useSelector(selectIsAuthenticated)
+    // useEffect(()=>{
+    //     const updateToken=async()=>{
+    //         const tokens=await readData("token")
+    //         dispatch(updateToken(tokens))
+    //         setToken(tokens)
+    //     }
+    //     updateToken()
+    // },[])
+    // useEffect(()=>{
+    //     if (token) {
+    //         saveData("token",token)
+    //         navigation.navigate("homeScreen")
+    //     }
+    // },[isAuthenticated])
+
+    // console.log(token)
     return (
         <View className="flex-1">
             <AbstractShape/>

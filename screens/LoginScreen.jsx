@@ -5,11 +5,10 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import ButtonCom from '../components/ButtonCom'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
-import {useDispatch,useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import { loginUser } from '../redux/action/auth'
-import { selectIsAuthenticated, selectToken } from '../redux/authSlice'
-import { saveData } from '../utils/storage'
-import { useEffect } from 'react'
+import { useState } from 'react'
+
 
 
 const validationSchema = Yup.object().shape({
@@ -19,22 +18,18 @@ const validationSchema = Yup.object().shape({
 
 export default function LoginScreen() {
     const navigation = useNavigation()
+    const [focusEmail,setFocusEmail]=useState(false)
+    const [focusPassword,setFocusPassword]=useState(false)
     const dispatch=useDispatch()
-    const token=useSelector(selectToken)
-    const isAuthenticated=useSelector(selectIsAuthenticated)
 
     const handleLogin=async(values)=>{
         dispatch(loginUser(values))
         //saveData("token",token)
+        onFo
     }
-    useEffect(()=>{
-        if (token) {
-            saveData("token",token)
-            navigation.navigate("homeScreen")
-        }
-    },[isAuthenticated])
+
     return (
-        <View className="flex-1">
+        <View className="flex-1 bg-white">
             <StatusBar
                 barStyle="black"
             />
@@ -57,27 +52,35 @@ export default function LoginScreen() {
                                     <Text className="text-warningColor ml-[10px]">{errors.email}</Text>
                                 </View>
                             )} */}
-                            <View className="w-full flex-row items-center border border-borderColor px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] ">
-                                <Icon name="envelope" size={20} color="#666666" />
+                            <View className={`w-full flex-row  items-center px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] ${focusEmail===true?"border border-primaryColor ":"border border-borderColor "}`}>
+                                <Icon name="envelope" size={20} color="#AAAAAA" />
                                 <TextInput
                                     placeholder="Email"
                                     onChangeText={handleChange('email')}
-                                    onBlur={handleBlur('email')}
+                                    onBlur={()=>{
+                                        handleBlur('email')
+                                        setFocusEmail(false)
+                                    }}
                                     value={values.email}
-                                    className="text-[16px] leading-[20px] w-[85%] text-textColor ml-[10px] "
+                                    className="text-[16px] leading-[20px] w-[85%] text-textColor ml-[10px]"
+                                    onFocus={()=>setFocusEmail(true)}
                                 />
                             </View>
-                            <View className="w-full my-[20px] flex-row items-center border border-borderColor px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] ">
-                                <Icon name="lock" size={20} color="#666666" />
+                            <View className={`w-full my-[20px] flex-row  items-center ${focusPassword===true?"border border-primaryColor ":"border border-borderColor "} px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px]`}>
+                                <Icon name="lock" size={20} color="#AAAAAA" />
                                 <TextInput
                                     placeholder="Password"
                                     onChangeText={handleChange('password')}
-                                    onBlur={handleBlur('email')}
+                                    onBlur={()=>{
+                                        handleBlur('password')
+                                        setFocusEmail(false)
+                                    }}
                                     value={values.password}
                                     className="text-[16px] leading-[20px] text-textColor ml-[10px] w-[85%]  "
                                     secureTextEntry={true}
+                                    onFocus={()=>setFocusPassword(true)}
                                 />
-                                <Icon name="eye" size={20} color="#666666" />
+                                <Icon name="eye" size={20} color="#AAAAAA" />
                             </View>
                             <ButtonCom
                                 text="Đăng nhập"
@@ -92,7 +95,7 @@ export default function LoginScreen() {
                     <Text className="text-[16px] leading-[24px] font-[600] text-primaryColor">Quên mật khẩu ?</Text>
                 </TouchableOpacity>
                 <View className="mx-auto mt-[140px]">
-                    <Text className="text-[16px] leading-[24px] font-[400] text-[#242D35]">Bạn chưa có tài khoản ? <TouchableOpacity onPress={()=>navigation.navigate("registerScreen")}><Text className="text-[#0E33F3] text-[16px] font-[600]">Đăng ký</Text></TouchableOpacity></Text>
+                    <Text className="text-[16px] leading-[24px] font-[400] text-[#AAAAAA]">Bạn chưa có tài khoản ? <TouchableOpacity onPress={()=>navigation.navigate("registerScreen")}><Text className="text-[#6d85fc] text-[16px] font-[600]">Đăng ký</Text></TouchableOpacity></Text>
                 </View>
             </ScrollView>
         </View>
