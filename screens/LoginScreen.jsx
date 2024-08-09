@@ -28,10 +28,17 @@ export default function LoginScreen() {
     const error=useSelector(selectError)
     const dispatch=useDispatch()
 
-    const handleLogin=async(values)=>{
-        dispatch(loginUser(values))
-        //saveData("token",token)
+    const handleLogin = async (values) => {
+        const resultAction = await dispatch(loginUser(values));
+        if (loginUser.rejected.match(resultAction)) {
+            // Có lỗi khi đăng nhập
+            console.log("Lỗi đăng nhập:", resultAction.payload.message);
+        } else if (loginUser.fulfilled.match(resultAction)) {
+            // Đăng nhập thành công
+            console.log("Đăng nhập thành công:", resultAction.payload.token);
+        }
     }
+    
 
     return (
         <View className="flex-1 bg-white">
@@ -54,12 +61,14 @@ export default function LoginScreen() {
                         >
                             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                                 <View className="w-[330px] flex-col mt-[60px] mx-auto ">
-                                    {(touched.email && errors.email) || ( touched.password && errors.password ) || error ? (
-                                        <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
-                                            <Icon name="exclamation-circle" size={20} color="#EF4E4E" />
-                                            <Text className="text-warningColor ml-[10px]">{errors.email || errors.password || message}</Text>
-                                        </View>
-                                    ): null}
+                                {(touched.email && errors.email) || (touched.password && errors.password) || (error && message) ? (
+    <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
+        <Icon name="exclamation-circle" size={20} color="#EF4E4E" />
+        <Text className="text-warningColor ml-[10px]">
+            {errors.email || errors.password || message}
+        </Text>
+    </View>
+) : null}
                                     <View className={`w-full flex-row  items-center px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] ${focusEmail===true?"border border-primaryColor ":"border border-borderColor "}`}>
                                         <Icon name="envelope" size={20} color="#AAAAAA" />
                                         <TextInput

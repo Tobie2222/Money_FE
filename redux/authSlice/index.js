@@ -29,6 +29,7 @@ const authSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.loading = true
         state.error = null
+        
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.success=true
@@ -36,6 +37,7 @@ const authSlice = createSlice({
         state.loading = false
         state.token = action.payload.token
         state.token = action.payload.message
+        state.message = ""
         console.log(action.payload)
       })
       .addCase(loginUser.rejected, (state, action) => {
