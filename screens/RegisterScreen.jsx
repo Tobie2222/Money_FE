@@ -30,12 +30,12 @@ export default function RegisterScreen() {
     const handleSubmit=async(values)=>{
         try {
             console.log(values)
-            const response=await register(values)
-            if (response.status===200) {
-                console.log("success")
-            } else {
-                console.log("fail")
-            }
+            // const response=await register(values)
+            // if (response.status===200) {
+            //     console.log("success")
+            // } else {
+            //     console.log("fail")
+            // }
         } catch(err) {
             console.log(err)
         }
@@ -56,7 +56,7 @@ export default function RegisterScreen() {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                    {({ handleChange, handleBlur, handleSubmit,setFieldValue, values, errors, touched }) => (
                         <View className="w-[330px] flex-col mt-[60px] mx-auto ">
                             {/* {touched.email && errors.email && (
                                 <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
@@ -133,6 +133,7 @@ export default function RegisterScreen() {
                                     placeholder="Giới tính"
                                     value={selectedValue}
                                     onChange={item => {
+                                        setFieldValue('sex', item.value)
                                         setSelectedValue(item.value)
                                     }}
                                     renderItem={item => (

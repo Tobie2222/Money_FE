@@ -8,12 +8,14 @@ const authSlice = createSlice({
     loading: false,
     success: null,
     error: false,
-    isAuthenticated: false
+    isAuthenticated: false,
+    message: ""
   },
   reducers: {
     logout(state) {
       state.isAuthenticated=false
       state.token=""
+      state.message=""
       state.loading=false
       state.error=false
       state.success=false
@@ -33,11 +35,14 @@ const authSlice = createSlice({
         state.isAuthenticated = true
         state.loading = false
         state.token = action.payload.token
+        state.token = action.payload.message
         console.log(action.payload)
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false
-        state.error = action.payload
+        state.error = true
+        state.message = action.payload.message
+        console.log(action.payload)
       })
   }
 })
@@ -49,5 +54,6 @@ export const selectToken=(state)=>state.auth.token
 export const selectLoading=(state)=>state.auth.loading
 export const selectError=(state)=>state.auth.error
 export const selectSuccess=(state)=>state.auth.success
+export const selectMessage=(state)=>state.auth.message
 
 export default authSlice.reducer

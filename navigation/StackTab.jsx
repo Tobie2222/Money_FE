@@ -7,6 +7,7 @@ import LoginScreen from "../screens/LoginScreen"
 import RegisterScreen from "../screens/RegisterScreen"
 import VerifyCodeScreen from "../screens/VerifyCodeScreen"
 import ForgotPassword from "../screens/ForgotPassword"
+import ResetPasswordScreen from "../screens/ResetPasswordScreen"
 const Stack=createStackNavigator()
 
 export default function StackTab() {
@@ -20,6 +21,7 @@ export default function StackTab() {
                 <Stack.Screen name="registerScreen" component={RegisterScreen}/>
                 <Stack.Screen name="verifyCodeScreen" component={VerifyCodeScreen}/>
                 <Stack.Screen name="forgotPassword" component={ForgotPassword}/>
+                <Stack.Screen name="resetPasswordScreen" component={ResetPasswordScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
