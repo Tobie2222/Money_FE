@@ -43,7 +43,7 @@ export default function LoginScreen() {
     useEffect(()=>{
         if (token) {
             //saveData("token",token)
-            navigation.navigate("homeScreen")
+            navigation.navigate("bottomTabScreen")
         }
     },[isAuthenticated])
     return (

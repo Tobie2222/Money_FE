@@ -1,4 +1,4 @@
-import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message'
 
 export const showToast = (type, message, title) => {
     Toast.show({
@@ -10,5 +10,5 @@ export const showToast = (type, message, title) => {
         autoHide: true,
         topOffset: 30,
         onHide: () => console.log('Toast hidden'),
-    });
-};
+    })
+}

@@ -1,8 +1,8 @@
-import { View ,Text,StatusBar,StyleSheet,Image, ScrollView} from 'react-native'
+import { View ,Text,StatusBar,StyleSheet,Image, ScrollView, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AbstractCircle from '../components/AbstractCircle'
-import TabScreen from '../navigation/TabScreen'
-import TabViewExample from '../components/tabView'
+import TabViews from '../components/TabViews'
+import { useState } from 'react'
 
 
 const labelCost=[
@@ -15,13 +15,16 @@ const labelCost=[
 ]
 
 export default function HomeScreen() {
+    const [hiddenTime,setHiddenTime]=useState(false)
+    const [valueTime,setValueTime]=useState("Tháng này")
     return (
         <View className="flex-1">
             <AbstractCircle/>
             <StatusBar
                 barStyle="light-content"
             />
-            <ScrollView>
+            <ScrollView className=" ">
+                {/* my account */}
                 <View className="flex-row items-center w-full justify-between mt-[70px] px-[20px]">
                     <Text className="text-white text-[24px] leading-[33px] font-[700] ">1.500.000 đ</Text>
                     <Icon name={"bell"} size={25} color="#fff" />
@@ -43,13 +46,14 @@ export default function HomeScreen() {
                         <Text className="text-textColor text-[16px] leading-[24px] font-[500]">1.500.000 đ</Text>
                     </View>
                 </View>
+                {/* report */}
                 <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] my-[20px] ">Báo cáo chi tiêu</Text>
                 <View className="w-[91%] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                     <Text className="text-[#000000] text-[18px] leading-[27px] font-[500]">12.000.000.000 đ</Text>
                     <Text className="text-textColor mt-[5px] text-[14px] leading-[21px] font-[500]">Tổng chi tháng này  <Text className="text-clickButton font-[600]">Tăng 20%</Text></Text>
-                    <TabViewExample/>
-                    <View className="flex-row justify-between h-[200px] mt-[5px] ">
-                        <View className="flex-row gap-[30px] items-end">
+                    <TabViews/>
+                    <View className="flex-row justify-between ">
+                        <View className="flex-row gap-[25px] items-end">
                             <View className="flex-col items-end">
                                 {
                                     labelCost.map((item)=>{
@@ -63,13 +67,99 @@ export default function HomeScreen() {
                             <View className="w-[10px] h-[160px] bg-[#22C55E] rounded-[30px] "></View>
                             <View className="w-[10px] h-[108px] bg-[#A855F7] rounded-[30px] "></View>
                         </View>
-                        <View className="">
-                            
+                        <View className="mt-[15px] ">
+                            <TouchableOpacity activeOpacity={0.9} onPress={()=>setHiddenTime(!hiddenTime)} className=" flex-row items-center gap-[5px] relative mb-[60px] ml-auto">
+                                <Text className="text-[#4B7BE5] font-[500] text-[15px] ">{valueTime}</Text>
+                                <Icon name={"chevron-down"} size={18} color="#4B7BE5" />
+                                {
+                                    hiddenTime && (
+                                        <View  className="absolute w-[100px] bg-[#f0eef1] rounded-[4px] top-[100%] px-[5px] ">
+                                            <TouchableOpacity onPress={()=>{setHiddenTime(false); setValueTime("Tháng này")}}><Text  className="text-textColor font-[400] text-[14px] mt-[5px]">Tháng này</Text></TouchableOpacity>
+                                            <TouchableOpacity  onPress={()=>{setHiddenTime(false); setValueTime("Tháng trước")}}><Text className="text-textColor font-[400] text-[14px] my-[5px]">Tháng trước</Text></TouchableOpacity>
+                                        </View>
+                                    )
+                                }
+                            </TouchableOpacity>
+                            <View className="flex-col gap-[10px] ">
+                                <View className="flex-row items-center ">
+                                    <View className="flex-row items-center gap-[5px]">
+                                        <View className="w-[15px] h-[15px] bg-[#22C55E] rounded-[50%]"></View>
+                                        <Text className="text-[15px] font-[700] text-[#606C80]">Tiền thu</Text>
+                                    </View>
+                                    <Text className="ml-[16px] leading-[24px] text-[#B8BFCC]  font-[700] text-[14px] ">25.000k</Text>
+                                </View>
+                                <View className="flex-row items-center ">
+                                    <View className="flex-row items-center gap-[5px] ">
+                                        <View className="w-[15px] h-[15px] bg-[#A855F7] rounded-[50%]"></View>
+                                        <Text className="text-[15px] font-[700] text-[#606C80]">Tiền chi</Text>
+                                    </View>
+                                    <Text className="ml-[16px] leading-[24px] text-[#B8BFCC]  font-[700] text-[14px] ">25.000k</Text>
+                                </View>
+                            </View>
+                            <View className="w-full h-[1px] bg-borderColor my-[15px]"></View>
+                            <Text className="ml-auto leading-[24px] text-[#B8BFCC]  font-[700] text-[14px] ">25.000k</Text>
                         </View>
                     </View>
                 </View>
+                {/* recent spending */}
+                <View className="flex-row justify-between my-[20px] mx-[20px] ">
+                    <Text className="text-textColor text-[14px] leading-[21px] font-[600] ">Chi tiêu gần đây</Text>
+                    <TouchableOpacity activeOpacity={0.9}>
+                        <Text  className="text-primaryColor text-[14px] leading-[21px] font-[600] ">Xem tất cả</Text>
+                    </TouchableOpacity>
+                </View>
+                <View className="w-[91%]  bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
+                    <View className="flex-row justify-between items-center ">
+                        <View className="flex-row items-center gap-[10px] ">
+                            <Image
+                                source={require("../assets/pig.png")}
+                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
+                            />
+                            <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Ăn uống</Text>
+                        </View>
+                        <Text className="text-warningColor text-[16px] leading-[24px] font-[500]">-1.500.000 đ</Text>
+                    </View>
+                    <View className="flex-row justify-between items-center mt-[15px] ">
+                        <View className="flex-row items-center gap-[10px] ">
+                            <Image
+                                source={require("../assets/pig.png")}
+                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
+                            />
+                            <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Đổ xăng</Text>
+                        </View>
+                        <Text className="text-warningColor text-[16px] leading-[24px] font-[500]">-1.500.000 đ</Text>
+                    </View>
+                </View>
+                {/* recent income */}
+                <View className="flex-row justify-between my-[20px] mx-[20px] ">
+                    <Text className="text-textColor text-[14px] leading-[21px] font-[600] ">Thu nhập gần đây</Text>
+                    <TouchableOpacity activeOpacity={0.9}>
+                        <Text  className="text-primaryColor text-[14px] leading-[21px] font-[600] ">Xem tất cả</Text>
+                    </TouchableOpacity>
+                </View>
+                <View className="w-[91%]  bg-white mx-auto rounded-[12px] py-[15px] px-[20px] mb-[30px]" style={styles.shadowS}>
+                    <View className="flex-row justify-between items-center ">
+                        <View className="flex-row items-center gap-[10px] ">
+                            <Image
+                                source={require("../assets/pig.png")}
+                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
+                            />
+                            <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Ăn uống</Text>
+                        </View>
+                        <Text className="text-warningColor text-[16px] leading-[24px] font-[500]">-1.500.000 đ</Text>
+                    </View>
+                    <View className="flex-row justify-between items-center mt-[15px] ">
+                        <View className="flex-row items-center gap-[10px] ">
+                            <Image
+                                source={require("../assets/pig.png")}
+                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
+                            />
+                            <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Đổ xăng</Text>
+                        </View>
+                        <Text className="text-warningColor text-[16px] leading-[24px] font-[500]">-1.500.000 đ</Text>
+                    </View>
+                </View>
             </ScrollView>
-
         </View>
     )
 }
@@ -86,6 +176,17 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.20,
         shadowRadius: 1.41,
+        elevation: 2
+    },
+    shadowX: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 2,
+            height: 2,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 1.00,
+
         elevation: 2
     }
 })
