@@ -9,7 +9,7 @@ const authSlice = createSlice({
     success: null,
     error: false,
     isAuthenticated: false,
-    message: ""
+    message: "",
   },
   reducers: {
     logout(state) {

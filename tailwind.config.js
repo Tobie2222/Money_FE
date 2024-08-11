@@ -12,7 +12,10 @@ module.exports = {
         "backGroundColor": "#F5F4FB",
         "iconColor": "#AAAAAA",
         "backGroundColorWarning": "#FFD7D7"
-      }
+      },
+      scale: {
+        'x-2': '2', // Thêm lớp scaleX tùy chỉnh
+      },
     },
   },
   plugins: [],
