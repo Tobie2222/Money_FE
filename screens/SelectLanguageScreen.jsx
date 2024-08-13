@@ -4,8 +4,10 @@ import AbstractShape from '../components/AbstractShape'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ButtonCom from '../components/ButtonCom'
 import { useNavigation } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 
 export default function SelectLanguageScreen() {
+    const {i18n}=useTranslation()
     const navigation = useNavigation()
     const [selectedValue, setSelectedValue] = useState("")
     const [hiddenListLang,setHiddenListLang]=useState(false)
@@ -18,9 +20,11 @@ export default function SelectLanguageScreen() {
     
     ]
     const handleSelectLang=(values)=>{
+
         setSelectedValue(values) 
         setHiddenListLang(false)
     }
+    
     return (
         <View className="flex-1 relative ">
             <AbstractShape/>

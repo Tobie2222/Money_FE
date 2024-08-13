@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import Loading from '../components/Loading'
 import { selectError, selectIsAuthenticated, selectLoading, selectMessage, selectToken } from '../redux/authSlice'
 import { showToast } from '../utils/toast'
+import { saveData } from '../utils/storage'
 
 
 
@@ -42,7 +43,7 @@ export default function LoginScreen() {
     }
     useEffect(()=>{
         if (token) {
-            //saveData("token",token)
+            saveData("token",token)
             navigation.navigate("bottomTabScreen")
         }
     },[isAuthenticated])

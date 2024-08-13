@@ -3,6 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import AbstractCircle from '../components/AbstractCircle'
 import TabViews from '../components/TabViews'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 
 const labelCost=[
@@ -17,6 +18,7 @@ const labelCost=[
 export default function HomeScreen() {
     const [hiddenTime,setHiddenTime]=useState(false)
     const [valueTime,setValueTime]=useState("Tháng này")
+    const {t}=useTranslation()
     return (
         <View className="flex-1">
             <AbstractCircle/>
@@ -29,7 +31,7 @@ export default function HomeScreen() {
                     <Text className="text-white text-[24px] leading-[33px] font-[700] ">1.500.000 đ</Text>
                     <Icon name={"bell"} size={25} color="#fff" />
                 </View>
-                <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] ">Tổng số dư?</Text>
+                <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] ">{t('Balance')}</Text>
                 <View className="w-[91%]  mt-[20px] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                     <View className="flex-row justify-between ">
                         <Text className="text-[#000000] text-[15px] leading-[22px] font-[500]">Ví của tôi</Text>

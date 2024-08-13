@@ -11,6 +11,7 @@ const Tab=createMaterialBottomTabNavigator()
 export default function BottomTabScreens() {
     return (
         <Tab.Navigator 
+            
             initialRouteName="homeScreen" 
             activeColor="#438883"
             inactiveColor="#AAAAAA"
@@ -19,22 +20,26 @@ export default function BottomTabScreens() {
                 height: 80
             }}
             shifting={false}
+            screenOptions={{
+                tabBarColor: 'red'
+            }}
         >
             <Tab.Screen 
                 name="homeScreen" component={HomeScreen}
                 options={{
                 tabBarLabel: null,
                 tabBarIcon: ({ color }) => (
-                    <Icon name="home" color={color} size={26} />
+                    <Icon name="home" color={color} size={26} style={{backgroundColor: "transparent"}}/>
                 ),
-        }}
+                
+            }}
             />
             <Tab.Screen 
-                name="settingScreen" component={SettingScreen}
+                name="analysis" component={Analysis}
                 options={{
                     tabBarLabel: null,
                     tabBarIcon: ({ color }) => (
-                        <Icon name="cog" color={color} size={26} />
+                        <Icon name="bar-chart" color={color} size={26} />
                     )
                 }}
             />
@@ -57,11 +62,11 @@ export default function BottomTabScreens() {
                 }}
             />
             <Tab.Screen 
-                name="analysis" component={Analysis}
+                name="settingScreen" component={SettingScreen}
                 options={{
                     tabBarLabel: null,
                     tabBarIcon: ({ color }) => (
-                        <Icon name="bar-chart" color={color} size={26} />
+                        <Icon name="cog" color={color} size={26} />
                     )
                 }}
             />

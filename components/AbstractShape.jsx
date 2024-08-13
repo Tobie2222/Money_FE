@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 
-export default function AbstractShape ({className=""}) {
+export default function AbstractShape () {
     return (
         <View className="relative z-[-1]">
             <View className="absolute w-full h-[400px] bg-[#D6EEEB]"></View>

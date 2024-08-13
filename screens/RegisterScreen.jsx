@@ -30,6 +30,8 @@ export default function RegisterScreen() {
     const [focusPassword,setFocusPassword]=useState(false)
     const [focusName,setFocusName]=useState(false)
     const [focusConfirmPassword,setFocusConfirmPassword]=useState(false)
+    const [hiddenPassword,setHiddenPassword]=useState(false)
+    const [hiddenConfirmPassword,setHiddenConfirmPassword]=useState(false)
     const [focusSex,setFocusSex]=useState(false)
     const handleSubmit = async (values) => {
         try {
@@ -126,9 +128,11 @@ export default function RegisterScreen() {
                                         onFocus={()=>setFocusPassword(true)}
                                         value={values.password}
                                         className="text-[16px] leading-[20px] text-textColor ml-[10px] w-[85%]  "
-                                        secureTextEntry={true}
+                                        secureTextEntry={!hiddenPassword}
                                     />
-                                    <Icon name="eye" size={20} color="#AAAAAA" />
+                                    <TouchableOpacity onPress={()=>setHiddenPassword(!hiddenPassword)}>
+                                        <Icon name={`${hiddenPassword===true?"eye-slash":"eye"}`} size={20} color="#AAAAAA" />
+                                    </TouchableOpacity>
                                 </View>
                                 <View className={`w-full mt-[10px] flex-row items-center ${focusConfirmPassword===true?"border border-primaryColor ":"border border-borderColor "} px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] `}>
                                     <Icon name="lock" size={20} color="#AAAAAA" />
@@ -142,9 +146,11 @@ export default function RegisterScreen() {
                                         onFocus={()=>setFocusConfirmPassword(true)}
                                         value={values.confirmPassword}
                                         className="text-[16px] leading-[20px] text-textColor ml-[10px] w-[85%]  "
-                                        secureTextEntry={true}
+                                        secureTextEntry={!hiddenConfirmPassword}
                                     />
-                                    <Icon name="eye" size={20} color="#AAAAAA" />
+                                    <TouchableOpacity onPress={()=>setFocusConfirmPassword(!hiddenConfirmPassword)}>
+                                        <Icon name={`${hiddenConfirmPassword===true?"eye-slash":"eye"}`} size={20} color="#AAAAAA" />
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={styles.container} className={`w-full rounded-[14px] ${focusSex===true?"border border-primaryColor ":"border border-borderColor "}`}>
                                     <Dropdown

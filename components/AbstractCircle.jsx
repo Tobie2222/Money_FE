@@ -1,11 +1,11 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function AbstractCircle() {
+export default function AbstractCircle({shadowS,className=""}) {
     return (
         <View className="relative z-[-1]">
-            <View className="absolute w-full h-[300px] bg-primaryColor"></View>
-            <View className="absolute h-[115px] w-[115px] top-[250px] left-[150px] bg-primaryColor rounded-[50px] scale-x-[4]"></View>
+            <View style={shadowS} className="absolute h-[115px] w-[115px] top-[220px] left-[150px] bg-primaryColor rounded-[50px] scale-x-[4]"></View>
+            <View className={`absolute  w-full h-[250px] bg-primaryColor`}></View>
         </View>
     )
 }
