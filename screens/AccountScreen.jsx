@@ -1,4 +1,4 @@
-import { View ,StyleSheet,Image,Text} from 'react-native';
+import {  View ,StyleSheet,Image,Text, StatusBar, ScrollView,TouchableOpacity,Modal } from 'react-native'
 
 
 export default function AccountScreen() {
@@ -6,7 +6,6 @@ export default function AccountScreen() {
         <View className="flex-1">
             
         </View>
-
-    );
+    )
 }
 

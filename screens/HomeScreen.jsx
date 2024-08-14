@@ -20,37 +20,39 @@ export default function HomeScreen() {
     const [valueTime,setValueTime]=useState("Tháng này")
     const {t}=useTranslation()
     return (
-        <View className="flex-1">
+        <View className="flex-1 ">
             <AbstractCircle/>
             <StatusBar
                 barStyle="light-content"
             />
-            <ScrollView className=" ">
-                {/* my account */}
+            <ScrollView>
                 <View className="flex-row items-center w-full justify-between mt-[70px] px-[20px]">
                     <Text className="text-white text-[24px] leading-[33px] font-[700] ">1.500.000 đ</Text>
                     <Icon name={"bell"} size={25} color="#fff" />
                 </View>
                 <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] ">{t('Balance')}</Text>
+                {/* my account */}
                 <View className="w-[91%]  mt-[20px] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
-                    <View className="flex-row justify-between ">
-                        <Text className="text-[#000000] text-[15px] leading-[22px] font-[500]">Ví của tôi</Text>
-                        <Text className="text-clickButton text-[14px] leading-[18px] font-[500]">Xem tất cả</Text>
-                    </View>
-                    <View className="flex-row justify-between items-center mt-[10px] ">
-                        <View className="flex-row items-center gap-[5px] ">
-                            <Image
-                                source={require("../assets/pig.png")}
-                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
-                            />
-                            <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Tiền mặt</Text>
+                        <View className="flex-row justify-between ">
+                            <Text className="text-[#000000] text-[15px] leading-[22px] font-[500]">Ví của tôi</Text>
+                            <Text className="text-clickButton text-[14px] leading-[18px] font-[500]">Xem tất cả</Text>
                         </View>
-                        <Text className="text-textColor text-[16px] leading-[24px] font-[500]">1.500.000 đ</Text>
+                        
+                        <View className="flex-row justify-between items-center mt-[10px] ">
+                            <View className="flex-row items-center gap-[10px] ">
+                                <Image
+                                    source={require("../assets/pig.png")}
+                                    className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
+                                />
+                                <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Tiền mặt</Text>
+                            </View>
+                            <Text className="text-textColor text-[16px] leading-[24px] font-[500]">1.500.000 đ</Text>
+                        </View>
                     </View>
-                </View>
-                {/* report */}
                 <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] my-[20px] ">Báo cáo chi tiêu</Text>
-                <View className="w-[91%] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
+                                {/* report */}
+                
+                                <View className="w-[91%] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                     <Text className="text-[#000000] text-[18px] leading-[27px] font-[500]">12.000.000.000 đ</Text>
                     <Text className="text-textColor mt-[5px] text-[14px] leading-[21px] font-[500]">Tổng chi tháng này  <Text className="text-clickButton font-[600]">Tăng 20%</Text></Text>
                     <TabViews/>
@@ -85,14 +87,14 @@ export default function HomeScreen() {
                             <View className="flex-col gap-[10px] ">
                                 <View className="flex-row items-center ">
                                     <View className="flex-row items-center gap-[5px]">
-                                        <View className="w-[15px] h-[15px] bg-[#22C55E] rounded-[50%]"></View>
+                                        <View className="w-[15px] h-[15px] bg-[#22C55E] rounded-[100px]"></View>
                                         <Text className="text-[15px] font-[700] text-[#606C80]">Tiền thu</Text>
                                     </View>
                                     <Text className="ml-[16px] leading-[24px] text-[#B8BFCC]  font-[700] text-[14px] ">25.000k</Text>
                                 </View>
                                 <View className="flex-row items-center ">
                                     <View className="flex-row items-center gap-[5px] ">
-                                        <View className="w-[15px] h-[15px] bg-[#A855F7] rounded-[50%]"></View>
+                                        <View className="w-[15px] h-[15px] bg-[#A855F7] rounded-[100px]"></View>
                                         <Text className="text-[15px] font-[700] text-[#606C80]">Tiền chi</Text>
                                     </View>
                                     <Text className="ml-[16px] leading-[24px] text-[#B8BFCC]  font-[700] text-[14px] ">25.000k</Text>
@@ -115,7 +117,7 @@ export default function HomeScreen() {
                         <View className="flex-row items-center gap-[10px] ">
                             <Image
                                 source={require("../assets/pig.png")}
-                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
+                                className="w-[35px] h-[35px] rounded-[200px] object-cover border border-borderColor "
                             />
                             <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Ăn uống</Text>
                         </View>
@@ -125,7 +127,7 @@ export default function HomeScreen() {
                         <View className="flex-row items-center gap-[10px] ">
                             <Image
                                 source={require("../assets/pig.png")}
-                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
+                                className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
                             />
                             <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Đổ xăng</Text>
                         </View>
@@ -144,7 +146,7 @@ export default function HomeScreen() {
                         <View className="flex-row items-center gap-[10px] ">
                             <Image
                                 source={require("../assets/pig.png")}
-                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
+                                className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
                             />
                             <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Ăn uống</Text>
                         </View>
@@ -154,13 +156,21 @@ export default function HomeScreen() {
                         <View className="flex-row items-center gap-[10px] ">
                             <Image
                                 source={require("../assets/pig.png")}
-                                className="w-[35px] h-[35px] rounded-[50%] object-cover border border-borderColor "
+                                className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
                             />
                             <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Đổ xăng</Text>
                         </View>
                         <Text className="text-warningColor text-[16px] leading-[24px] font-[500]">-1.500.000 đ</Text>
                     </View>
                 </View>
+            </ScrollView>
+
+        </View>
+    )
+    return (
+        <View className="flex-1">
+            <ScrollView className=" ">
+
             </ScrollView>
         </View>
     )

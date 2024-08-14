@@ -57,7 +57,7 @@ export default function SelectLanguageScreen() {
                                             <TouchableOpacity onPress={()=>handleSelectLang(item.value) } key={index}  className="flex-row py-[10px] px-[16px] bg-white items-center gap-[10px]">
                                                 <Image
                                                     source={{ uri: item.image }}
-                                                    className="w-[28px] h-[18px] rounded-[4px] border-2 border-borderColor "
+                                                    className="w-[28px] h-[18px] rounded-[4px] border-[2px] border-borderColor "
                                                 />
                                                 <Text className="text-[16px] font-[500] text-textColor">{item.value}</Text>
                                             </TouchableOpacity>

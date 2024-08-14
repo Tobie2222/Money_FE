@@ -9,6 +9,7 @@ import VerifyCodeScreen from "../screens/VerifyCodeScreen"
 import ForgotPassword from "../screens/ForgotPassword"
 import ResetPasswordScreen from "../screens/ResetPasswordScreen"
 import BottomTabScreens from "./BottomTabScreens"
+import NotificationScreen from "../screens/NotificationScreen"
 const Stack=createStackNavigator()
 
 export default function StackTab() {
@@ -26,6 +27,7 @@ export default function StackTab() {
                 </Stack.Group>
 
                 <Stack.Screen name="homeScreen" component={HomeScreen}/>
+                <Stack.Screen name="notificationScreen" component={NotificationScreen}/>
                 <Stack.Screen name="bottomTabScreen" component={BottomTabScreens}/>
             </Stack.Navigator>
         </NavigationContainer>
