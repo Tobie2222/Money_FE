@@ -1,9 +1,9 @@
 import { View ,StatusBar,TouchableOpacity,StyleSheet,Text, Keyboard} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import AbstractShape from '../components/AbstractShape'
+import AbstractShape from '../../components/AbstractShape'
 import { useState } from 'react'
-import ButtonCom from '../components/ButtonCom'
+import ButtonCom from '../../components/ButtonCom'
 import {OtpInput} from "react-native-otp-entry"
 
 

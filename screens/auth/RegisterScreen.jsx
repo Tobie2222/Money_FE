@@ -3,11 +3,13 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import ButtonCom from '../components/ButtonCom'
+import ButtonCom from '../../components/ButtonCom'
 import { useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
-import { register } from '../data/Api'
-import Loading from '../components/Loading'
+import { register } from '../../data/Api'
+import Loading from '../../components/Loading'
+import axios from 'axios'
+
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Email không hợp lệ').required('Email là bắt buộc'),
@@ -33,24 +35,46 @@ export default function RegisterScreen() {
     const [hiddenPassword,setHiddenPassword]=useState(false)
     const [hiddenConfirmPassword,setHiddenConfirmPassword]=useState(false)
     const [focusSex,setFocusSex]=useState(false)
+
+    // const checkEmail=async(email)=>{
+    //     try {
+    //         const response=await axios.get(`https://api.zerobounce.net/v2/validate`, {
+    //         params: {
+    //             email: email,
+    //             api_key: "fee798be931b48d1b6a27e494cd268f4",
+    //         }})
+    //         return response.data
+    //     } catch(err) {
+    //         console.log(err)
+    //     }
+    // }
+
     const handleSubmit = async (values) => {
         try {
+            // const checkMail=await checkEmail(values.email)
+            // if (checkMail.status!=="!valid") {
+            //     setErr(true)
+            //     setMessage("Email không tồn tại")
+            //     return
+            // }
+
             setLoading(true)
             const response = await register(values)
             if (response.status === 200) {
                 setMessage(response.data.message)
-                navigation.navigate("loginScreen", { registrationSuccess: true })
+                navigation.navigate("loginScreen", { registrationSuccess: true ,messageR:response.data.message})
             } else {
                 setMessage(response.data.message)
                 setErr(true)
             }
         } catch (err) {
             if (err.response) {
-                console.log("Response data:", err.response.data)
-                setMessage(err.response.data.message)
-                setErr(true)
-                console.log("Response status:", err.response.status)
-                console.log("Response headers:", err.response.headers)
+                if (err.response.data.message.code === 11000) {
+                    setMessage("Email đã tồn tại, vui lòng sử dụng email khác.")
+                } else {
+                    setMessage(err.response.data.message)
+                }
+                setErr(true);
             } else if (err.request) {
                 console.log("Request data:", err.request)
             } else {
@@ -61,6 +85,7 @@ export default function RegisterScreen() {
         }
     }
     
+    
     return (
         <View className="flex-1 bg-white">
             <StatusBar
@@ -70,7 +95,7 @@ export default function RegisterScreen() {
                 loading===true?(<Loading color='#438883'/>):(
                 <ScrollView>
                     <Image
-                        source={require("../assets/pig.png")}
+                        source={require("../../assets/pig.png")}
                         className="w-[150px] h-[180px] mt-[70px] mx-auto object-cover "
                     />
                     <Text className="mx-auto mt-[10px] text-center font-[700] leading-[39px] text-[26px] text-primaryColor w-[300px]"><Text className="text-[#FBBE4A]">M</Text>.app</Text>
@@ -148,7 +173,7 @@ export default function RegisterScreen() {
                                         className="text-[16px] leading-[20px] text-textColor ml-[10px] w-[85%]  "
                                         secureTextEntry={!hiddenConfirmPassword}
                                     />
-                                    <TouchableOpacity onPress={()=>setFocusConfirmPassword(!hiddenConfirmPassword)}>
+                                    <TouchableOpacity onPress={()=>setHiddenConfirmPassword(!hiddenConfirmPassword)}>
                                         <Icon name={`${hiddenConfirmPassword===true?"eye-slash":"eye"}`} size={20} color="#AAAAAA" />
                                     </TouchableOpacity>
                                 </View>

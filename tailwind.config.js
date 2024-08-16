@@ -11,10 +11,11 @@ module.exports = {
         "clickButton": "#41C867",
         "backGroundColor": "#F5F4FB",
         "iconColor": "#AAAAAA",
-        "backGroundColorWarning": "#FFD7D7"
+        "backGroundColorWarning": "#FFD7D7",
+        "successColor": "#1c7a00"
       },
       scale: {
-        'x-2': '2', // Thêm lớp scaleX tùy chỉnh
+        'x-2': '2',
       },
     },
   },

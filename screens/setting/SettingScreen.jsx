@@ -1,13 +1,13 @@
 import { View ,StyleSheet,Image,Text, StatusBar, ScrollView,TouchableOpacity,Modal} from 'react-native'
-import AbstractCircle from '../components/AbstractCircle'
+import AbstractCircle from '../../components/AbstractCircle'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useState } from 'react'
-import ButtonCom from '../components/ButtonCom'
+import ButtonCom from '../../components/ButtonCom'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { logout } from '../redux/authSlice'
-import { removeData } from '../utils/storage'
-import Loading from '../components/Loading'
+import { logout } from '../../redux/authSlice'
+import { removeData } from '../../utils/storage'
+import Loading from '../../components/Loading'
 
 
 const func=[
@@ -108,7 +108,7 @@ export default function SettingScreen() {
                 />
                 <View className="px-[20px]">
                     <Image
-                        source={require("../assets/user.png")}
+                        source={require("../../assets/user.png")}
                         className="w-[100px] h-[100px] mt-[280px] rounded-[200px] border border-borderColor mx-auto object-cover "
                         style={styles.shadowX}
                     />

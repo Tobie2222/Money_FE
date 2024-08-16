@@ -1,14 +1,16 @@
 import Toast from 'react-native-toast-message'
 
-export const showToast = (type, message, title) => {
+export const showToastU = ( message ,setBackgroundColor,nameIcon,duration) => {
     Toast.show({
-        type: type, // 'success', 'error', 'info'
+        type: 'custom_toast',
         position: 'top',
-        text1: title,
-        text2: message,
-        visibilityTime: 4000,
+        text1: message,
         autoHide: true,
-        topOffset: 30,
-        onHide: () => console.log('Toast hidden'),
+        topOffset: 60,
+        visibilityTime: duration,
+        props: {
+            setBackgroundColor: setBackgroundColor,
+            nameIcon: nameIcon
+        }
     })
 }

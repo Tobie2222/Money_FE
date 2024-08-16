@@ -2,16 +2,18 @@ import { View ,TextInput,Image,Text,TouchableOpacity,StatusBar} from 'react-nati
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import ButtonCom from '../components/ButtonCom'
+import ButtonCom from '../../components/ButtonCom'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import {useDispatch, useSelector} from 'react-redux'
-import { loginUser } from '../redux/action/auth'
+import { loginUser } from '../../redux/action/auth'
 import { useEffect, useState } from 'react'
-import Loading from '../components/Loading'
-import { selectError, selectIsAuthenticated, selectLoading, selectMessage, selectToken } from '../redux/authSlice'
-import { showToast } from '../utils/toast'
-import { saveData } from '../utils/storage'
+import Loading from '../../components/Loading'
+import { selectError, selectIsAuthenticated, selectLoading, selectMessage, selectToken } from '../../redux/authSlice'
+import { saveData } from '../../utils/storage'
+import Toast from 'react-native-toast-message'
+import CustomToast from '../../components/CutomToast'
+import { showToastU } from '../../utils/toast'
 
 
 
@@ -32,12 +34,14 @@ export default function LoginScreen() {
     const error=useSelector(selectError)
     const dispatch=useDispatch()
     const route=useRoute()
+    const { registrationSuccess, messageR } = route.params || {}
+    useEffect(() => {
+        if (registrationSuccess) {
+            showToastU(messageR,"#438883","check",3000)
+            navigation.setParams({ registrationSuccess: false, messageR: '' })
+        }
+    }, [registrationSuccess])
 
-    // useEffect(()=>{
-    //     if (route.params?.registrationSuccess) {
-    //         showToast("success","đăng ký thành công", "Thành công")
-    //     }
-    // },[route.params])
     const handleLogin = async (values) => {
         dispatch(loginUser(values))
     }
@@ -52,12 +56,19 @@ export default function LoginScreen() {
         {
             loading===true?(<Loading color='#438883'/>):(
             <View>
+                <View className="z-20">
+                    <Toast 
+                        config={{
+                            custom_toast: (internalState) => <CustomToast {...internalState} />
+                        }} 
+                    />
+                </View>
                 <StatusBar
                     barStyle="black"
                 />
                 <ScrollView>
                     <Image
-                        source={require("../assets/pig.png")}
+                        source={require("../../assets/pig.png")}
                         className="w-[150px] h-[180px] mt-[80px] mx-auto object-cover "
                     />
                     <Text className="mx-auto mt-[10px] text-center font-[700] leading-[39px] text-[26px] text-primaryColor w-[300px]"><Text className="text-[#FBBE4A]">M</Text>.app</Text>
@@ -112,12 +123,21 @@ export default function LoginScreen() {
                                     text="Đăng nhập"
                                     styleButton="w-full flex py-[13px] mt-[5px] bg-primaryColor rounded-[14px] " 
                                     styleText="text-white text-center text-[16px] leading-[24px] font-[600]" 
-                                    onPress={handleSubmit}
+                                    onPress={
+                                        handleSubmit
+                                        // ()=>{
+                                        //     showToast()
+                                        // }
+                                    }
                                 />
                             </View>
                         )}
                     </Formik>
-                    <TouchableOpacity onPress={()=>navigation.navigate("forgotPassword")} activeOpacity={0.8} className="mx-auto mt-[40px]">
+                    <TouchableOpacity 
+                        onPress={()=>navigation.navigate("forgotPassword")}
+                        activeOpacity={0.8} 
+                        className="mx-auto mt-[40px]"
+                    >
                         <Text className="text-[16px] leading-[24px] font-[600] text-primaryColor">Quên mật khẩu ?</Text>
                     </TouchableOpacity>
                     <View className="mx-auto mt-[140px]">

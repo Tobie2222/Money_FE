@@ -1,12 +1,15 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import HomeScreen from "../screens/HomeScreen"
-import SettingScreen from "../screens/SettingScreen"
-import TransactionScreen from "../screens/TransactionScreen"
-import AccountScreen from "../screens/AccountScreen"
-import Analysis from '../screens/Analysis'
+
+import  HomeStackScreen  from './HomeStackScreen'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import AnalysisStackScreen from './AnalysisStackScreen'
+import AccountStackScreen from './AccountStackScreen'
+import TransactionStackScreen from './TransactionStackScreen'
+import SettingStackScreen from './SettingStackScreen'
 
 const Tab=createMaterialBottomTabNavigator()
+
+
 
 export default function BottomTabScreens() {
     return (
@@ -25,17 +28,17 @@ export default function BottomTabScreens() {
             }}
         >
             <Tab.Screen 
-                name="homeScreen" component={HomeScreen}
+                name="homeStack" 
+                component={HomeStackScreen}
                 options={{
-                tabBarLabel: null,
-                tabBarIcon: ({ color }) => (
-                    <Icon name="home" color={color} size={26} style={{backgroundColor: "transparent"}}/>
-                ),
-                
-            }}
+                    tabBarLabel: null,
+                    tabBarIcon: ({ color }) => (
+                        <Icon name="home" color={color} size={26} />
+                    ),
+                }}
             />
             <Tab.Screen 
-                name="analysis" component={Analysis}
+                name="analysisStack" component={AnalysisStackScreen}
                 options={{
                     tabBarLabel: null,
                     tabBarIcon: ({ color }) => (
@@ -44,7 +47,7 @@ export default function BottomTabScreens() {
                 }}
             />
             <Tab.Screen 
-                name="accountScreen" component={AccountScreen}
+                name="accountStack" component={AccountStackScreen}
                 options={{
                     tabBarLabel: null,
                     tabBarIcon: ({ color }) => (
@@ -53,7 +56,7 @@ export default function BottomTabScreens() {
                 }}
             />
             <Tab.Screen 
-                name="transactionScreen" component={TransactionScreen}
+                name="transactionStack" component={TransactionStackScreen}
                 options={{
                     tabBarLabel: null,
                     tabBarIcon: ({ color }) => (
@@ -62,7 +65,7 @@ export default function BottomTabScreens() {
                 }}
             />
             <Tab.Screen 
-                name="settingScreen" component={SettingScreen}
+                name="settingStack" component={SettingStackScreen}
                 options={{
                     tabBarLabel: null,
                     tabBarIcon: ({ color }) => (

@@ -1,9 +1,10 @@
 import { View ,Text,StatusBar,StyleSheet,Image, ScrollView, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import AbstractCircle from '../components/AbstractCircle'
-import TabViews from '../components/TabViews'
+import AbstractCircle from '../../components/AbstractCircle'
+import TabViews from '../../components/TabViews'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigation } from '@react-navigation/native'
 
 
 const labelCost=[
@@ -16,6 +17,7 @@ const labelCost=[
 ]
 
 export default function HomeScreen() {
+    const navigation = useNavigation()
     const [hiddenTime,setHiddenTime]=useState(false)
     const [valueTime,setValueTime]=useState("Tháng này")
     const {t}=useTranslation()
@@ -28,7 +30,9 @@ export default function HomeScreen() {
             <ScrollView>
                 <View className="flex-row items-center w-full justify-between mt-[70px] px-[20px]">
                     <Text className="text-white text-[24px] leading-[33px] font-[700] ">1.500.000 đ</Text>
-                    <Icon name={"bell"} size={25} color="#fff" />
+                    <TouchableOpacity activeOpacity={0.8} onPress={()=>navigation.navigate("notificationScreen")}>
+                        <Icon name={"bell"} size={25} color="#fff" />
+                    </TouchableOpacity>
                 </View>
                 <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] ">{t('Balance')}</Text>
                 {/* my account */}
@@ -41,7 +45,7 @@ export default function HomeScreen() {
                         <View className="flex-row justify-between items-center mt-[10px] ">
                             <View className="flex-row items-center gap-[10px] ">
                                 <Image
-                                    source={require("../assets/pig.png")}
+                                    source={require("../../assets/pig.png")}
                                     className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
                                 />
                                 <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Tiền mặt</Text>
@@ -50,9 +54,8 @@ export default function HomeScreen() {
                         </View>
                     </View>
                 <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] my-[20px] ">Báo cáo chi tiêu</Text>
-                                {/* report */}
-                
-                                <View className="w-[91%] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
+                {/* report */}
+                <View className="w-[91%] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                     <Text className="text-[#000000] text-[18px] leading-[27px] font-[500]">12.000.000.000 đ</Text>
                     <Text className="text-textColor mt-[5px] text-[14px] leading-[21px] font-[500]">Tổng chi tháng này  <Text className="text-clickButton font-[600]">Tăng 20%</Text></Text>
                     <TabViews/>
@@ -116,7 +119,7 @@ export default function HomeScreen() {
                     <View className="flex-row justify-between items-center ">
                         <View className="flex-row items-center gap-[10px] ">
                             <Image
-                                source={require("../assets/pig.png")}
+                                source={require("../../assets/pig.png")}
                                 className="w-[35px] h-[35px] rounded-[200px] object-cover border border-borderColor "
                             />
                             <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Ăn uống</Text>
@@ -126,7 +129,7 @@ export default function HomeScreen() {
                     <View className="flex-row justify-between items-center mt-[15px] ">
                         <View className="flex-row items-center gap-[10px] ">
                             <Image
-                                source={require("../assets/pig.png")}
+                                source={require("../../assets/pig.png")}
                                 className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
                             />
                             <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Đổ xăng</Text>
@@ -145,7 +148,7 @@ export default function HomeScreen() {
                     <View className="flex-row justify-between items-center ">
                         <View className="flex-row items-center gap-[10px] ">
                             <Image
-                                source={require("../assets/pig.png")}
+                                source={require("../../assets/pig.png")}
                                 className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
                             />
                             <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Ăn uống</Text>
@@ -155,7 +158,7 @@ export default function HomeScreen() {
                     <View className="flex-row justify-between items-center mt-[15px] ">
                         <View className="flex-row items-center gap-[10px] ">
                             <Image
-                                source={require("../assets/pig.png")}
+                                source={require("../../assets/pig.png")}
                                 className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
                             />
                             <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Đổ xăng</Text>

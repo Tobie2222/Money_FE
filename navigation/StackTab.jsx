@@ -1,21 +1,26 @@
 import {NavigationContainer} from "@react-navigation/native"
 import { createStackNavigator } from '@react-navigation/stack'
-import HomeScreen from "../screens/HomeScreen"
+
 import StartScreens from "../screens/StartScreen"
 import SelectLanguageScreen from "../screens/SelectLanguageScreen"
-import LoginScreen from "../screens/LoginScreen"
-import RegisterScreen from "../screens/RegisterScreen"
-import VerifyCodeScreen from "../screens/VerifyCodeScreen"
-import ForgotPassword from "../screens/ForgotPassword"
-import ResetPasswordScreen from "../screens/ResetPasswordScreen"
+import LoginScreen from "../screens/auth/LoginScreen"
+import RegisterScreen from "../screens/auth/RegisterScreen"
+import VerifyCodeScreen from "../screens/auth/VerifyCodeScreen"
+import ForgotPassword from "../screens/auth/ForgotPassword"
+import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen"
 import BottomTabScreens from "./BottomTabScreens"
-import NotificationScreen from "../screens/NotificationScreen"
+import { useSelector } from "react-redux"
+import { selectIsAuthenticated } from "../redux/authSlice"
 const Stack=createStackNavigator()
 
 export default function StackTab() {
+    const isAuthenticated=useSelector(selectIsAuthenticated)
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Navigator 
+                screenOptions={{ headerShown: false }}
+                initialRouteName={isAuthenticated===true?"bottomTabScreen":"startScreen"}
+            >
                 <Stack.Group>
                     <Stack.Screen name="startScreen" component={StartScreens}/>
                     <Stack.Screen name="selectLanguageScreen" component={SelectLanguageScreen}/>
@@ -25,9 +30,6 @@ export default function StackTab() {
                     <Stack.Screen name="forgotPassword" component={ForgotPassword}/>
                     <Stack.Screen name="resetPasswordScreen" component={ResetPasswordScreen}/>
                 </Stack.Group>
-
-                <Stack.Screen name="homeScreen" component={HomeScreen}/>
-                <Stack.Screen name="notificationScreen" component={NotificationScreen}/>
                 <Stack.Screen name="bottomTabScreen" component={BottomTabScreens}/>
             </Stack.Navigator>
         </NavigationContainer>
