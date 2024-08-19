@@ -4,12 +4,12 @@ import * as Yup from 'yup'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ButtonCom from '../../components/ButtonCom'
 import { ScrollView } from 'react-native-gesture-handler'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import {useDispatch, useSelector} from 'react-redux'
 import { loginUser } from '../../redux/action/auth'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Loading from '../../components/Loading'
-import { selectError, selectIsAuthenticated, selectLoading, selectMessage, selectToken } from '../../redux/authSlice'
+import { resetAuthState, selectError, selectIsAuthenticated, selectLoading, selectMessage, selectToken } from '../../redux/authSlice'
 import { saveData } from '../../utils/storage'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
@@ -34,23 +34,41 @@ export default function LoginScreen() {
     const error=useSelector(selectError)
     const dispatch=useDispatch()
     const route=useRoute()
-    const { registrationSuccess, messageR } = route.params || {}
+    const { registrationSuccess, messageR,verifyResetPassSuccess,messageReset } = route.params || {}
     useEffect(() => {
         if (registrationSuccess) {
             showToastU(messageR,"#438883","check",3000)
             navigation.setParams({ registrationSuccess: false, messageR: '' })
         }
-    }, [registrationSuccess])
-
+        if (verifyResetPassSuccess) {
+            showToastU(messageReset,"#438883","check",3000)
+            navigation.setParams({ verifyResetPassSuccess: false, messageReset: '' })
+        }
+    }, [registrationSuccess,verifyResetPassSuccess])
+    //clear state old
+    useFocusEffect(
+        useCallback(() => {
+            // Reset lại trạng thái message và error khi màn hình được focus
+            dispatch(resetAuthState())
+            return () => {
+                // Optional: Reset lại trạng thái khi màn hình mất focus
+                dispatch(resetAuthState())
+            }
+        }, [dispatch])
+    )
+    //handle login
     const handleLogin = async (values) => {
         dispatch(loginUser(values))
     }
+    //
     useEffect(()=>{
         if (token) {
             saveData("token",token)
             navigation.navigate("bottomTabScreen")
         }
     },[isAuthenticated])
+
+    
     return (
         <View className="flex-1 bg-white">
         {
@@ -123,12 +141,7 @@ export default function LoginScreen() {
                                     text="Đăng nhập"
                                     styleButton="w-full flex py-[13px] mt-[5px] bg-primaryColor rounded-[14px] " 
                                     styleText="text-white text-center text-[16px] leading-[24px] font-[600]" 
-                                    onPress={
-                                        handleSubmit
-                                        // ()=>{
-                                        //     showToast()
-                                        // }
-                                    }
+                                    onPress={handleSubmit}
                                 />
                             </View>
                         )}

@@ -57,7 +57,6 @@ export default function RegisterScreen() {
             //     setMessage("Email không tồn tại")
             //     return
             // }
-
             setLoading(true)
             const response = await register(values)
             if (response.status === 200) {
@@ -74,7 +73,7 @@ export default function RegisterScreen() {
                 } else {
                     setMessage(err.response.data.message)
                 }
-                setErr(true);
+                setErr(true)
             } else if (err.request) {
                 console.log("Request data:", err.request)
             } else {

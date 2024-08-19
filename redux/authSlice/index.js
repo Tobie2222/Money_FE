@@ -22,6 +22,10 @@ const authSlice = createSlice({
     },
     updateToken(state,action){
       state.token=action.payload.token
+    },
+    resetAuthState(state) {
+      state.message = ''
+      state.error = null
     }
   },
   extraReducers: (builder) => {
@@ -46,7 +50,7 @@ const authSlice = createSlice({
   }
 })
 
-export const { logout,updateToken } = authSlice.actions
+export const { logout,updateToken ,resetAuthState} = authSlice.actions
 
 export const selectIsAuthenticated=(state)=>state.auth.isAuthenticated
 export const selectToken=(state)=>state.auth.token
