@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { loginUser } from '../../redux/action/auth'
 import { useCallback, useEffect, useState } from 'react'
 import Loading from '../../components/Loading'
-import { resetAuthState, selectError, selectIsAuthenticated, selectLoading, selectMessage, selectToken } from '../../redux/authSlice'
+import { resetAuthState, selectError, selectIsAuthenticated, selectLoading, selectMessage, selectToken, selectUser } from '../../redux/authSlice'
 import { saveData } from '../../utils/storage'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
@@ -31,6 +31,7 @@ export default function LoginScreen() {
     const [hiddenPassword,setHiddenPassword]=useState(false)
     const loading=useSelector(selectLoading)
     const message=useSelector(selectMessage)
+    const user=useSelector(selectUser)
     const error=useSelector(selectError)
     const dispatch=useDispatch()
     const route=useRoute()
@@ -63,7 +64,7 @@ export default function LoginScreen() {
     //
     useEffect(()=>{
         if (token) {
-            saveData("token",token)
+            saveData([["token",token],["user",JSON.stringify(user)]])
             navigation.navigate("bottomTabScreen")
         }
     },[isAuthenticated])

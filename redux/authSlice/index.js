@@ -9,6 +9,7 @@ const authSlice = createSlice({
     success: null,
     error: false,
     isAuthenticated: false,
+    user: null,
     message: "",
   },
   reducers: {
@@ -20,8 +21,10 @@ const authSlice = createSlice({
       state.error=false
       state.success=false
     },
-    updateToken(state,action){
+    updateTsAuth(state,action){
       state.token=action.payload.token
+      state.user=action.payload.user
+      state.isAuthenticated=true
     },
     resetAuthState(state) {
       state.message = ''
@@ -41,6 +44,7 @@ const authSlice = createSlice({
         state.loading = false
         state.token = action.payload.token
         state.message = action.payload.message
+        state.user = action.payload.user
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false
@@ -50,7 +54,7 @@ const authSlice = createSlice({
   }
 })
 
-export const { logout,updateToken ,resetAuthState} = authSlice.actions
+export const { logout,updateTsAuth ,resetAuthState} = authSlice.actions
 
 export const selectIsAuthenticated=(state)=>state.auth.isAuthenticated
 export const selectToken=(state)=>state.auth.token
@@ -58,5 +62,6 @@ export const selectLoading=(state)=>state.auth.loading
 export const selectError=(state)=>state.auth.error
 export const selectSuccess=(state)=>state.auth.success
 export const selectMessage=(state)=>state.auth.message
+export const selectUser=(state)=>state.auth.user
 
 export default authSlice.reducer

@@ -2,9 +2,15 @@ import { View ,Text,StatusBar,StyleSheet,Image, ScrollView, TouchableOpacity} fr
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AbstractCircle from '../../components/AbstractCircle'
 import TabViews from '../../components/TabViews'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
+import { showToastU } from '../../utils/toast'
+import Toast from 'react-native-toast-message'
+import CustomToast from '../../components/CutomToast'
+import {  useSelector } from 'react-redux'
+import { selectMessage, selectSuccess } from '../../redux/authSlice'
+
 
 
 const labelCost=[
@@ -19,7 +25,17 @@ const labelCost=[
 export default function HomeScreen() {
     const navigation = useNavigation()
     const [hiddenTime,setHiddenTime]=useState(false)
+    const message=useSelector(selectMessage)
+    const success=useSelector(selectSuccess)
     const [valueTime,setValueTime]=useState("Tháng này")
+
+
+    useEffect(()=>{
+        if(success) {
+            showToastU(message,"#0866ff","check",3000)
+        }
+    },[success])
+
     const {t}=useTranslation()
     return (
         <View className="flex-1 ">
@@ -27,6 +43,13 @@ export default function HomeScreen() {
             <StatusBar
                 barStyle="light-content"
             />
+            <View className="z-20">
+                <Toast 
+                    config={{
+                        custom_toast: (internalState) => <CustomToast {...internalState} />
+                    }} 
+                />
+            </View>
             <ScrollView>
                 <View className="flex-row items-center w-full justify-between mt-[70px] px-[20px]">
                     <Text className="text-white text-[24px] leading-[33px] font-[700] ">1.500.000 đ</Text>

@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack'
-import AnalysisScreen from '../screens/AnalysisScreen'
+import AnalysisScreen from '../screens/analysis/AnalysisScreen'
 
 const SettingStack = createStackNavigator()
 

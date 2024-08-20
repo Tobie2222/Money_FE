@@ -1,5 +1,5 @@
 import axios from "axios"
-import { API } from "../constants"
+import { baseURL } from "../constants"
 export const HTTP=axios.create({
-    baseURL: API
+    baseURL: baseURL
 })

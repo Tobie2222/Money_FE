@@ -16,7 +16,7 @@ module.exports = {
       },
       scale: {
         'x-2': '2',
-      },
+      }
     },
   },
   plugins: [],

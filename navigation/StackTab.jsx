@@ -1,4 +1,4 @@
-import {NavigationContainer} from "@react-navigation/native"
+import {NavigationContainer, useNavigation} from "@react-navigation/native"
 import { createStackNavigator } from '@react-navigation/stack'
 
 import StartScreens from "../screens/StartScreen"
@@ -9,8 +9,9 @@ import VerifyCodeScreen from "../screens/auth/VerifyCodeScreen"
 import ForgotPassword from "../screens/auth/ForgotPassword"
 import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen"
 import BottomTabScreens from "./BottomTabScreens"
-import { useSelector } from "react-redux"
+import {  useSelector } from "react-redux"
 import { selectIsAuthenticated } from "../redux/authSlice"
+
 const Stack=createStackNavigator()
 
 export default function StackTab() {

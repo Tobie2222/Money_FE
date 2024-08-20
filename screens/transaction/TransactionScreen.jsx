@@ -1,10 +1,10 @@
 import { View,TouchableOpacity,Text,StatusBar ,TextInput, ScrollView} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import AbstractCircle from '../components/AbstractCircle'
+import AbstractCircle from '../../components/AbstractCircle'
 import { useState } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import ButtonCom from '../components/ButtonCom'
+import ButtonCom from '../../components/ButtonCom'
 
 
 const validationSchema = Yup.object().shape({

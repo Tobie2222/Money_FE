@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack'
-import TransactionScreen from '../screens/TransactionScreen'
+import TransactionScreen from '../screens/transaction/TransactionScreen'
 
 const SettingStack = createStackNavigator()
 

@@ -1,25 +1,29 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-export const saveData=async(key,value)=>{
+export const saveData=async(data)=>{
     try {
-        await AsyncStorage.setItem(key, value)
-        console.log("token ",value)
+        //console.log("data save", data)
+        await await AsyncStorage.multiSet(data)
     } catch(err) {
         console.log(err)
     }
 }
-export const readData=async(key)=>{
+export const readData=async(keys)=>{
     try {
-        const data=await AsyncStorage.getItem(key)
-        return data
+        const data=await AsyncStorage.multiGet(keys)
+        //console.log("data read", data)
+        return data.reduce((acc,[key,value])=>{
+            acc[key]=value!==null?value:null
+            return acc
+        },[])
     } catch(err) {
         console.log(err)
     }
 }
-export const removeData=async(key)=>{
+export const removeData=async()=>{
     try {
-        await AsyncStorage.removeItem(key)
+        await AsyncStorage.clear()
     } catch(err) {
         console.log(err)
     }
