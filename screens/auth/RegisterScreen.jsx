@@ -9,6 +9,7 @@ import { Dropdown } from 'react-native-element-dropdown'
 import { register } from '../../data/Api'
 import Loading from '../../components/Loading'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 
 
 const validationSchema = Yup.object().shape({
@@ -23,6 +24,7 @@ const options = [
 ]
 
 export default function RegisterScreen() {
+    const {t}=useTranslation()
     const [selectedValue, setSelectedValue] = useState(null)
     const [loading,setLoading]=useState(false)
     const [message,setMessage]=useState("")
@@ -114,7 +116,7 @@ export default function RegisterScreen() {
                                 <View className={`w-full flex-row items-center ${focusName===true?"border border-primaryColor ":"border border-borderColor "} px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] `}>
                                     <Icon name="user" size={20} color="#AAAAAA" />
                                     <TextInput
-                                        placeholder="Name"
+                                        placeholder={t("name")}
                                         onChangeText={handleChange('name')}
                                         onBlur={()=>{
                                             handleBlur('email')
@@ -129,7 +131,7 @@ export default function RegisterScreen() {
                                 <View className={`w-full flex-row items-center my-[10px] ${focusEmail===true?"border border-primaryColor ":"border border-borderColor "} px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] `}>
                                     <Icon name="envelope" size={15} color="#AAAAAA" />
                                     <TextInput
-                                        placeholder="Email"
+                                        placeholder={t("email")}
                                         onChangeText={handleChange('email')}
                                         onBlur={()=>{
                                             handleBlur('email')
@@ -143,7 +145,7 @@ export default function RegisterScreen() {
                                 <View className={`w-full flex-row items-center ${focusPassword===true?"border border-primaryColor ":"border border-borderColor "} px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] `}>
                                     <Icon name="lock" size={20} color="#AAAAAA" />
                                     <TextInput
-                                        placeholder="Password"
+                                        placeholder={t("password")}
                                         onChangeText={handleChange('password')}
                                         onBlur={()=>{
                                             handleBlur('password')
@@ -161,7 +163,7 @@ export default function RegisterScreen() {
                                 <View className={`w-full mt-[10px] flex-row items-center ${focusConfirmPassword===true?"border border-primaryColor ":"border border-borderColor "} px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] `}>
                                     <Icon name="lock" size={20} color="#AAAAAA" />
                                     <TextInput
-                                        placeholder="ConfirmPassword"
+                                        placeholder={t("confirmPassword")}
                                         onChangeText={handleChange('confirmPassword')}
                                         onBlur={()=>{
                                             handleBlur('confirmPassword')
@@ -182,7 +184,7 @@ export default function RegisterScreen() {
                                         data={options}
                                         labelField="label"
                                         valueField="value"
-                                        placeholder="Giới tính"
+                                        placeholder={t("gender")}
                                         value={selectedValue}
                                         onChange={item => {
                                             setFieldValue('sex', item.value)
@@ -201,7 +203,7 @@ export default function RegisterScreen() {
                                     />
                                 </View>
                                 <ButtonCom
-                                    text="Đăng ký"
+                                    text={t("register")}
                                     styleButton="w-full flex justify-center px-[124px] py-[13px] mt-[5px] bg-primaryColor rounded-[14px] " 
                                     styleText="text-white text-[16px] leading-[24px] font-[600]" 
                                     onPress={handleSubmit}
@@ -209,8 +211,9 @@ export default function RegisterScreen() {
                             </View>
                         )}
                     </Formik>
-                    <View className="mx-auto mt-[90px] mb-[40px] ">
-                        <Text className="text-[16px] leading-[24px] font-[400] text-[#AAAAAA]">Bạn đã có tài khoản ? <TouchableOpacity onPress={()=>navigation.navigate("loginScreen")}><Text className="text-[#6d85fc] text-[16px] font-[600]">Đăng nhập</Text></TouchableOpacity></Text>
+                    <View className="mx-auto mt-[100px] my-[50px] flex-row items-center">
+                        <Text className="text-[16px] leading-[24px] font-[400] text-[#AAAAAA]">{t("noAccount")}</Text>
+                        <TouchableOpacity className="ml-[10px] " onPress={()=>navigation.navigate("loginScreen")}><Text className="text-[#6d85fc] text-[16px] font-[600]">{t("login")}</Text></TouchableOpacity>
                     </View>
                 </ScrollView>
                 )

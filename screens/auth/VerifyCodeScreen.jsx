@@ -10,8 +10,10 @@ import { verifyCode } from '../../data/Api'
 import Toast from 'react-native-toast-message'
 import { showToastU } from '../../utils/toast'
 import CustomToast from '../../components/CutomToast'
+import { useTranslation } from 'react-i18next'
 
 export default function VerifyCodeScreen() {
+    const {t}=useTranslation()
     const navigation = useNavigation()
     const [loading,setLoading]=useState(false)
     const [message,setMessage]=useState("")

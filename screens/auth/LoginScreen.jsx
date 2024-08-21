@@ -14,6 +14,7 @@ import { saveData } from '../../utils/storage'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
+import { useTranslation } from 'react-i18next'
 
 
 
@@ -23,6 +24,7 @@ const validationSchema = Yup.object().shape({
 })
 
 export default function LoginScreen() {
+    const {t}=useTranslation()
     const navigation = useNavigation()
     const isAuthenticated=useSelector(selectIsAuthenticated)
     const token=useSelector(selectToken)
@@ -109,7 +111,7 @@ export default function LoginScreen() {
                                 <View className={`w-full flex-row  items-center px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] ${focusEmail===true?"border border-primaryColor ":"border border-borderColor "}`}>
                                     <Icon name="envelope" size={20} color="#AAAAAA" />
                                     <TextInput
-                                        placeholder="Email"
+                                        placeholder={t("email")}
                                         onChangeText={handleChange('email')}
                                         onBlur={()=>{
                                             handleBlur('email')
@@ -123,7 +125,7 @@ export default function LoginScreen() {
                                 <View className={`w-full my-[20px] flex-row  items-center ${focusPassword===true?"border border-primaryColor ":"border border-borderColor "} px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px]`}>
                                     <Icon name="lock" size={20} color="#AAAAAA" />
                                     <TextInput
-                                        placeholder="Password"
+                                        placeholder={t("password")}
                                         onChangeText={handleChange('password')}
                                         onBlur={()=>{
                                             handleBlur('password')
@@ -139,7 +141,7 @@ export default function LoginScreen() {
                                     </TouchableOpacity>
                                 </View>
                                 <ButtonCom
-                                    text="Đăng nhập"
+                                    text={t("login")}
                                     styleButton="w-full flex py-[13px] mt-[5px] bg-primaryColor rounded-[14px] " 
                                     styleText="text-white text-center text-[16px] leading-[24px] font-[600]" 
                                     onPress={handleSubmit}
@@ -152,10 +154,11 @@ export default function LoginScreen() {
                         activeOpacity={0.8} 
                         className="mx-auto mt-[40px]"
                     >
-                        <Text className="text-[16px] leading-[24px] font-[600] text-primaryColor">Quên mật khẩu ?</Text>
+                        <Text className="text-[16px] leading-[24px] font-[600] text-primaryColor">{t("forgotPassword")}</Text>
                     </TouchableOpacity>
-                    <View className="mx-auto mt-[140px]">
-                        <Text className="text-[16px] leading-[24px] font-[400] text-[#AAAAAA]">Bạn chưa có tài khoản ? <TouchableOpacity onPress={()=>navigation.navigate("registerScreen")}><Text className="text-[#6d85fc] text-[16px] font-[600]">Đăng ký</Text></TouchableOpacity></Text>
+                    <View className="mx-auto mt-[140px] flex-row items-center">
+                        <Text className="text-[16px] leading-[24px] font-[400] text-[#AAAAAA]">{t("noAccount")}</Text>
+                        <TouchableOpacity className="ml-[10px] " onPress={()=>navigation.navigate("registerScreen")}><Text className="text-[#6d85fc] text-[16px] font-[600]">{t("register")}</Text></TouchableOpacity>
                     </View>
                 </ScrollView>
         </View>

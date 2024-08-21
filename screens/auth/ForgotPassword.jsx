@@ -8,12 +8,14 @@ import { useNavigation } from '@react-navigation/native'
 import { forgotPassword } from '../../data/Api'
 import { useState } from 'react'
 import Loading from '../../components/Loading'
+import { useTranslation } from 'react-i18next'
 
 const validationSchema = Yup.object().shape({
     //email: Yup.string().email('Email không hợp lệ').required('Email là bắt buộc')
 })
 
 export default function ForgotPassword() {
+    const {t}=useTranslation()
     const navigation = useNavigation()
     const [loading,setLoading]=useState(false)
     const [message,setMessage]=useState("")

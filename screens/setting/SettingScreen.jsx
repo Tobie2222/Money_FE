@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, selectIsAuthenticated, selectToken, selectUser } from '../../redux/authSlice'
 import { removeData } from '../../utils/storage'
 import Loading from '../../components/Loading'
+import { useTranslation } from 'react-i18next'
 
 
 const func = [
@@ -24,11 +25,11 @@ const func = [
 
 
 export default function SettingScreen() {
+    const {t}=useTranslation()
     const [modalVisible, setModalVisible] = useState(false)
     const token = useSelector(selectToken)
     const isAuthenticated = useSelector(selectIsAuthenticated)
     const user = useSelector(selectUser)
-    console.log(user)
     const dispatch = useDispatch()
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
@@ -88,7 +89,7 @@ export default function SettingScreen() {
         if (functionChose[typeFunc]) {
             functionChose[typeFunc]()
         } else {
-            console.warn(`Function ${typeFunc} not defined`)
+            console.log(`Function ${typeFunc} not defined`)
         }
     }
 

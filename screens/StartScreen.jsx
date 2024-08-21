@@ -6,10 +6,12 @@ import { readData } from '../utils/storage'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { updateTsAuth } from '../redux/authSlice'
+import { useTranslation } from 'react-i18next'
 
 
 
 export default function StartScreens() {
+    const {t}=useTranslation()
     const [dataS,setDataS]=useState({})
     const navigation = useNavigation()
     const dispatch=useDispatch()
@@ -43,9 +45,9 @@ export default function StartScreens() {
                 source={require("../assets/pig.png")}
                 className="w-[200px] h-[240px] mt-[200px] mx-auto object-cover "
             />
-            <Text className="mx-auto text-center font-[700] leading-[39px] text-[26px] text-primaryColor w-[300px]">Chào mừng đến với <Text className="text-[#FBBE4A]">M</Text>.app</Text>
+            <Text className="mx-auto text-center font-[700] leading-[39px] text-[26px] text-primaryColor w-[300px]">{t("Welcome")}<Text className="text-[#FBBE4A]">M</Text>.app</Text>
             <ButtonCom
-                text="Bắt đầu"
+                text={t("Start")}
                 styleButton="px-[96px] py-[13px] mt-[218px] mx-auto bg-primaryColor rounded-[40px] " 
                 styleText="text-white text-[16px] leading-[24px] font-[600]" 
                 onPress={() =>  navigation.navigate('selectLanguageScreen')}

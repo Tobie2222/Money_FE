@@ -11,6 +11,7 @@ import Loading from '../../components/Loading'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
+import { useTranslation } from 'react-i18next'
 
 const validationSchema = Yup.object().shape({
     newPassword: Yup.string().required('Mật khẩu là bắt buộc').min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
@@ -18,6 +19,7 @@ const validationSchema = Yup.object().shape({
 })
 
 export default function ResetPasswordScreen() {
+    const {t}=useTranslation()
     const navigation = useNavigation()
     const [focusPassword,setFocusPassword]=useState(false)
     const [focusConfirmPassword,setConfirmFocusPassword]=useState(false)

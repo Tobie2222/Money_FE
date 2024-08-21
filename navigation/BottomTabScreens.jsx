@@ -14,13 +14,12 @@ const Tab=createMaterialBottomTabNavigator()
 export default function BottomTabScreens() {
     return (
         <Tab.Navigator 
-            
             initialRouteName="homeScreen" 
             activeColor="#438883"
             inactiveColor="#AAAAAA"
             barStyle={{
                 backgroundColor: "#FFF",
-                height: 80
+                height: 80,
             }}
             shifting={false}
             screenOptions={{

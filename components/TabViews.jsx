@@ -15,7 +15,7 @@ export default function TabViews() {
             {
                 tabs.map((tab)=>{
                     return (
-                        <TouchableOpacity onPress={()=>setCurrentTab(tab.id)} activeOpacity={0.8} className={`w-[50%] ${tab.id===currentTab?"bg-white ":""}  h-[24px] flex-row items-center justify-center rounded-[6px]`}>
+                        <TouchableOpacity key={tab.id} onPress={()=>setCurrentTab(tab.id)} activeOpacity={0.8} className={`w-[50%] ${tab.id===currentTab?"bg-white ":""}  h-[24px] flex-row items-center justify-center rounded-[6px]`}>
                             <Text className="text-[14px] font-[500] text-textColor ">{tab.title}</Text>
                         </TouchableOpacity>
                     )

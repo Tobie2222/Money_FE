@@ -23,6 +23,7 @@ const labelCost=[
 ]
 
 export default function HomeScreen() {
+    const {t}=useTranslation()
     const navigation = useNavigation()
     const [hiddenTime,setHiddenTime]=useState(false)
     const message=useSelector(selectMessage)
@@ -36,7 +37,6 @@ export default function HomeScreen() {
         }
     },[success])
 
-    const {t}=useTranslation()
     return (
         <View className="flex-1 ">
             <AbstractCircle/>
@@ -61,8 +61,8 @@ export default function HomeScreen() {
                 {/* my account */}
                 <View className="w-[91%]  mt-[20px] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                         <View className="flex-row justify-between ">
-                            <Text className="text-[#000000] text-[15px] leading-[22px] font-[500]">Ví của tôi</Text>
-                            <Text className="text-clickButton text-[14px] leading-[18px] font-[500]">Xem tất cả</Text>
+                            <Text className="text-[#000000] text-[15px] leading-[22px] font-[500]">{t('myAccount')}</Text>
+                            <Text className="text-clickButton text-[14px] leading-[18px] font-[500]">{t('viewAll')}</Text>
                         </View>
                         
                         <View className="flex-row justify-between items-center mt-[10px] ">
@@ -71,16 +71,16 @@ export default function HomeScreen() {
                                     source={require("../../assets/pig.png")}
                                     className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
                                 />
-                                <Text className="text-textColor text-[14px] leading-[18px] font-[500]">Tiền mặt</Text>
+                                <Text className="text-textColor text-[14px] leading-[18px] font-[500]">{t('cash')}</Text>
                             </View>
                             <Text className="text-textColor text-[16px] leading-[24px] font-[500]">1.500.000 đ</Text>
                         </View>
                     </View>
-                <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] my-[20px] ">Báo cáo chi tiêu</Text>
+                <Text className="text-white text-[14px] leading-[21px] font-[600] ml-[20px] my-[20px] ">{t('expenseReport')}</Text>
                 {/* report */}
                 <View className="w-[91%] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                     <Text className="text-[#000000] text-[18px] leading-[27px] font-[500]">12.000.000.000 đ</Text>
-                    <Text className="text-textColor mt-[5px] text-[14px] leading-[21px] font-[500]">Tổng chi tháng này  <Text className="text-clickButton font-[600]">Tăng 20%</Text></Text>
+                    <Text className="text-textColor mt-[5px] text-[14px] leading-[21px] font-[500]">{t('totalSpendingThisMonth')}<Text className="text-clickButton font-[600]">Tăng 20%</Text></Text>
                     <TabViews/>
                     <View className="flex-row justify-between ">
                         <View className="flex-row gap-[25px] items-end">
@@ -133,9 +133,9 @@ export default function HomeScreen() {
                 </View>
                 {/* recent spending */}
                 <View className="flex-row justify-between my-[20px] mx-[20px] ">
-                    <Text className="text-textColor text-[14px] leading-[21px] font-[600] ">Chi tiêu gần đây</Text>
+                    <Text className="text-textColor text-[14px] leading-[21px] font-[600] ">{t('recentExpenses')}</Text>
                     <TouchableOpacity activeOpacity={0.9}>
-                        <Text  className="text-primaryColor text-[14px] leading-[21px] font-[600] ">Xem tất cả</Text>
+                        <Text  className="text-primaryColor text-[14px] leading-[21px] font-[600] ">{t('viewAll')}</Text>
                     </TouchableOpacity>
                 </View>
                 <View className="w-[91%]  bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
@@ -162,7 +162,7 @@ export default function HomeScreen() {
                 </View>
                 {/* recent income */}
                 <View className="flex-row justify-between my-[20px] mx-[20px] ">
-                    <Text className="text-textColor text-[14px] leading-[21px] font-[600] ">Thu nhập gần đây</Text>
+                    <Text className="text-textColor text-[14px] leading-[21px] font-[600] ">{t('recentIncome')}</Text>
                     <TouchableOpacity activeOpacity={0.9}>
                         <Text  className="text-primaryColor text-[14px] leading-[21px] font-[600] ">Xem tất cả</Text>
                     </TouchableOpacity>
