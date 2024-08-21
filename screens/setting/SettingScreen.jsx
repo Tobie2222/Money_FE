@@ -34,6 +34,7 @@ export default function SettingScreen() {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
     const [admin, setAdmin] = useState(false)
+    console.log(user)
 
     useEffect(() => {
         if (isAuthenticated && token) {
