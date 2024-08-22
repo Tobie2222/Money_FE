@@ -80,7 +80,7 @@ export default function HomeScreen() {
                 {/* report */}
                 <View className="w-[91%] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                     <Text className="text-[#000000] text-[18px] leading-[27px] font-[500]">12.000.000.000 đ</Text>
-                    <Text className="text-textColor mt-[5px] text-[14px] leading-[21px] font-[500]">{t('totalSpendingThisMonth')}<Text className="text-clickButton font-[600]">Tăng 20%</Text></Text>
+                    <Text className="text-textColor mt-[5px] ml-[5px] text-[14px] leading-[21px] font-[500]">{t('totalSpendingThisMonth')}<Text className="text-clickButton font-[600]">Tăng 20%</Text></Text>
                     <TabViews/>
                     <View className="flex-row justify-between ">
                         <View className="flex-row gap-[25px] items-end">
@@ -191,13 +191,6 @@ export default function HomeScreen() {
                 </View>
             </ScrollView>
 
-        </View>
-    )
-    return (
-        <View className="flex-1">
-            <ScrollView className=" ">
-
-            </ScrollView>
         </View>
     )
 }

@@ -8,8 +8,8 @@ import ButtonCom from '../../components/ButtonCom'
 import { useTranslation } from 'react-i18next'
 
 const selectFun = [
-    { id: 0, title: "Chi tiền" },
-    { id: 1, title: "Thu tiền" },
+    { id: 0, title: "Chi tiền",nameIcon: "plus" },
+    { id: 1, title: "Thu tiền",nameIcon: "minus" },
 ]
 
 
@@ -37,8 +37,24 @@ export default function TransactionScreen() {
             </TouchableOpacity>
             {
                 hiddenModal && (
-                    <View className="absolute w-full h-[84%] left-0 bottom-0 bg-black opacity-20 z-10">
-
+                    <View className="absolute w-full h-[84%] left-0 bottom-0 ">
+                        <View className="w-full h-full relative ">
+                            <View className="bg-white w-full h-auto px-[20px] pt-[15px] rounded-b-[20px] absolute top-0 left-0 z-20 ">
+                                {
+                                    selectFun.map((fun)=>{
+                                        return (
+                                            <TouchableOpacity key={fun.id} activeOpacity={0.8} onPress={()=>{setFunc(fun.title); setHiddenModal(false)}} className="flex-row items-center gap-[20px] mb-[15px]">
+                                                <View className="flex-row items-center justify-center px-[10px] py-[8px] bg-[#c4d9d7] rounded-[100px]">
+                                                    <Icon name={fun.nameIcon} size={25} color="#fff" />
+                                                </View>
+                                                <Text className="text-[22px] font-[800] leading-[33px] text-primaryColor">{fun.title}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    })
+                                }
+                            </View>
+                            <View className="bg-black w-full h-full opacity-30 insert-0 z-10"></View>
+                        </View>
                     </View>
                 )
             }
