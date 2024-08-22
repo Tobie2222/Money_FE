@@ -38,28 +38,29 @@ export default function RegisterScreen() {
     const [hiddenConfirmPassword,setHiddenConfirmPassword]=useState(false)
     const [focusSex,setFocusSex]=useState(false)
 
-    // const checkEmail=async(email)=>{
-    //     try {
-    //         const response=await axios.get(`https://api.zerobounce.net/v2/validate`, {
-    //         params: {
-    //             email: email,
-    //             api_key: "fee798be931b48d1b6a27e494cd268f4",
-    //         }})
-    //         return response.data
-    //     } catch(err) {
-    //         console.log(err)
-    //     }
-    // }
+    const checkEmail=async(email)=>{
+        try {
+            const response=await axios.get(`https://api.zerobounce.net/v2/validate`, {
+            params: {
+                email: email,
+                api_key: "fee798be931b48d1b6a27e494cd268f4",
+            }})
+            return response.data
+        } catch(err) {
+            console.log(err)
+        }
+    }
 
     const handleSubmit = async (values) => {
+        setLoading(true)
         try {
-            // const checkMail=await checkEmail(values.email)
-            // if (checkMail.status!=="!valid") {
-            //     setErr(true)
-            //     setMessage("Email không tồn tại")
-            //     return
-            // }
-            setLoading(true)
+            const checkMail=await checkEmail(values.email)
+            if (checkMail.status!=="!valid") {
+                setErr(true)
+                setMessage("Email không tồn tại")
+                return
+            }
+
             const response = await register(values)
             if (response.status === 200) {
                 setMessage(response.data.message)
