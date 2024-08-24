@@ -9,18 +9,16 @@ import VerifyCodeScreen from "../screens/auth/VerifyCodeScreen"
 import ForgotPassword from "../screens/auth/ForgotPassword"
 import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen"
 import BottomTabScreens from "./BottomTabScreens"
-import {  useSelector } from "react-redux"
-import { selectIsAuthenticated } from "../redux/authSlice"
+import AdminStackScreen from "./AdminStackScreen"
 
 const Stack=createStackNavigator()
 
 export default function StackTab() {
-    const isAuthenticated=useSelector(selectIsAuthenticated)
+
     return (
         <NavigationContainer>
             <Stack.Navigator 
                 screenOptions={{ headerShown: false }}
-                initialRouteName={isAuthenticated===true?"bottomTabScreen":"startScreen"}
             >
                 <Stack.Group>
                     <Stack.Screen name="startScreen" component={StartScreens}/>
@@ -32,6 +30,7 @@ export default function StackTab() {
                     <Stack.Screen name="resetPasswordScreen" component={ResetPasswordScreen}/>
                 </Stack.Group>
                 <Stack.Screen name="bottomTabScreen" component={BottomTabScreens}/>
+                <Stack.Screen name="adminStackScreen" component={AdminStackScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

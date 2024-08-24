@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { loginUser } from '../../redux/action/auth'
 import { useCallback, useEffect, useState } from 'react'
 import Loading from '../../components/Loading'
-import { resetAuthState, selectError, selectIsAuthenticated, selectLoading, selectMessage, selectToken, selectUser } from '../../redux/authSlice'
+import { resetAuthState, selectError, selectLoading, selectMessage, selectToken, selectUser } from '../../redux/authSlice'
 import { saveData } from '../../utils/storage'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
@@ -26,7 +26,6 @@ const validationSchema = Yup.object().shape({
 export default function LoginScreen() {
     const {t}=useTranslation()
     const navigation = useNavigation()
-    const isAuthenticated=useSelector(selectIsAuthenticated)
     const token=useSelector(selectToken)
     const [focusEmail,setFocusEmail]=useState(false)
     const [focusPassword,setFocusPassword]=useState(false)
@@ -63,13 +62,16 @@ export default function LoginScreen() {
     const handleLogin = async (values) => {
         dispatch(loginUser(values))
     }
-    //
     useEffect(()=>{
         if (token) {
-            saveData([["token",token],["user",JSON.stringify(user)]])
+            const dataSave = {
+                token: token,
+                user: JSON.stringify(user)
+            }
+            saveData("dataSave", JSON.stringify(dataSave))
             navigation.navigate("bottomTabScreen")
         }
-    },[isAuthenticated])
+    },[token,user])
 
     
     return (

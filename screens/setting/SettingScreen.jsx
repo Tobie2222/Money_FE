@@ -23,26 +23,25 @@ const func = [
     { nameIcon: "bell", title: "Trang quản trị", typeFunc: "navigateAdminPage" },
 ]
 
-
 export default function SettingScreen() {
     const {t}=useTranslation()
     const [modalVisible, setModalVisible] = useState(false)
     const token = useSelector(selectToken)
-    const isAuthenticated = useSelector(selectIsAuthenticated)
+
     const user = useSelector(selectUser)
     const dispatch = useDispatch()
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
     const [admin, setAdmin] = useState(false)
-    console.log(user)
+    
+    console.log("setting ",user)
 
     useEffect(() => {
-        if (isAuthenticated && token) {
+        if ( token) {
             const decoded = jwtDecode(token)
             setAdmin(decoded.isAdmin)
         }
-    },
-        [isAuthenticated])
+    },[token])
 
 
 
@@ -50,7 +49,7 @@ export default function SettingScreen() {
         try {
             dispatch(logout())
             setLoading(true)
-            await removeData()
+            await removeData("dataSave")
             navigation.navigate('startScreen')
         } catch (err) {
             console.log(err)
@@ -62,28 +61,22 @@ export default function SettingScreen() {
         },
         Logout: () => { setModalVisible(true) },
         ChangePassword: () => {
-            console.log("click 1")
             //navigation.navigate('ChangePassword')
         },
         ChangeLanguage: () => {
-            console.log("click 1")
             //navigation.navigate('ChangeLanguage')
         },
         ChangeMoney: () => {
-            console.log("click 1")
             //navigation.navigate('ChangeMoney')
         },
         ChangeCategoriesExpense: () => {
-            console.log("click 1")
             //navigation.navigate('ChangeCategoriesExpense')
         },
         ChangeCategoriesIncome: () => {
-            console.log("click 1")
             //navigation.navigate('ChangeCategoriesIncome')
         },
         navigateAdminPage: () => {
-            console.log("click 1")
-            //navigation.navigate('ChangeCategoriesIncome')
+            navigation.navigate('adminStackScreen')
         }
     }
     const choseFun = (typeFunc) => {

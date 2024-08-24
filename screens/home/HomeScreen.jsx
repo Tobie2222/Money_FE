@@ -2,7 +2,7 @@ import { View ,Text,StatusBar,StyleSheet,Image, ScrollView, TouchableOpacity} fr
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AbstractCircle from '../../components/AbstractCircle'
 import TabViews from '../../components/TabViews'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 import { showToastU } from '../../utils/toast'
@@ -29,13 +29,22 @@ export default function HomeScreen() {
     const message=useSelector(selectMessage)
     const success=useSelector(selectSuccess)
     const [valueTime,setValueTime]=useState("Tháng này")
+    const [hiddenToast,setHiddenToast]=useState(false)
+
 
 
     useEffect(()=>{
-        if(success) {
-            showToastU(message,"#0866ff","check",3000)
+        let timmer
+        if(success && !hiddenToast) {
+            timmer=setInterval(()=>{
+                showToastU(message,"#0866ff","check",3000)
+                setHiddenToast(true)
+            },500)
         }
-    },[success])
+        return ()=>{
+            clearInterval(timmer)
+        }
+    },[success,hiddenToast])
 
     return (
         <View className="flex-1 ">
@@ -81,7 +90,12 @@ export default function HomeScreen() {
                 <View className="w-[91%] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                     <Text className="text-[#000000] text-[18px] leading-[27px] font-[500]">12.000.000.000 đ</Text>
                     <Text className="text-textColor mt-[5px] ml-[5px] text-[14px] leading-[21px] font-[500]">{t('totalSpendingThisMonth')}<Text className="text-clickButton font-[600]">Tăng 20%</Text></Text>
-                    <TabViews/>
+                    <TabViews
+                        tabs={[{id:0,title: "Tháng"},{id:1,title: "Tuần"},]}
+                        styleTabs="h-[30px] bg-[#f0eef1] mt-[10px] rounded-[8px] flex-row items-center px-[4px]"
+                        styleTextTab="text-[14px] font-[500] text-textColor"
+                        styleTab="rounded-[6px] h-[24px]"
+                    />
                     <View className="flex-row justify-between ">
                         <View className="flex-row gap-[25px] items-end">
                             <View className="flex-col items-end">

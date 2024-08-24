@@ -6,6 +6,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import ButtonCom from '../../components/ButtonCom'
 import { useTranslation } from 'react-i18next'
+import { useNavigation } from '@react-navigation/native'
 
 const selectFun = [
     { id: 0, title: "Chi tiền",nameIcon: "plus" },
@@ -18,6 +19,7 @@ const validationSchema = Yup.object().shape({
 })
 
 export default function TransactionScreen() {
+    const navigation = useNavigation()
     const {t}=useTranslation()
     const [func, setFunc] = useState("Chi tiền")
     const [focusEmail, setFocusEmail] = useState(false)
@@ -58,7 +60,7 @@ export default function TransactionScreen() {
                     </View>
                 )
             }
-            <ScrollView >
+            <ScrollView className="z-[-1]">
                 <Formik
                     initialValues={{ transaction_name: '', desc_transaction: '', amount: 0 }}
                     validationSchema={validationSchema}
@@ -66,7 +68,7 @@ export default function TransactionScreen() {
                 >
                     {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                         <View className="w-[358px] mt-[60px] mx-auto rounded-[14px] ">
-                            <View className="w-full flex-col bg-[#F5F6F7] rounded-[14px] py-[30px] px-[20px] ">
+                            <View className="w-full flex-col bg-white rounded-[14px] py-[30px] px-[20px] ">
                                 {/* {(touched.email && errors.email) || (touched.password && errors.password) || (error && message) ? (
                                     <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
                                         <Icon name="exclamation-circle" size={20} color="#EF4E4E" />

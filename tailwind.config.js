@@ -6,13 +6,15 @@ module.exports = {
       colors: {
         "primaryColor": "#438883",
         "textColor": "#666666",
+        "textColorAdmin": "#343C6A",
         "borderColor": "#DCDFE3",
         "warningColor": "#EF4E4E",
         "clickButton": "#41C867",
         "backGroundColor": "#F5F4FB",
         "iconColor": "#AAAAAA",
         "backGroundColorWarning": "#FFD7D7",
-        "successColor": "#1c7a00"
+        "successColor": "#1c7a00",
+        "bgAdmin": "#F5F7FA"
       },
       scale: {
         'x-2': '2',

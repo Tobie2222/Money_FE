@@ -19,7 +19,9 @@ export default function BottomTabScreens() {
             inactiveColor="#AAAAAA"
             barStyle={{
                 backgroundColor: "#FFF",
-                height: 80,
+                borderTopColor: "#DCDFE3",
+                borderTopWidth: 1,
+                height: 70,
             }}
             shifting={false}
             screenOptions={{

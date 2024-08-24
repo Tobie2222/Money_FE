@@ -8,39 +8,36 @@ const authSlice = createSlice({
     loading: false,
     success: null,
     error: false,
-    isAuthenticated: false,
     user: null,
     message: "",
   },
   reducers: {
     logout(state) {
-      state.isAuthenticated=false
       state.token=""
       state.message=""
       state.loading=false
       state.error=false
       state.success=false
+      state.user=null
     },
     updateTsAuth(state,action){
       state.token=action.payload.token
       state.user=action.payload.user
-      state.isAuthenticated=true
     },
     resetAuthState(state) {
       state.message = ''
-      state.error = null
+      state.error = false
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
         state.loading = true
-        state.error = null
+        state.error = false
         
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.success=true
-        state.isAuthenticated = true
         state.loading = false
         state.token = action.payload.token
         state.message = action.payload.message
@@ -56,7 +53,6 @@ const authSlice = createSlice({
 
 export const { logout,updateTsAuth ,resetAuthState} = authSlice.actions
 
-export const selectIsAuthenticated=(state)=>state.auth.isAuthenticated
 export const selectToken=(state)=>state.auth.token
 export const selectLoading=(state)=>state.auth.loading
 export const selectError=(state)=>state.auth.error

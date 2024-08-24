@@ -4,8 +4,8 @@ import AbstractShape from '../components/AbstractShape'
 import { useNavigation } from '@react-navigation/native'
 import { readData } from '../utils/storage'
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { updateTsAuth } from '../redux/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectToken, updateTsAuth } from '../redux/authSlice'
 import { useTranslation } from 'react-i18next'
 
 
@@ -13,30 +13,32 @@ import { useTranslation } from 'react-i18next'
 export default function StartScreens() {
     const {t}=useTranslation()
     const [dataS,setDataS]=useState({})
+    const token=useSelector(selectToken)
     const navigation = useNavigation()
     const dispatch=useDispatch()
 
     useEffect(()=>{
-        const upDateToken = async () => {
+        const updateData=async()=>{
             try {
-                const keys=["token","user"]
-                const data = await readData(keys)
-                if (data['user']) {
-                    data['user'] = JSON.parse(data['user'])
+                const data=await readData("dataSave")
+                if (data["user"]) {
+                    data["user"]=JSON.parse(data["user"])
                 }
                 setDataS(data)
             } catch (err) {
-                console.log("Error reading token:", err)
+                console.log(err)
             }
         }
-        upDateToken()
+        updateData()
     },[])
-    useEffect(()=>{
-        if (dataS) {
-            dispatch(updateTsAuth({token: dataS?.token,user: dataS?.user}))
-            navigation.navigate("bottomTabScreen")
-        }
-    },[dataS])
+    console.log("data save",dataS)
+    // useEffect(()=>{
+    //     dispatch(updateTsAuth({token: dataS?.token,user: dataS?.user}))
+    //     if (token) {
+    //         console.log("token",token)
+    //         //navigation.navigate("bottomTabScreen")
+    //     }
+    // },[dataS,token])
 
     return (
         <View className="flex-1">

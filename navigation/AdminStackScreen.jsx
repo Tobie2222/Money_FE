@@ -4,7 +4,7 @@ import Notification from '../screens/admin/Notification'
 
 const AdminStack = createStackNavigator()
 
-export default function AccountStackScreen() {
+export default function AdminStackScreen() {
     return (
         <AdminStack.Navigator screenOptions={{ headerShown: false }}>
             <AdminStack.Screen name="dashBroad" component={DashBroad} />
