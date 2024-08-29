@@ -13,6 +13,19 @@ export const verifyCode=(payload)=>HTTP.post(`/auth/verify-code`,payload)
 //resetPassword Email
 export const resetPassword=(payload)=>HTTP.post(`/auth/reset-password`,payload)
 
+//user
+export const getAllUser=(config)=>HTTP.get(`user/getAllUser`,config)
+
+//transaction
+
+//income
+
+//saving
+
+//account
+
+
+
 //getAll accountType
 export const getAllAccountType=(payload)=>HTTP.post(`/accountType/getAllTypeAccount`,payload)
 

@@ -1,4 +1,4 @@
-import { View ,Image,Text } from 'react-native'
+import { View ,Image,Text ,StatusBar} from 'react-native'
 import ButtonCom from '../components/ButtonCom'
 import AbstractShape from '../components/AbstractShape'
 import { useNavigation } from '@react-navigation/native'
@@ -21,9 +21,7 @@ export default function StartScreens() {
         const updateData=async()=>{
             try {
                 const data=await readData("dataSave")
-                if (data["user"]) {
-                    data["user"]=JSON.parse(data["user"])
-                }
+                console.log("data lấy ra", data)
                 setDataS(data)
             } catch (err) {
                 console.log(err)
@@ -31,18 +29,22 @@ export default function StartScreens() {
         }
         updateData()
     },[])
-    console.log("data save",dataS)
-    // useEffect(()=>{
-    //     dispatch(updateTsAuth({token: dataS?.token,user: dataS?.user}))
-    //     if (token) {
-    //         console.log("token",token)
-    //         //navigation.navigate("bottomTabScreen")
-    //     }
-    // },[dataS,token])
+    console.log("data save",typeof dataS?.user,dataS?.user)
+    useEffect(()=>{
+        if (token) {
+            console.log("token",token)
+            navigation.navigate("bottomTabScreen")
+            return;
+        }
+        dispatch(updateTsAuth({token: dataS?.token,user: dataS?.user}))
+    },[dataS,token])
 
     return (
         <View className="flex-1">
             <AbstractShape/>
+            <StatusBar
+                barStyle="dark"
+            />
             <Image
                 source={require("../assets/pig.png")}
                 className="w-[200px] h-[240px] mt-[200px] mx-auto object-cover "

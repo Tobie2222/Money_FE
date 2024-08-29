@@ -34,7 +34,6 @@ export default function SettingScreen() {
     const [loading, setLoading] = useState(false)
     const [admin, setAdmin] = useState(false)
     
-    console.log("setting ",user)
 
     useEffect(() => {
         if ( token) {
@@ -50,6 +49,7 @@ export default function SettingScreen() {
             dispatch(logout())
             setLoading(true)
             await removeData("dataSave")
+            console.log("đã đăng xuất")
             navigation.navigate('startScreen')
         } catch (err) {
             console.log(err)
@@ -107,7 +107,7 @@ export default function SettingScreen() {
                                             text="Đăng xuất"
                                             styleButton="w-full py-[13px] mx-auto bg-warningColor rounded-[18px] "
                                             styleText="text-white text-[16px] leading-[24px] font-[700] text-center"
-                                            onPress={handleLogout}
+                                            onPress={()=>handleLogout()}
                                         />
                                         <ButtonCom
                                             text="Quay lại"

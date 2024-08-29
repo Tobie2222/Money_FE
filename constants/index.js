@@ -2,6 +2,5 @@
 
 export const baseURL="https://btl-app.vercel.app/v1"
 
-// export const baseURL="http://10.0.2.2:3000/v1" 
+//export const baseURL="http://10.0.2.2:3000/v1" 
 
-// export const baseURL="http://localhost:3000/v1/"

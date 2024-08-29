@@ -66,10 +66,13 @@ export default function LoginScreen() {
         if (token) {
             const dataSave = {
                 token: token,
-                user: JSON.stringify(user)
+                user
             }
             saveData("dataSave", JSON.stringify(dataSave))
-            navigation.navigate("bottomTabScreen")
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'bottomTabScreen' }],
+            })
         }
     },[token,user])
 

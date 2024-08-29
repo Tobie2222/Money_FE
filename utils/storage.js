@@ -19,6 +19,7 @@ export const readData = async (key) => {
 export const removeData=async(key)=>{
     try {
         await AsyncStorage.removeItem(key)
+        console.log(`${key} đã bị xóa khỏi AsyncStorage`);
     } catch(err) {
         console.log(err)
     }

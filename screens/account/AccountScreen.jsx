@@ -52,7 +52,7 @@ export default function AccountScreen() {
                             styleTextTab="text-[14px] font-[500] text-textColor"
                         />
                     </View>
-                    <View className=" flex flex-col gap-[10px] w-full h-[auto] my-[20px]">
+                    <ScrollView className=" flex flex-col gap-[10px] w-full h-[100px] my-[20px]">
                         {
                             accounts.map((account) => {
                                 return (
@@ -77,7 +77,7 @@ export default function AccountScreen() {
                             })
                         }
 
-                    </View>
+                    </ScrollView>
                 </View>
 
 

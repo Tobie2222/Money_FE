@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View ,StyleSheet,Image,Text, ScrollView,TextInput,TouchableOpacity } from 'react-native'
+import { View ,StyleSheet,Image,Text, ScrollView,TextInput,TouchableOpacity ,StatusBar} from 'react-native'
 import AbstractShape from '../components/AbstractShape'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ButtonCom from '../components/ButtonCom'
@@ -24,6 +24,9 @@ export default function SelectLanguageScreen() {
     return (
         <View className="flex-1 relative ">
             <AbstractShape/>
+            <StatusBar
+                barStyle="dark"
+            />
             <TouchableOpacity onPress={()=>navigation.navigate("startScreen")} className="absolute w-[28px] h-[28px] top-[75px] left-[25px] flex items-center justify-center">
                 <Icon name='chevron-left'  color={"#438883"} style={styles.icon}/>
             </TouchableOpacity>
