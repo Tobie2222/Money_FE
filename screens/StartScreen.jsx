@@ -7,10 +7,11 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectToken, updateTsAuth } from '../redux/authSlice'
 import { useTranslation } from 'react-i18next'
-
+import { CommonActions } from '@react-navigation/native';
 
 
 export default function StartScreens() {
+    console.log("render ")
     const {t}=useTranslation()
     const [dataS,setDataS]=useState({})
     const token=useSelector(selectToken)
@@ -21,7 +22,7 @@ export default function StartScreens() {
         const updateData=async()=>{
             try {
                 const data=await readData("dataSave")
-                console.log("data lấy ra", data)
+                //console.log("data lấy ra", data)
                 setDataS(data)
             } catch (err) {
                 console.log(err)
@@ -29,12 +30,17 @@ export default function StartScreens() {
         }
         updateData()
     },[])
-    console.log("data save",typeof dataS?.user,dataS?.user)
+    //console.log("data save",typeof dataS?.user,dataS?.user)
     useEffect(()=>{
         if (token) {
-            console.log("token",token)
-            navigation.navigate("bottomTabScreen")
-            return;
+            //console.log("token",token)
+            navigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'bottomTabScreen' }],
+                })
+            );
+            return
         }
         dispatch(updateTsAuth({token: dataS?.token,user: dataS?.user}))
     },[dataS,token])

@@ -1,7 +1,12 @@
 import { View, Text ,TouchableOpacity} from 'react-native'
 import React, { useState } from 'react'
 
-export default function TabViews({tabs,styleTabs,styleTab,styleTextTab}) {
+export default function TabViews({tabs,styleTabs,styleTab,styleTextTab,setCurrentTabs}) {
+    const handleTab=(id,nameTab)=>{
+        setCurrentTab(id)
+        setCurrentTabs(nameTab)
+    }
+
     const [currentTab,setCurrentTab]=useState(0)
 
     return (
@@ -9,7 +14,7 @@ export default function TabViews({tabs,styleTabs,styleTab,styleTextTab}) {
             {
                 tabs.map((tab)=>{
                     return (
-                        <TouchableOpacity key={tab.id} onPress={()=>setCurrentTab(tab.id)} activeOpacity={0.8} className={`w-[50%] ${tab.id===currentTab?"bg-white ":""}   flex-row items-center justify-center ${styleTab}`}>
+                        <TouchableOpacity key={tab.id} onPress={()=>handleTab(tab.id,tab.title)} activeOpacity={0.8} className={`w-[50%] ${tab.id===currentTab?"bg-white ":""}   flex-row items-center justify-center ${styleTab}`}>
                             <Text className={` ${styleTextTab}`}>{tab.title}</Text>
                         </TouchableOpacity>
                     )

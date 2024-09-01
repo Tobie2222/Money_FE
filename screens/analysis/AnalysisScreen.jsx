@@ -191,11 +191,11 @@ export default function AnalysisScreen() {
                         <Text className="text-center text-textColor  text-[16px] font-[600] leading-[24px] mb-[10px]">Thông tin thu chi từng tháng năm 2024 </Text>
                         <View className="mb-[20px] w-full flex-row justify-center ">
                             <View className="flex-row items-center gap-[15px] ">
-                                <View className="w-[15px] h-[15px] bg-[#22C55E] rounded-[50%]"></View>
+                                <View className="w-[15px] h-[15px] bg-[#22C55E] rounded-[100px]"></View>
                                 <Text className="text-[#606C80]  text-[14px] font-[800] leading-[21px] ">Tiền thu</Text>
                             </View>
                             <View className="flex-row items-center gap-[15px] ml-[15px]">
-                                <View className="w-[15px] h-[15px] bg-warningColor rounded-[50%]"></View>
+                                <View className="w-[15px] h-[15px] bg-warningColor rounded-[100px]"></View>
                                 <Text className="text-[#606C80]  text-[14px] font-[800] leading-[21px] ">Tiền chi</Text>
                             </View>
                         </View>
@@ -230,7 +230,7 @@ export default function AnalysisScreen() {
                         <Text className="text-center text-textColor  text-[16px] font-[600] leading-[24px] mb-[10px]">Thu nhập trung bình từng tháng</Text>
                         <View className="mb-[20px] w-full flex-row justify-center ">
                             <View className="flex-row items-center gap-[15px] ">
-                                <View className="w-[15px] h-[15px] bg-[#22C55E] rounded-[50%]"></View>
+                                <View className="w-[15px] h-[15px] bg-[#22C55E] rounded-[100px]"></View>
                                 <Text className="text-[#606C80]  text-[14px] font-[800] leading-[21px] ">Tiền thu</Text>
                             </View>
                         </View>
@@ -264,7 +264,7 @@ export default function AnalysisScreen() {
                         <Text className="text-center text-textColor  text-[16px] font-[600] leading-[24px] mb-[10px]">Chi tiêu trung bình từng tháng</Text>
                         <View className="mb-[20px] w-full flex-row justify-center ">
                             <View className="flex-row items-center gap-[15px] ">
-                                <View className="w-[15px] h-[15px] bg-warningColor rounded-[50%]"></View>
+                                <View className="w-[15px] h-[15px] bg-warningColor rounded-[100px]"></View>
                                 <Text className="text-[#606C80]  text-[14px] font-[800] leading-[21px] ">Tiền chi</Text>
                             </View>
                         </View>

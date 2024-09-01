@@ -9,7 +9,8 @@ import { showToastU } from '../../utils/toast'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import {  useSelector } from 'react-redux'
-import { selectMessage, selectSuccess } from '../../redux/authSlice'
+import { selectMessage, selectSuccess, selectToken, selectUser } from '../../redux/authSlice'
+import { getBalance } from '../../data/Api'
 
 
 
@@ -23,28 +24,45 @@ const labelCost=[
 ]
 
 export default function HomeScreen() {
+    const token=useSelector(selectToken)
+    const user=useSelector(selectUser)
     const {t}=useTranslation()
     const navigation = useNavigation()
     const [hiddenTime,setHiddenTime]=useState(false)
+    const [totalBalance,setTotalBalance]=useState(0)
     const message=useSelector(selectMessage)
     const success=useSelector(selectSuccess)
     const [valueTime,setValueTime]=useState("Tháng này")
-    const [hiddenToast,setHiddenToast]=useState(false)
-
-
+    console.log(message)
 
     useEffect(()=>{
-        let timmer
-        if(success && !hiddenToast) {
-            timmer=setInterval(()=>{
-                showToastU(message,"#0866ff","check",3000)
-                setHiddenToast(true)
-            },500)
+        if(success) {
+            showToastU(message,"#0866ff","check",3000)
         }
-        return ()=>{
-            clearInterval(timmer)
+    },[success])
+
+    //fetching total balance
+    useEffect(()=>{
+        const getTotalBalance= async () => {
+            try {
+                const response = await getBalance(user?.id, {
+                    headers: {
+                        token: `bearer ${token}`
+                    }
+                })
+                if (response.status === 200) {
+                    console.log(response.data)
+                    setTotalBalance(response.data.totalBalance)
+                }
+            } catch (err) {
+                console.log(err)
+            }
         }
-    },[success,hiddenToast])
+        if (token) {
+            getTotalBalance()
+        }
+    },[token])
+
 
     return (
         <View className="flex-1 ">
@@ -61,7 +79,7 @@ export default function HomeScreen() {
             </View>
             <ScrollView>
                 <View className="flex-row items-center w-full justify-between mt-[70px] px-[20px]">
-                    <Text className="text-white text-[24px] leading-[33px] font-[700] ">1.500.000 đ</Text>
+                    <Text className="text-white text-[24px] leading-[33px] font-[700] ">{totalBalance.toLocaleString('vi-VN')} đ</Text>
                     <TouchableOpacity activeOpacity={0.8} onPress={()=>navigation.navigate("notificationScreen")}>
                         <Icon name={"bell"} size={25} color="#fff" />
                     </TouchableOpacity>
@@ -71,7 +89,9 @@ export default function HomeScreen() {
                 <View className="w-[91%]  mt-[20px] bg-white mx-auto rounded-[12px] py-[15px] px-[20px] " style={styles.shadowS}>
                         <View className="flex-row justify-between ">
                             <Text className="text-[#000000] text-[15px] leading-[22px] font-[500]">{t('myAccount')}</Text>
-                            <Text className="text-clickButton text-[14px] leading-[18px] font-[500]">{t('viewAll')}</Text>
+                            <TouchableOpacity activeOpacity={0.8} onPress={()=>navigation.navigate("accountScreen")} >
+                                <Text className="text-clickButton text-[14px] leading-[18px] font-[500]">{t('viewAll')}</Text>
+                            </TouchableOpacity>
                         </View>
                         
                         <View className="flex-row justify-between items-center mt-[10px] ">

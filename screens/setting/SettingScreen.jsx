@@ -47,9 +47,8 @@ export default function SettingScreen() {
     const handleLogout = async () => {
         try {
             dispatch(logout())
+            await removeData("dataSave") 
             setLoading(true)
-            await removeData("dataSave")
-            console.log("đã đăng xuất")
             navigation.navigate('startScreen')
         } catch (err) {
             console.log(err)
@@ -57,23 +56,23 @@ export default function SettingScreen() {
     }
     const functionChose = {
         EditUser: () => {
-            //navigation.navigate('EditUser')
+            navigation.navigate('profileScreen')
         },
         Logout: () => { setModalVisible(true) },
         ChangePassword: () => {
-            //navigation.navigate('ChangePassword')
+            navigation.navigate('changePasswordScreen')
         },
         ChangeLanguage: () => {
-            //navigation.navigate('ChangeLanguage')
+            navigation.navigate('selectLanguageScreen')
         },
         ChangeMoney: () => {
             //navigation.navigate('ChangeMoney')
         },
         ChangeCategoriesExpense: () => {
-            //navigation.navigate('ChangeCategoriesExpense')
+            navigation.navigate('expenseTypeScreen')
         },
         ChangeCategoriesIncome: () => {
-            //navigation.navigate('ChangeCategoriesIncome')
+            navigation.navigate('incomeTypeScreen')
         },
         navigateAdminPage: () => {
             navigation.navigate('adminStackScreen')
@@ -102,7 +101,7 @@ export default function SettingScreen() {
                                 <View className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-50"></View>
                                 <View className="w-[300px] p-[20px] bg-white rounded-[18px] z-10">
                                     <Text className="text-center font-[600] text-[16px] text-textColor ">Bạn có muốn đăng xuất ?</Text>
-                                    <View className="flex-col mt-[20px] ">
+                                    <View className="flex flex-col mt-[20px] ">
                                         <ButtonCom
                                             text="Đăng xuất"
                                             styleButton="w-full py-[13px] mx-auto bg-warningColor rounded-[18px] "
@@ -135,8 +134,8 @@ export default function SettingScreen() {
                                 <Text className="text-center text-[22px] font-[600] text-textColor mt-[10px] leading-[33px] ">{user?.name}</Text>
                                 <Text className="text-center text-[16px] font-[600] text-primaryColor leading-[24px] ">{user?.email}</Text>
                                 <View className="w-full mt-[25px] bg-white mx-auto rounded-[8px] py-[12px] px-[20px]" style={styles.shadowS}>
-                                    <View className="flex-row items-center gap-[15px] ">
-                                        <View className="h-[45px] w-[45px] rounded-[200px] border-[2px] border-primaryColor flex-row items-center justify-center">
+                                    <View className="flex flex-row items-center gap-[15px] ">
+                                        <View className="h-[45px] w-[45px] rounded-[200px] border-[2px] border-primaryColor flex flex-row items-center justify-center">
                                             <Image
                                                 source={{ uri: "https://s3-alpha-sig.figma.com/img/4fb3/cea4/2af90e1573bb9b5163aec628ea81185d?Expires=1724630400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=DA4WMfM2WMHgH1qWGikk3z0R2OXW4jXVfqZxFjQveQlUMjV8gsQ8iG4tdqUTDENHju3mQzmIP~KVUfpNe8p98aO1WPGJi9JMeHYqccEmpasxowowK8BTaepVLrkb7XS0VCTz7Y-p7A28h88PC~ZVERoXKA6UrO8sBgxmj~AwjW0QoAToe7gpzrV5aYnEuFSB1u8DBTIMeHR3ndZoU9DDlvmL5PeXlZEqWkr5OZdsRRrRxijPnoQ8xuxNHbzalzTq7ZvZ8JMQMlX~g08m2fnOr96f-MYOSqGFzR61GFAxg0~H5mWxRoQ~qxh9AoIMKBxylq87sOONfWx1BXNBooj4Fw__" }}
                                                 className="w-[27px] h-[22px] object-cover "
@@ -152,8 +151,8 @@ export default function SettingScreen() {
                                             .filter((fun) => (admin && fun.typeFunc === "navigateAdminPage") || (fun.typeFunc !== "navigateAdminPage"))
                                             .map((fun, index) => {
                                                 return (
-                                                    <TouchableOpacity onPress={() => choseFun(fun.typeFunc)} activeOpacity={0.8} key={index} className="flex-row items-center gap-[15px] mt-[1px] ">
-                                                        <View className="h-[45px] w-[45px] rounded-[200px] bg-[#F3F2FB] border-[2px] border-primaryColor flex-row items-center justify-center">
+                                                    <TouchableOpacity onPress={() => choseFun(fun.typeFunc)} activeOpacity={0.8} key={index} className="flex flex-row items-center gap-[15px] mt-[1px] ">
+                                                        <View className="h-[45px] w-[45px] rounded-[200px] bg-[#F3F2FB] border-[2px] border-primaryColor flex flex-row items-center justify-center">
                                                             <Icon name={`${fun.nameIcon}`} size={18} color="#438883" />
                                                         </View>
                                                         <Text className="text-textColor text-[16px] leading-[21] font-[500]">{fun.title}</Text>
