@@ -8,33 +8,36 @@ import TabViews from '../../components/TabViews'
 import { useEffect, useState } from 'react'
 import { selectToken, selectUser } from '../../redux/authSlice'
 import { useSelector } from 'react-redux'
-import { Calendar } from 'react-native-calendars';
-import WeekView from 'react-native-week-view';
-import ButtonCom from '../../components/ButtonCom'
+import { Calendar } from 'react-native-calendars'
+import { selectRefresh } from '../../redux/accountSlice'
+import { getAccount } from '../../data/Api'
+
 
 export default function AccountDetailScreen() {
+    const refresh = useSelector(selectRefresh)
     const [selectedDate, setSelectedDate] = useState(null)
     const token = useSelector(selectToken)
+    const user = useSelector(selectUser)
     const route = useRoute()
     const navigation = useNavigation()
     const [activeTab, setActiveTab] = useState("Khoản chi")
+    const [expenses, setExpenses] = useState([])
+    const [incomes, setIncomes] = useState([])
+    const [balance, setBalance] = useState(0)
     const { t } = useTranslation()
-    const { id } = route.params || {}
+    const { accountId } = route.params || {}
 
-    const date = new Date()
     // Lấy năm, tháng, ngày
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-    const day = String(date.getDate()).padStart(2, '0'); // Ngày
-
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
     // Định dạng ngày
-    const formattedDate = `${year}-${month}-${day}`;
+    const formattedDate = `${year}-${month}-${day}`
     const tabs = [
         { id: 0, name: "Khoản chi" },
         { id: 1, name: "Khoản thu" }
     ]
-    console.log(formattedDate)
-
     const handleDayPress = (day) => {
         setSelectedDate(day.dateString)
     }
@@ -53,44 +56,27 @@ export default function AccountDetailScreen() {
             }
         })
     }
-    useEffect(() => { }, [token])
-    const tranExpense = [
-        { id: 0, name: "mua đồ dùng 1", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 1, name: "mua đồ dùng 2", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 2, name: "mua đồ dùng 3", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 3, name: "mua đồ dùng 4", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 4, name: "mua đồ dùng 5", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 5, name: "mua đồ dùng 1", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 6, name: "mua đồ dùng 2", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 7, name: "mua đồ dùng 3", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 8, name: "mua đồ dùng 4", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 9, name: "mua đồ dùng 5", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 10, name: "mua đồ dùng 1", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 11, name: "mua đồ dùng 2", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 12, name: "mua đồ dùng 3", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 13, name: "mua đồ dùng 4", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 14, name: "mua đồ dùng 14", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    ]
-    const tranInCome = [
-        { id: 0, name: "Lương 1", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 1, name: "Lương 2", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 2, name: "Lương 3", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 3, name: "Lương 4", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 4, name: "Lương 5", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 5, name: "Lương 1", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 6, name: "Lương 2", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 7, name: "Lương 3", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 8, name: "Lương 4", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 9, name: "Lương 5", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 10, name: "Lương 1", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 11, name: "Lương 2", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 12, name: "Lương 3", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 13, name: "Lương 4", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-        { id: 14, name: "Lương 14", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    ]
-
-
-    console.log(id)
+    useEffect(() => {
+        const getDetailAccount = async () => {
+            try {
+                const response = await getAccount(accountId, user?.id, {
+                    headers: {
+                        token: `Bearer ${token}`
+                    }
+                })
+                if (response.status === 200) {
+                    setBalance(response.data.accountDetails.balance)
+                    setExpenses(response.data.accountDetails.expenseTransactions)
+                    setIncomes(response.data.accountDetails.incomeTransactions)
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        if (token) {
+            getDetailAccount()
+        }
+    }, [token, refresh])
 
     return (
         <View className="flex-1 bg-backGroundColor">
@@ -118,22 +104,18 @@ export default function AccountDetailScreen() {
                         <Calendar
                             // Định dạng tháng
                             monthFormat={'MMMM - yyyy'}
-                            // Khi một ngày được chọn
                             onDayPress={handleDayPress}
-                            // Ngày hiện tại và ngày được chọn
                             markedDates={markedDates}
-                            // Cài đặt kiểu dáng
                             theme={{
                                 selectedDayBackgroundColor: '#fff',
                                 todayTextColor: '#00adf5',
                                 arrowColor: '#666666',
-
                             }}
                         />
                     </View>
                 </View>
                 <Text className="text-center text-textColor mt-[40px] text-[16px] font-[400]">Số dư của ví</Text>
-                <Text className="text-center text-primaryColor text-[30px] font-[700] leading-[45px] ">96.000.000 vnđ</Text>
+                <Text className="text-center text-primaryColor text-[30px] font-[700] leading-[45px] ">{balance.toLocaleString('vi-VN')} vnđ</Text>
                 <View className="w-full bg-white h-full rounded-[40px] mt-[40px] px-[25px] py-[20px]">
                     <View className="w-full border-b border-[#e5e7e9] flex flex-row items-center">
                         {
@@ -146,29 +128,35 @@ export default function AccountDetailScreen() {
                             })
                         }
                     </View>
-                    <View className="mt-[20px] h-[500px] mb-[30px]">
-                        <ScrollView className="flex-1 h-full">
-                            {
-                                (activeTab === "Khoản chi" ? tranExpense : tranInCome).map((item) => {
-                                    return (
-                                        <View key={item.id} className="flex flex-row justify-between items-center mt-[10px]" >
-                                            <TouchableOpacity activeOpacity={0.8} onPress={() => { }} className="flex flex-row items-center">
-                                                <View className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
-                                                    <Image
-                                                        source={{ uri: `${item.image}` }}
-                                                        className="object-cover w-full h-full rounded-[100px]"
-                                                    />
-                                                </View>
-                                                <View className="ml-[10px] flex flex-col items-start">
-                                                    <Text className="text-center text-textColor text-[16px] font-[600]">{item.name}</Text>
-                                                    <Text className={`text-center mt-[5px] ${activeTab === "Khoản chi" ? "text-warningColor" : "text-clickButton"}  text-[12px] font-[500]`}>{item.balance} {item.currency}</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ScrollView>
+                    <View className="mt-[20px]  mb-[30px]">
+
+                        {
+                            (activeTab === "Khoản chi" ? expenses : incomes).length === 0 ? <View className="w-full flex flex-col items-center mt-[40px]">
+                                <Text className="text-[16px] text-textColor font-[500]">Không có dữ liệu!</Text>
+                                <Image
+                                    className="w-[100px] h-[100px]"
+                                    source={{ uri: "https://s3-alpha-sig.figma.com/img/e224/311e/ad4282c1095acb9f0a249e6846fc58a6?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=o79vKFqjKxvscW6fpTzuJcgXi2YXmJks38nJJxlwwE-msUQqaZEPXSjjiF3NZqCcDG1KbbF8yXtBb9dAho4LYMi53Qy07pgbY3t25SFu0qgKAAIocjbOafGTxe5LSkGGbvzHD~4Zz2yWnPc2cSoaJ6S1yTJ-bC7OC7UDVEpw19nJp6eylQ0rJtn5jBDidlPTFeJ0xm-k7C0925NYFHFV5y2df-4Ej3jYPVxY7M9N~885~uOCdD1yrATnueLdQZ8c2emEqPtptDeV-kwtzzG~g90m3cYjL3yH28MSbPfrkHik7ddqKfEl2C4RXtem5OiJa5w1ZxQwk1wsuxjrKZe6VA__" }}
+                                />
+                            </View> : (activeTab === "Khoản chi" ? expenses : incomes).map((item) => {
+                                return (
+                                    <View key={item.id} className="flex flex-row justify-between items-center mt-[10px]" >
+                                        <TouchableOpacity activeOpacity={0.8} onPress={() => { }} className="flex flex-row items-center">
+                                            <View className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
+                                                <Image
+                                                    source={{ uri: `${activeTab === "Khoản chi" ? item?.category?.categories_image : item?.incomeType?.income_type_image}` }}
+                                                    className="object-cover w-full h-full rounded-[100px]"
+                                                />
+                                            </View>
+                                            <View className="ml-[10px] flex flex-col items-start">
+                                                <Text className="text-center text-textColor text-[16px] font-[600]">{item?.transaction_name}</Text>
+                                                <Text className={`text-center mt-[5px] ${activeTab === "Khoản chi" ? "text-warningColor" : "text-clickButton"}  text-[12px] font-[500]`}>{item?.amount}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })
+                        }
+
                     </View>
                 </View>
             </ScrollView>

@@ -11,11 +11,8 @@ import { useSelector } from 'react-redux'
 import AbstractCircle from '../../components/AbstractCircle'
 import ButtonCom from '../../components/ButtonCom'
 import { SelectCountry } from 'react-native-element-dropdown'
-const validationSchema = Yup.object().shape({
 
-})
-
-
+const validationSchema = Yup.object().shape({})
 
 export default function DepositMoneySavingScreen() {
     const navigation=useNavigation()
@@ -24,7 +21,6 @@ export default function DepositMoneySavingScreen() {
     const [focusGender, setFocusGender] = useState(false)
     const [country, setCountry] = useState('1')
     const [valueSelected,setValueSelected]=useState("")
-    console.log(valueSelected)
 
     const local_data = [
         {

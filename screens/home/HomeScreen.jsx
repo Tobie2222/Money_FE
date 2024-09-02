@@ -8,9 +8,10 @@ import { useNavigation } from '@react-navigation/native'
 import { showToastU } from '../../utils/toast'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
-import {  useSelector } from 'react-redux'
+import {  useDispatch, useSelector } from 'react-redux'
 import { selectMessage, selectSuccess, selectToken, selectUser } from '../../redux/authSlice'
 import { getBalance } from '../../data/Api'
+import { getBalances, selectRefresh } from '../../redux/accountSlice'
 
 
 
@@ -26,6 +27,8 @@ const labelCost=[
 export default function HomeScreen() {
     const token=useSelector(selectToken)
     const user=useSelector(selectUser)
+    const refresh=useSelector(selectRefresh)
+    const dispatch=useDispatch()
     const {t}=useTranslation()
     const navigation = useNavigation()
     const [hiddenTime,setHiddenTime]=useState(false)
@@ -51,6 +54,9 @@ export default function HomeScreen() {
                     }
                 })
                 if (response.status === 200) {
+                    dispatch(getBalances({
+                        balance: response.data.totalBalance
+                    }))
                     console.log(response.data)
                     setTotalBalance(response.data.totalBalance)
                 }
@@ -58,10 +64,10 @@ export default function HomeScreen() {
                 console.log(err)
             }
         }
-        if (token) {
+        if (token || refresh) {
             getTotalBalance()
         }
-    },[token])
+    },[token,refresh])
 
 
     return (

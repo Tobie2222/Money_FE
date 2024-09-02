@@ -18,7 +18,7 @@ i18n.use(initReactI18next).init({
     compatibilityJSON: 'v3',
     resources,
     //default
-    lng: 'en',
+    lng: 'vi',
     fallbackLng: 'vi',
     interpolation: {
         escapeValue: false // react already safes from xss

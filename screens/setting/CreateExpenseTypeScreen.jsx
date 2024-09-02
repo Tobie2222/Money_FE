@@ -8,13 +8,14 @@ import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ButtonCom from '../../components/ButtonCom'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectToken, selectUser } from '../../redux/authSlice'
 import { createCatExpense } from '../../data/Api'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
 import * as ImagePicker from "expo-image-picker"
+import { toggleRefresh } from '../../redux/accountSlice'
 
 
 
@@ -25,6 +26,7 @@ const validationSchema = Yup.object().shape({
 })
 
 export default function CreateExpenseTypeScreen() {
+    const dispatch=useDispatch()
     const [avatar, setAvatar] = useState("https://timo.vn/wp-content/uploads/cach-chi-tieu-hop-ly-voi-muc-luong-6-trieu.jpg")
     const navigation = useNavigation()
     const user = useSelector(selectUser)
@@ -74,9 +76,9 @@ export default function CreateExpenseTypeScreen() {
             })
             if (response.status === 200) {
                 setLoading(false)
-                console.log(response.data)
                 showToastU(response.data.message, "#0866ff", "check", 3000)
                 setAvatar("https://timo.vn/wp-content/uploads/cach-chi-tieu-hop-ly-voi-muc-luong-6-trieu.jpg")
+                dispatch(toggleRefresh())
             }
         } catch (err) {
             setLoading(false)

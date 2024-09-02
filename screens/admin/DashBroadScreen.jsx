@@ -216,10 +216,6 @@ export default function DashBroadScreen() {
             onCloseBottomSheet={() => setHiddenBottomSheetDelete(false)}
             children={(
               <View>
-                <TouchableOpacity activeOpacity={0.8} onPress={() => { setHiddenBottomSheetDelete(false) }} className="flex-row items-center gap-[15px] px-[20px] py-[10px]">
-                  <Icon name={`pencil`} size={30} color="#AAAAAA" />
-                  <Text className="text-[18px] text-[#AAAAAA] font-[500]">Sửa</Text>
-                </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.8} onPress={() => { setModalVisible(true); setHiddenBottomSheetDelete(false) }} className="flex-row items-center gap-[15px] px-[20px] py-[10px]">
                   <Icon name={`trash`} size={30} color="#AAAAAA" />
                   <Text className="text-[18px] text-[#AAAAAA] font-[500]">Xóa</Text>

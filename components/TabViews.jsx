@@ -2,9 +2,10 @@ import { View, Text ,TouchableOpacity} from 'react-native'
 import React, { useState } from 'react'
 
 export default function TabViews({tabs,styleTabs,styleTab,styleTextTab,setCurrentTabs}) {
+    const setCurrentTabsCom=setCurrentTabs || (()=>{})
     const handleTab=(id,nameTab)=>{
         setCurrentTab(id)
-        setCurrentTabs(nameTab)
+        setCurrentTabsCom(nameTab)
     }
 
     const [currentTab,setCurrentTab]=useState(0)

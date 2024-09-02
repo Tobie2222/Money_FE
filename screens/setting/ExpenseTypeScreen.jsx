@@ -13,11 +13,13 @@ import BottomSheetCom from '../../components/BottomSheetCom'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
+import { selectRefresh } from '../../redux/accountSlice'
 
 
 export default function ExpenseTypeScreen() {
     const user = useSelector(selectUser)
     const token = useSelector(selectToken)
+    const refresh=useSelector(selectRefresh)
     const [loading, setLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
     const [fetchingCatExpense, setFetchingCatExpense] = useState(false)
@@ -66,10 +68,10 @@ export default function ExpenseTypeScreen() {
                 console.log(err)
             }
         }
-        if (token) {
+        if (token || refresh) {
             getAllCategoriesExpenses()
         }
-    }, [token,fetchingCatExpense])
+    }, [token,fetchingCatExpense,refresh])
 
     return (
         <View className="flex-1 relative">

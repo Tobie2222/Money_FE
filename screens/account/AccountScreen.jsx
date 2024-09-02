@@ -1,103 +1,80 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import { View, StyleSheet, Image, Text, StatusBar, ScrollView, TouchableOpacity, Modal, FlatList, Dimensions } from 'react-native'
+import { View, StyleSheet, Image, Text, StatusBar, TouchableOpacity, Modal, FlatList } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import TabViews from '../../components/TabViews'
 import { useEffect, useState } from 'react'
 import { selectToken, selectUser } from '../../redux/authSlice'
 import { useSelector } from 'react-redux'
-import { getAllAccount, getBalance } from '../../data/Api'
+import { getAllAccount, getAllSaving } from '../../data/Api'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
+import { selectBalance, selectRefresh } from '../../redux/accountSlice'
+import WidthCurrentSavingAmount from '../../components/WidthCurrentSavingAmount'
 
 
-const savings = [
-    { id: 0, name: "mua nhà 1", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 1, name: "mua nhà 2", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 2, name: "mua nhà 3", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 3, name: "mua nhà 4", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 4, name: "mua nhà 5", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 5, name: "mua nhà 6", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 6, name: "mua nhà 7", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 7, name: "mua nhà 8", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 8, name: "mua nhà 9", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 9, name: "mua nhà 10", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 10, name: "mua nhà 11", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 12, name: "mua nhà 12", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 13, name: "mua nhà 13", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
-    { id: 14, name: "mua nhà 14", image: "https://res.cloudinary.com/doklsozku/image/upload/v1724342646/app_ql/sy7rcszdxyoqxgxxkmee.jpg", currency: "vnđ", balance: 400000 },
 
-]
+
 
 export default function AccountScreen() {
     const [currentTab, setCurrentTab] = useState("Tài khoản")
-    const [accounts,setAccounts]=useState([])
+    const refresh=useSelector(selectRefresh)
+    const balance = useSelector(selectBalance)
+    const [accounts, setAccounts] = useState([])
+    const [savings, setSavings] = useState([])
     const user = useSelector(selectUser)
     const token = useSelector(selectToken)
     const [loading, setLoading] = useState(false)
-    const [totalBalance,setTotalBalance]=useState(0)
-    const route=useRoute()
+    const route = useRoute()
     const navigation = useNavigation()
-    const {message ,refresh}=route.params || {}
-    console.log("Tổng số dư ",totalBalance)
     const { t } = useTranslation()
     const handleTabs = (childData) => {
         setCurrentTab(childData)
     }
-    console.log(accounts)
-    useEffect(()=>{
-        //fetching all Account
-        const getAllAccounts = async () => {
+    console.log(savings)
+    //fetching data
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!token) return
             setLoading(true)
             try {
-                const response = await getAllAccount(user?.id, {
-                    headers: {
-                        token: `bearer ${token}`
+                if (currentTab === "Tài khoản") {
+                    const accountsResponse = await getAllAccount(user?.id, {
+                        headers: {
+                            token: `bearer ${token}`
+                        }
+                    })
+                    if (accountsResponse.status === 200) {
+                        setAccounts(accountsResponse.data.allAccountByUser)
                     }
-                })
-                if (response.status === 200) {
-                    setLoading(false)
-                    setAccounts(response.data.allAccountByUser)
+                }
+                if (currentTab === "Tích lũy") {
+                    const savingsResponse = await getAllSaving(user?.id, {
+                        headers: {
+                            token: `bearer ${token}`
+                        }
+                    })
+                    if (savingsResponse.status === 200) {
+                        setSavings(savingsResponse.data.allSaving)
+                    }
                 }
             } catch (err) {
-                setLoading(false)
                 console.log(err)
+            } finally {
+                setLoading(false)
             }
         }
-        const getTotalBalance= async () => {
-            try {
-                const response = await getBalance(user?.id, {
-                    headers: {
-                        token: `bearer ${token}`
-                    }
-                })
-                if (response.status === 200) {
-                    setTotalBalance(response.data.totalBalance)
-                }
-            } catch (err) {
-                setLoading(false)
-                console.log(err)
-            }
-        }
-        if (token || refresh) {
-            getTotalBalance()
-            getAllAccounts()
-        }
-        if (refresh) {
-            showToastU(message, "#0866ff", "check", 3000)
-        }
-    },[token,refresh])
-
-
+        fetchData()
+    }, [token, refresh, currentTab])
 
     return (
         <View className="flex-1 ">
             <StatusBar
                 barStyle="light"
             />
-            
-                        <View className="z-20">
+
+            <View className="z-20">
                 <Toast
                     config={{
                         custom_toast: (internalState) => <CustomToast {...internalState} />
@@ -110,7 +87,7 @@ export default function AccountScreen() {
                 </View>
                 <View className="w-full h-full bg-white rounded-t-[36px] mt-[-45px] px-[20px]">
                     <Text className="text-center text-textColor mt-[60px] text-[16px] font-[400]">Tổng số tiền</Text>
-                    <Text className="text-center text-textColor mt-[15px] text-[30px] font-[700] leading-[45px] ">{totalBalance.toLocaleString('vi-VN')} vnđ</Text>
+                    <Text className="text-center text-textColor mt-[15px] text-[30px] font-[700] leading-[45px] ">{balance.toLocaleString('vi-VN')} vnđ</Text>
                     <View className="mx-auto mt-[35px] flex flex-row">
                         <View className="flex-col items-center gap-[10px] mr-[20px] ">
                             <TouchableOpacity onPress={() => { navigation.navigate("createAccountScreen") }} activeOpacity={0.8} className="w-[60px] h-[60px] border border-primaryColor rounded-[100px] flex flex-row items-center justify-center">
@@ -141,7 +118,7 @@ export default function AccountScreen() {
                                 return (
                                     <View className="flex flex-row justify-between items-center mt-[10px]" >
                                         {
-                                            currentTab === "Tài khoản" ? (<TouchableOpacity activeOpacity={0.8} onPress={() => { navigation.navigate("accountDetailScreen", { id: item?._id }) }} className="flex flex-row items-center">
+                                            currentTab === "Tài khoản" ? (<TouchableOpacity activeOpacity={0.8} onPress={() => { navigation.navigate("accountDetailScreen", { accountId: item?._id }) }} className="flex flex-row items-center">
                                                 <View style={styles.shadowS} className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
                                                     <Image
                                                         source={{ uri: `${item?.accountType?.account_type_image}` }}
@@ -150,22 +127,25 @@ export default function AccountScreen() {
                                                 </View>
                                                 <View className="ml-[10px] flex flex-col items-start">
                                                     <Text className="text-center text-textColor text-[16px] font-[600]">{item?.account_name}</Text>
-                                                    <Text className="text-center mt-[5px] text-clickButton text-[12px] font-[500]">{item?.balance} vnđ</Text>
+                                                    <Text className="text-center mt-[5px] text-clickButton text-[12px] font-[500]">{item?.balance.toLocaleString('vi-VN')} vnđ</Text>
                                                 </View>
                                             </TouchableOpacity>) : (
-                                                <TouchableOpacity className="w-[90%]  flex flex-row items-center" activeOpacity={0.8} onPress={() => { navigation.navigate("savingDetailScreen", { id: item?.id }) }}>
+                                                <TouchableOpacity className="w-[90%]  flex flex-row items-center" activeOpacity={0.8} onPress={() => { navigation.navigate("savingDetailScreen", { savingId: item?._id }) }}>
                                                     <View style={styles.shadowS} className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
                                                         <Image
-                                                            source={{ uri: `${item?.image}` }}
+                                                            source={{ uri: `${item?.saving_image}` }}
                                                             className="object-cover w-full h-full rounded-[100px]"
                                                         />
                                                     </View>
-                                                    <View className="ml-[10px] flex flex-col items-start w-[100%]">
-                                                        <Text className="text-center text-textColor text-[16px] font-[600]">{item?.name}</Text>
-                                                        <Text className="text-center mt-[2px] text-primaryColor text-[12px] font-[500]">{item?.balance} {item?.currency}</Text>
-                                                        <View className="w-[80%] h-[4px] mt-[2px] bg-borderColor rounded-[6px]">
-                                                            <View className="w-[20%] h-[4px]  bg-clickButton rounded-[6px]"></View>
-                                                        </View>
+                                                    <View className="ml-[10px] flex flex-col items-start w-[100%] ">
+                                                        <Text className="text-center text-textColor text-[16px] font-[600]">{item?.saving_name}</Text>
+                                                        <Text className="text-center mt-[2px] text-primaryColor text-[12px] font-[500]">{item?.current_amount.toLocaleString('vi-VN')} vnđ</Text>
+                                                        <WidthCurrentSavingAmount
+                                                            styleChildren="h-[4px] "
+                                                            styleParent="w-[85%] h-[4px] mt-[2px]"
+                                                            goal_amount={item?.goal_amount}
+                                                            current_amount={item?.current_amount}
+                                                        />
                                                     </View>
                                                 </TouchableOpacity>
                                             )

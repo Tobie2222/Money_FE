@@ -5,10 +5,18 @@ import { useTranslation } from 'react-i18next'
 import AbstractCircle from '../../components/AbstractCircle'
 import { ScrollView } from 'react-native-gesture-handler'
 import { BarChart } from "react-native-gifted-charts"
+import { useSelector } from 'react-redux'
+import { selectBalance } from '../../redux/accountSlice'
 
 
 
 export default function AnalysisScreen() {
+    const [valueTime, setValueTime] = useState("Thời gian")
+    const balance=useSelector(selectBalance)
+    const [valueTimeIncome, setValueTimeIncome] = useState("Thời gian")
+    const [valueTimeExpense, setValueTimeExpense] = useState("Thời gian")
+    const [hiddenTime, setHiddenTime] = useState(false)
+    const { t } = useTranslation()
     const barData = [
         {
             value: 40,
@@ -146,11 +154,7 @@ export default function AnalysisScreen() {
         { value: 45, label: 'T10', frontColor: '#EF4E4E' },
         { value: 15, label: 'T11', frontColor: '#EF4E4E' },
         { value: 13, label: 'T12', frontColor: '#EF4E4E' },]
-    const [valueTime, setValueTime] = useState("Thời gian")
-    const [valueTimeIncome, setValueTimeIncome] = useState("Thời gian")
-    const [valueTimeExpense, setValueTimeExpense] = useState("Thời gian")
-    const [hiddenTime, setHiddenTime] = useState(false)
-    const { t } = useTranslation()
+
     return (
         <View className="flex-1 ">
             <StatusBar
@@ -162,7 +166,7 @@ export default function AnalysisScreen() {
                 <View className="w-full h-full bg-backGroundColor rounded-t-[36px] px-[20px] py-[25px]">
                     <View className="flex-row items-center gap-[15px]">
                         <Text className="text-center text-textColor  text-[16px] font-[600] leading-[24px] ">Tổng số Tiền</Text>
-                        <Text className="text-center text-[#1E1E1E]  text-[18px] font-[600] leading-[27px]">100.000.000 vnđ</Text>
+                        <Text className="text-center text-[#1E1E1E]  text-[18px] font-[600] leading-[27px]">{balance.toLocaleString('vi-VN')} vnđ</Text>
                     </View>
                     <View className="flex-row items-center gap-[15px] mt-[0px]">
                         <Text className="text-center text-textColor  text-[16px] font-[600] leading-[24px] ">Thu nhập trung thàng này</Text>

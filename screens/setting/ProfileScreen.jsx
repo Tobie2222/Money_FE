@@ -8,8 +8,8 @@ import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ButtonCom from '../../components/ButtonCom'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectToken, selectUser } from '../../redux/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectToken, selectUser, updateTsAuth } from '../../redux/authSlice'
 import { createUser, updateUser } from '../../data/Api'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
@@ -25,9 +25,10 @@ const validationSchema = Yup.object().shape({
 
 
 export default function ProfileScreen() {
-  const user=useSelector(selectUser)
+  const user = useSelector(selectUser)
   const token = useSelector(selectToken)
-  const [avatar, setAvatar] = useState(user?.image)
+  const dispatch = useDispatch()
+  const [avatar, setAvatar] = useState(user?.avatar)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [error, setError] = useState(false)
@@ -43,6 +44,7 @@ export default function ProfileScreen() {
     { label: 'Male', value: 'male', sex: 'male' },
     { label: 'Female', value: 'female', sex: 'female' }
   ]
+
 
   const upLoadImage = async () => {
     try {
@@ -68,36 +70,39 @@ export default function ProfileScreen() {
   const handleSubmit = async (values) => {
     setLoading(true)
     try {
-        const formData = new FormData()
-        formData.append("name", values?.name)
-        formData.append("email", values?.email)
-        formData.append("sex", values?.sex)
-        if (avatar) {
-            formData.append("image", {
-                uri: avatar,
-                name: 'image.jpg',
-                type: 'image/jpeg',
-            })
-        }
-        const response=await updateUser(formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-              token: `Bearer ${token}`,
-          },
+      const formData = new FormData()
+      formData.append("name", values?.name)
+      formData.append("email", values?.email)
+      formData.append("sex", values?.sex)
+      if (avatar) {
+        formData.append("image", {
+          uri: avatar,
+          name: 'image.jpg',
+          type: 'image/jpeg',
+        })
+      }
+      const response = await updateUser(user?.id, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          token: `Bearer ${token}`,
+        },
       })
-        if (response.status === 200) {
-            setLoading(false)
-            console.log(response.data)
-            showToastU(response.data.message, "#0866ff", "check", 3000)
-            setAvatar("")
-        }
-    } catch (err) {
+      if (response.status === 200) {
         setLoading(false)
-        setError(true)
-        if (err.response) {
-            setMessage(err.response.data.message)
-            showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
-        } 
+        showToastU(response.data.message, "#0866ff", "check", 3000)
+        dispatch(updateTsAuth({
+          user: response.data.updateUser,
+          token: token
+        }))
+        setAvatar(response.data.updateUser.avatar)
+      }
+    } catch (err) {
+      setLoading(false)
+      setError(true)
+      if (err.response) {
+        setMessage(err.response.data.message)
+        showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
+      }
     }
   }
 
@@ -124,8 +129,12 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           <Text className=" text-[22px] leading-[33px] font-[700] text-white text-center ml-[35px] ">Chỉnh sửa thông tin cá nhân</Text>
         </View>
+
+
         {
-          loading ? (<Loading color='#438883' />) : (
+          loading ? (<View className="mt-[350px]">
+            <Loading color='#438883' />
+          </View>) : (
             <View className="flex-1">
               <View className="w-[100px] h-[100px] rounded-[100px] border border-borderColor mt-[130px] mx-auto shadow-2xl relative ">
                 <Image

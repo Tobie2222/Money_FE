@@ -13,11 +13,13 @@ import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import BottomSheetCom from '../../components/BottomSheetCom'
 import { showToastU } from '../../utils/toast'
+import { selectRefresh } from '../../redux/accountSlice'
 
 export default function IncomeTypeScreen() {
     const user = useSelector(selectUser)
     const token = useSelector(selectToken)
     const [loading, setLoading] = useState(false)
+    const refresh=useSelector(selectRefresh)
     const [message, setMessage] = useState("")
     const [idCatIncomeType, setIdCatIncomeType] = useState("")
     const [modalVisible, setModalVisible] = useState(false)
@@ -71,10 +73,10 @@ export default function IncomeTypeScreen() {
                 console.log(err)
             }
         }
-        if (token) {
+        if (token || refresh) {
             getAllCategoriesIncomes()
         }
-    }, [token, fetchingCatIncomeType])
+    }, [token, fetchingCatIncomeType,refresh])
     //handleDelete
 
 

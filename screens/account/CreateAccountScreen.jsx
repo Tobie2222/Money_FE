@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useEffect, useState } from 'react'
 import { selectToken, selectUser } from '../../redux/authSlice'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import AbstractCircle from '../../components/AbstractCircle'
 import { SelectCountry } from 'react-native-element-dropdown'
 import ButtonCom from '../../components/ButtonCom'
@@ -15,11 +15,13 @@ import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
 import Loading from '../../components/Loading'
+import { toggleRefresh } from '../../redux/accountSlice'
 
 const validationSchema = Yup.object().shape({})
 
 
 export default function CreateAccountScreen() {
+    const dispatch=useDispatch()
     const navigation = useNavigation()
     const { t } = useTranslation()
     const user = useSelector(selectUser)
@@ -89,9 +91,9 @@ export default function CreateAccountScreen() {
             })
             if (response.status === 200) {
                 console.log(response.data.message)
-
-                navigation.navigate('accountScreen', { refresh: true ,message:response.data.message })
+                showToastU(response.data.message, "#438883", "check", 3000)
                 setLoading(false)
+                dispatch(toggleRefresh())
             }
         } catch (err) {
             setLoading(false)

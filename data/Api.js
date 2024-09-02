@@ -45,43 +45,11 @@ export const deleteCatIncome=(inComeId,userId,config)=>HTTP.delete(`incomeType/d
 //update income
 export const updateCatIncome=(userId,config)=>HTTP.put(`incomeType/getAllCat/${userId}`,config)
 
-//transaction Expense
-//getAll TranExpense 
-export const getAllCatTranExpense=(userId,config)=>HTTP.get(`categories/getAllCat/${userId}`,config)
-//create TranExpense
-export const createCatTranExpense=(userId,config)=>HTTP.post(`categories/getAllCat/${userId}`,config)
-//delete TranExpense
-export const deleteCatTranExpense=(inComeTypeId,userId,config)=>HTTP.delete(`categories/getAllCat/${inComeTypeId}/${userId}`,config)
-//update TranExpense
-export const updateCatTranExpense=(userId,config)=>HTTP.put(`categories/getAllCat/${userId}`,config)
-
-
-
-//transaction income
-//getAll TranIncome 
-export const getAllCatTranIncome=(userId,config)=>HTTP.get(`categories/getAllCat/${userId}`,config)
-//create TranIncome
-export const createCatTranIncome=(userId,config)=>HTTP.post(`categories/getAllCat/${userId}`,config)
-//delete TranIncome
-export const deleteCatTranIncome=(userId,config)=>HTTP.delete(`categories/getAllCat/${userId}`,config)
-//update TranIncome
-export const updateCatTranIncome=(userId,config)=>HTTP.put(`categories/getAllCat/${userId}`,config)
-
-
-
-//saving
-//getAll Saving 
-export const getAllSaving=(userId,config)=>HTTP.get(`categories/getAllCat/${userId}`,config)
-//create Saving
-export const createSaving=(userId,config)=>HTTP.post(`categories/getAllCat/${userId}`,config)
-//delete Saving
-export const deleteSaving=(userId,config)=>HTTP.delete(`categories/getAllCat/${userId}`,config)
-//update Saving
-export const updateSaving=(userId,config)=>HTTP.put(`categories/getAllCat/${userId}`,config)
-
 //account
 //getAll Account 
 export const getAllAccount=(userId,config)=>HTTP.get(`account/getAllAccount/${userId}`,config)
+//get Account
+export const getAccount=(accountId,userId,config)=>HTTP.get(`account/getDetailAccount/${accountId}/${userId}`,config)
 //create Account
 export const createAccount=(id_accountType,userId,payload,config)=>HTTP.post(`account/createAccount/${id_accountType}/${userId}`,payload,config)
 //delete Account
@@ -91,7 +59,42 @@ export const updateAccount=(userId,config)=>HTTP.put(`account/getAllCat/${userId
 
 export const getBalance=(userId,config)=>HTTP.get(`account/getBalance/${userId}`,config)
 
+//transaction Expense
+//getAll TranExpense 
+export const getAllTranExpense=(userId,config)=>HTTP.get(`transaction/allTranExpense/${userId}`,config)
+//create TranExpense
+export const createTranExpense=(accountId,userId,catExpenseId,payload,config)=>HTTP.post(`transaction/createExpenseTrans/${accountId}/${userId}/${catExpenseId}`,payload,config)
+//getAll TranExpense recent
+export const getAllTranExpenseRecent=(userId,config)=>HTTP.get(`transaction/getAllTranExpenseRecent/${userId}`,config)
+
+//delete Tran
+export const deleteTran=(tranId,userId,config)=>HTTP.delete(`transaction/deleteTran/${tranId}/${userId}`,config)
+//update TranIncome
+export const updateTran=(tranId,userId,payload,config)=>HTTP.put(`transaction/updateTransactions/${tranId}/${userId}`,payload,config)
+
+//transaction income
+//getAll TranIncome 
+export const getAllTranIncome=(userId,config)=>HTTP.get(`transaction/allTranIncome/${userId}`,config)
+//create TranIncome
+export const createTranIncome=(accountId,userId,catIncomeId,payload,config)=>HTTP.post(`transaction/createIncomeTrans/${accountId}/${userId}/${catIncomeId}`,payload,config)
+//getAll TranIcome recent
+export const getAllTranIncomeRecent=(userId,config)=>HTTP.get(`transaction/getAllTranIncomeRecent/${userId}`,config)
+
+//saving
+//getAll Saving 
+export const getAllSaving=(userId,config)=>HTTP.get(`saving/getAllSaving/${userId}`,config)
+//get Saving 
+export const getSaving=(savingId,userId,config)=>HTTP.get(`saving/getDetailSaving/${savingId}/${userId}`,config)
+//create Saving
+export const createSaving=(userId,payload,config)=>HTTP.post(`saving/createSaving/${userId}`,payload,config)
+//delete Saving
+export const deleteSaving=(savingId,userId,config)=>HTTP.delete(`saving/deleteSaving/${savingId}/${userId}`,config)
+//update Saving
+export const updateSaving=(savingId,userId,config)=>HTTP.put(`saving/updateSaving/${savingId}/${userId}`,config)
+
+
+
 //getAll accountType
 export const getAllAccountType=(userId,payload)=>HTTP.get(`/accountType/getAllTypeAccount/${userId}`,payload)
 
-//analysis
+// //analysis

@@ -42,7 +42,11 @@ export default function SettingScreen() {
         }
     },[token])
 
-
+    useEffect(() => {
+        return () => {
+            setModalVisible(false) // Reset modalVisible khi rời khỏi màn hình
+        }
+    }, [])
 
     const handleLogout = async () => {
         try {
