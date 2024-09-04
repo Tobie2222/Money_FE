@@ -24,6 +24,8 @@ export const updateUser = (userId, payload, config) => HTTP.put(`user/updateUser
 export const createUser = ( payload, config) => HTTP.post(`user/createUser`, payload, config)
 //delete user
 export const deleteUser = ( userId, config) => HTTP.delete(`user/deleteUser/${userId}`, config)
+//find User 
+export const findUser = ( keyword, config) => HTTP.delete(`user/findUser?keyword=${keyword}`, config)
 
 //categories expense 
 //getAll Expense
@@ -53,9 +55,9 @@ export const getAccount=(accountId,userId,config)=>HTTP.get(`account/getDetailAc
 //create Account
 export const createAccount=(id_accountType,userId,payload,config)=>HTTP.post(`account/createAccount/${id_accountType}/${userId}`,payload,config)
 //delete Account
-export const deleteAccount=(userId,config)=>HTTP.delete(`account/getAllCat/${userId}`,config)
+export const deleteAccount=(accountId,userId,config)=>HTTP.delete(`account/deleteAccount/${accountId}/${userId}`,config)
 //update Account
-export const updateAccount=(userId,config)=>HTTP.put(`account/getAllCat/${userId}`,config)
+export const updateAccount=(accountId,userId,config)=>HTTP.put(`account/updateAccount/${accountId}/${userId}`,config)
 
 export const getBalance=(userId,config)=>HTTP.get(`account/getBalance/${userId}`,config)
 
@@ -64,9 +66,10 @@ export const getBalance=(userId,config)=>HTTP.get(`account/getBalance/${userId}`
 export const getAllTranExpense=(userId,config)=>HTTP.get(`transaction/allTranExpense/${userId}`,config)
 //create TranExpense
 export const createTranExpense=(accountId,userId,catExpenseId,payload,config)=>HTTP.post(`transaction/createExpenseTrans/${accountId}/${userId}/${catExpenseId}`,payload,config)
-//getAll TranExpense recent
-export const getAllTranExpenseRecent=(userId,config)=>HTTP.get(`transaction/getAllTranExpenseRecent/${userId}`,config)
 
+
+//getAll Tran recent
+export const getAllTranRecent=(userId,config)=>HTTP.get(`transaction/getAllTranRecent/${userId}`,config)
 //delete Tran
 export const deleteTran=(tranId,userId,config)=>HTTP.delete(`transaction/deleteTran/${tranId}/${userId}`,config)
 //update TranIncome
@@ -77,8 +80,7 @@ export const updateTran=(tranId,userId,payload,config)=>HTTP.put(`transaction/up
 export const getAllTranIncome=(userId,config)=>HTTP.get(`transaction/allTranIncome/${userId}`,config)
 //create TranIncome
 export const createTranIncome=(accountId,userId,catIncomeId,payload,config)=>HTTP.post(`transaction/createIncomeTrans/${accountId}/${userId}/${catIncomeId}`,payload,config)
-//getAll TranIcome recent
-export const getAllTranIncomeRecent=(userId,config)=>HTTP.get(`transaction/getAllTranIncomeRecent/${userId}`,config)
+
 
 //saving
 //getAll Saving 
@@ -92,9 +94,23 @@ export const deleteSaving=(savingId,userId,config)=>HTTP.delete(`saving/deleteSa
 //update Saving
 export const updateSaving=(savingId,userId,config)=>HTTP.put(`saving/updateSaving/${savingId}/${userId}`,config)
 
+//deposits Saving
+export const depositsSaving=(savingId,accountId,userId,payload,config)=>HTTP.post(`saving/depositMoney/${savingId}/${accountId}/${userId}`,payload,config)
 
+//getAll deposits Saving
+export const getAllDepositsSaving=(userId,config)=>HTTP.get(`saving/getAllDeposits/${userId}`,config)
 
 //getAll accountType
 export const getAllAccountType=(userId,payload)=>HTTP.get(`/accountType/getAllTypeAccount/${userId}`,payload)
 
 // //analysis
+
+//get sum In this Month and prev month
+export const getAvgTranMonth=(year,month,userId,config)=>HTTP.get(`/transaction/getSumTranInMonth/${userId}?year=${year}&month=${month}`,config)
+
+// /spread All sum transactions by month by year
+export const getSumTranInYear=(year,userId,config)=>HTTP.get(`/transaction/getSumTranByMonth/${userId}?year=${year}`,config)
+
+//spread All avg transactions by month by year
+export const getAvgTranInYear=(year,userId,config)=>HTTP.get(`/transaction/getAvgTranByMonth/${userId}?year=${year}`,config)
+

@@ -1,11 +1,11 @@
-import { View, StyleSheet, Image, Text, StatusBar, ScrollView, TouchableOpacity, Modal } from 'react-native'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { View, StyleSheet, Text, StatusBar, ScrollView, TouchableOpacity, Modal } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useSelector } from 'react-redux'
-import { selectMessage, selectToken, selectUser } from '../../redux/authSlice'
+import { selectToken, selectUser } from '../../redux/authSlice'
 import { useNavigation } from '@react-navigation/native'
-import { Table, Row, Rows } from 'react-native-table-component'
+import { Table, Row } from 'react-native-table-component'
 import BottomSheetCom from '../../components/BottomSheetCom'
 import HeaderAdmin from '../../components/HeaderAdmin'
 import ButtonCom from '../../components/ButtonCom'
@@ -15,8 +15,10 @@ import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
 import Loading from '../../components/Loading'
+import { selectRefresh } from '../../redux/accountSlice'
 
 export default function DashBroadScreen() {
+  const refresh = useSelector(selectRefresh)
   const [loading, setLoading] = useState(false)
   const [fetchingUser, setFetchingUser] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
@@ -50,7 +52,7 @@ export default function DashBroadScreen() {
     if (token) {
       getAllUsers()
     }
-  }, [token, fetchingUser])
+  }, [token, fetchingUser, refresh])
   const tableHead = ['STT', 'Tên', 'Giới tính', 'Email', 'Hành động']
 
   const toggleSheet = () => {
@@ -150,7 +152,7 @@ export default function DashBroadScreen() {
                 <Text className="text-textColorAdmin text-[18px] font-[700] my-[20px] ">Danh sách người sự dụng APP</Text>
                 <ButtonCom
                   text="Tạo người tham gia mới"
-                  styleButton=" py-[8px] px-[10px] w-[60%] bg-white rounded-[6px] shadow-2xl"
+                  styleButton=" py-[8px] px-[10px] w-[60%] bg-white rounded-[6px] shadow-2xl border border-borderColor"
                   styleText="text-[#718EBF] text-[16px] leading-[24px] font-[500] text-center"
                   onPress={() => { navigation.navigate("createUserScreen"); setHiddenBottomSheet(false) }}
                 />
@@ -162,11 +164,11 @@ export default function DashBroadScreen() {
                       {
                         users.map((user, index) => {
                           return (
-                            <View key={index} className="flex-row gap-[10px] px-[8px] ">
+                            <View key={index} className="flex-row gap-[10px] px-[8px] mt-[1px]">
                               <Text className="text-center w-[17%] ">{index}</Text>
-                              <Text className="text-center w-[17%] ">{user?.name}</Text>
-                              <Text className="text-center w-[17%] ">{user?.sex}</Text>
-                              <Text className="text-center w-[17%] ">  {user?.email.length > 4 ? `${user?.email.substring(0, 4)}...` : user?.email}</Text>
+                              <Text className="text-start w-[17%] ">{user?.name.length > 5 ? `${user?.name.substring(0, 5)}...` : user?.name}</Text>
+                              <Text className="text-start w-[17%] ">{user?.sex}</Text>
+                              <Text className="text-start w-[17%] ">  {user?.email.length > 4 ? `${user?.email.substring(0, 4)}...` : user?.email}</Text>
                               <TouchableOpacity activeOpacity={0.8} onPress={() => { setIdUser(user._id); setHiddenBottomSheetDelete(true) }} style={styles.icon} className=" flex-row justify-center">
                                 <Icon name="ellipsis-v" size={20} color="#AAAAAA" />
                               </TouchableOpacity>
@@ -183,7 +185,6 @@ export default function DashBroadScreen() {
             <View className="">
 
             </View>
-
           </View>
         )
       }

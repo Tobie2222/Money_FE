@@ -1,8 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import { View, StyleSheet, Text, StatusBar, ScrollView, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StatusBar, TouchableOpacity, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import TabViews from '../../components/TabViews'
 import { useEffect, useState } from 'react'
 import { selectToken, selectUser } from '../../redux/authSlice'
 import { useSelector } from 'react-redux'
@@ -48,6 +47,7 @@ export default function SavingDetailScreen() {
     const currentAmount = savingD?.current_amount || 0
     const remainingAmount = savingD?.remainingAmount || 0
     const savingDate = savingD?.saving_date ? format(parseISO(savingD.saving_date), 'dd/MM/yyyy') : ''
+    const day=new Date()
     const deadlineDate = savingD?.deadline ? format(parseISO(savingD.deadline), 'dd/MM/yyyy') : ''
     return (
         <View className="flex-1 bg-backGroundColor">
@@ -70,34 +70,53 @@ export default function SavingDetailScreen() {
                 </View>
             </View>
             <View className="w-full mt-[60px] px-[20px]">
-                <View className="w-full flex flex-col  bg-white rounded-[16px] shadow-sm p-[20px]">
-                    <View className="flex flex-row gap-[15px] ">
-                        <Icon name='calendar' color={"#666666"} size={22} />
-                        <Text className="text-[16px] text-textColor font-[500]">{savingDate} - {deadlineDate}</Text>
-                    </View>
-                    <Text className="text-[14px] mt-[5px] text-iconColor ">(Con khoảng {savingD?.remainingDate} ngày)</Text>
-                    <View className="flex flex-col items-end mt-[20px]">
-                        <Text className="text-[18px] font-[700] text-primaryColor">{goalAmount.toLocaleString('vi-VN')} vnđ</Text>
-                        <WidthCurrentSavingAmount
-                            goal_amount={goalAmount}
-                            current_amount={currentAmount}
-                            styleParent='w-[100%] h-[6px] my-[5px]'
-                            styleChildren="h-[6px]"
-                        />
-                        <View className="w-full flex flex-row justify-between">
-                            <Text className="text-[12px] font-[500] text-primaryColor">
-                            {currentAmount.toLocaleString('vi-VN')} vnđ</Text>
-                            <Text className="text-[12px] font-[500] text-textColor">
-                            {remainingAmount.toLocaleString('vi-VN')}  vnđ</Text>
+
+                {
+                    goalAmount<=currentAmount?(<View className="w-full flex flex-col justify-center items-center bg-white rounded-[16px] shadow-sm p-[20px] mb-[50px]">
+                    <Text className="text-[20px] font-[700] text-clickButton mt-[20px]">Bạn đã hoàn thành mục tiêu </Text>
+                    <Image
+                        className="w-[100px] h-[100px] mt-[20px]"
+                        source={{uri: "https://png.pngtree.com/png-clipart/20230918/original/pngtree-contemporary-circular-tick-symbol-indicates-success-or-accomplishment-vector-illustrations-vector-png-image_12613319.png"}}
+                    />
+                </View>):(deadlineDate<day?(<View className="w-full flex flex-col justify-center items-center bg-white rounded-[16px] shadow-sm p-[20px] mb-[50px]">
+                    <Text className="text-[20px] font-[700] text-[#f31900] mt-[20px]">Bạn đã quá hạn mục tiêu !</Text>
+                    <Image
+                        className="w-[100px] h-[100px] mt-[20px]"
+                        source={{ uri: "https://img.freepik.com/free-psd/cross-mark-isolated_23-2151478807.jpg" }}
+                    />
+                </View>):(<View className="">
+                    <View className="w-full flex flex-col  bg-white rounded-[16px] shadow-sm p-[20px]">
+                        <View className="flex flex-row gap-[15px] ">
+                            <Icon name='calendar' color={"#666666"} size={22} />
+                            <Text className="text-[16px] text-textColor font-[500]">{savingDate} - {deadlineDate}</Text>
+                        </View>
+                        <Text className="text-[14px] mt-[5px] text-iconColor ">(Con khoảng {savingD?.remainingDate} ngày)</Text>
+                        <View className="flex flex-col items-end mt-[20px]">
+                            <Text className="text-[18px] font-[700] text-primaryColor">{goalAmount.toLocaleString('vi-VN')} vnđ</Text>
+                            <WidthCurrentSavingAmount
+                                goal_amount={goalAmount}
+                                current_amount={currentAmount}
+                                styleParent='w-[100%] h-[6px] my-[5px]'
+                                styleChildren="h-[6px]"
+                            />
+                            <View className="w-full flex flex-row justify-between">
+                                <Text className="text-[12px] font-[500] text-primaryColor">
+                                {currentAmount.toLocaleString('vi-VN')} vnđ</Text>
+                                <Text className="text-[12px] font-[500] text-textColor">
+                                {remainingAmount.toLocaleString('vi-VN')}  vnđ</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-                <ButtonCom
-                    text="Gửi vào"
-                    styleButton="w-full flex py-[13px] mt-[130px] border border-primaryColor mb-[30px] rounded-[40px] "
-                    styleText="text-white text-center text-[16px] leading-[24px] font-[600] text-primaryColor"
-                    onPress={() => navigation.navigate("depositMoneySavingScreen",{nameSaving: savingD?.saving_name,imageSaving: savingD?.saving_image})}
-                />
+                    <ButtonCom
+                        text="Gửi vào"
+                        styleButton="w-full flex py-[13px] mt-[130px] border border-primaryColor mb-[30px] rounded-[40px] "
+                        styleText="text-white text-center text-[16px] leading-[24px] font-[600] text-primaryColor"
+                        onPress={() => navigation.navigate("depositMoneySavingScreen",{nameSaving: savingD?.saving_name,imageSaving: savingD?.saving_image,savingId:savingId})}
+                    />
+                </View>))
+                }
+
+
             </View>
         </View>
     )

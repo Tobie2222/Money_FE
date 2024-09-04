@@ -1,10 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import { View, StyleSheet, Text, StatusBar, ScrollView, TouchableOpacity, Image } from 'react-native'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
+import { View, Text, StatusBar, ScrollView, TouchableOpacity, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import TabViews from '../../components/TabViews'
 import { useEffect, useState } from 'react'
 import { selectToken, selectUser } from '../../redux/authSlice'
 import { useSelector } from 'react-redux'
@@ -139,7 +136,7 @@ export default function AccountDetailScreen() {
                                 />
                             </View> : (activeTab === "Khoản chi" ? expenses : incomes).map((item) => {
                                 return (
-                                    <View key={item.id} className="flex flex-row justify-between items-center mt-[10px]" >
+                                    <View key={item._id} className="flex flex-row justify-between items-center mt-[10px]" >
                                         <TouchableOpacity activeOpacity={0.8} onPress={() => { }} className="flex flex-row items-center">
                                             <View className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
                                                 <Image

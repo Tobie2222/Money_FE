@@ -5,28 +5,30 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import TabViews from '../../components/TabViews'
 import { useEffect, useState } from 'react'
 import { selectToken, selectUser } from '../../redux/authSlice'
-import { useSelector } from 'react-redux'
-import { getAllAccount, getAllSaving } from '../../data/Api'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteAccount, deleteSaving, getAllSaving } from '../../data/Api'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
-import { selectBalance, selectRefresh } from '../../redux/accountSlice'
+import {  selectAccounts, selectRefresh, toggleRefresh } from '../../redux/accountSlice'
 import WidthCurrentSavingAmount from '../../components/WidthCurrentSavingAmount'
-
-
-
+import { getBalance } from '../../redux/accountSelector'
+import Loading from '../../components/Loading'
+import ButtonCom from '../../components/ButtonCom'
 
 
 export default function AccountScreen() {
     const [currentTab, setCurrentTab] = useState("Tài khoản")
+    const dispatch=useDispatch()
     const refresh=useSelector(selectRefresh)
-    const balance = useSelector(selectBalance)
-    const [accounts, setAccounts] = useState([])
+    const balance = useSelector(getBalance)
+    const accounts=useSelector(selectAccounts)
     const [savings, setSavings] = useState([])
     const user = useSelector(selectUser)
     const token = useSelector(selectToken)
+    const [modalVisible, setModalVisible] = useState(false)
+    const [selectId,setSelectId]=useState("")
     const [loading, setLoading] = useState(false)
-    const route = useRoute()
     const navigation = useNavigation()
     const { t } = useTranslation()
     const handleTabs = (childData) => {
@@ -39,16 +41,6 @@ export default function AccountScreen() {
             if (!token) return
             setLoading(true)
             try {
-                if (currentTab === "Tài khoản") {
-                    const accountsResponse = await getAllAccount(user?.id, {
-                        headers: {
-                            token: `bearer ${token}`
-                        }
-                    })
-                    if (accountsResponse.status === 200) {
-                        setAccounts(accountsResponse.data.allAccountByUser)
-                    }
-                }
                 if (currentTab === "Tích lũy") {
                     const savingsResponse = await getAllSaving(user?.id, {
                         headers: {
@@ -67,13 +59,42 @@ export default function AccountScreen() {
         }
         fetchData()
     }, [token, refresh, currentTab])
-
+    //handle delete
+    const handleDelete = async () => {
+        
+        try {
+            if (currentTab === "Tài khoản") {
+                const response=await deleteAccount(selectId,user?.id,{
+                    headers: {
+                        token: `Bearer ${token}`
+                    }
+                }) 
+                if (response.status===200) {
+                    showToastU(response.data.message, "#0866ff", "check", 3000)
+                }
+            } else {
+                const response=await deleteSaving(selectId,user?.id,{
+                    headers: {
+                        token: `Bearer ${token}`
+                    }
+                })
+                if (response.status===200) {
+                    showToastU(response.data.message, "#0866ff", "check", 3000)
+                }
+            }
+            setLoading(false)
+            setModalVisible(false)
+            dispatch(toggleRefresh())
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    console.log(selectId)
     return (
         <View className="flex-1 ">
             <StatusBar
                 barStyle="light"
             />
-
             <View className="z-20">
                 <Toast
                     config={{
@@ -81,6 +102,33 @@ export default function AccountScreen() {
                     }}
                 />
             </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+            >
+                <View className="flex-1 justify-center items-center">
+                    {/* black overlay */}
+                    <View className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-50"></View>
+                    <View className="w-[300px] p-[20px] bg-white rounded-[18px] z-10">
+                        <Text className="text-center font-[600] text-[16px] text-textColor ">{currentTab==="Tài khoản"?"Bạn có muốn xóa tài khoản này ?":"Bạn có muốn xóa tích lũy này ?"}</Text>
+                        <View className="flex flex-col mt-[20px] ">
+                            <ButtonCom
+                                text="xóa"
+                                styleButton="w-full py-[13px] mx-auto bg-warningColor rounded-[18px] "
+                                styleText="text-white text-[16px] leading-[24px] font-[700] text-center"
+                                onPress={() => handleDelete()}
+                            />
+                            <ButtonCom
+                                text="Quay lại"
+                                styleButton="w-full py-[13px] mt-[10px]  mx-auto bg-primaryColor rounded-[18px] "
+                                styleText="text-white text-[16px] leading-[24px] font-[700] text-center"
+                                onPress={() => setModalVisible(false)}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <View className="">
                 <View className="bg-primaryColor py-[70px]">
                     <Text className=" text-[22px] leading-[33px] font-[700] text-white text-center">Ví của bạn </Text>
@@ -112,56 +160,90 @@ export default function AccountScreen() {
                         />
                     </View>
                     <View className="mt-[20px] mb-[640px]" >
-                        <FlatList
-                            data={currentTab === "Tài khoản" ? accounts : savings}
-                            renderItem={({ item }) => {
-                                return (
-                                    <View className="flex flex-row justify-between items-center mt-[10px]" >
-                                        {
-                                            currentTab === "Tài khoản" ? (<TouchableOpacity activeOpacity={0.8} onPress={() => { navigation.navigate("accountDetailScreen", { accountId: item?._id }) }} className="flex flex-row items-center">
-                                                <View style={styles.shadowS} className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
-                                                    <Image
-                                                        source={{ uri: `${item?.accountType?.account_type_image}` }}
-                                                        className="object-cover w-full h-full rounded-[100px]"
-                                                    />
-                                                </View>
-                                                <View className="ml-[10px] flex flex-col items-start">
-                                                    <Text className="text-center text-textColor text-[16px] font-[600]">{item?.account_name}</Text>
-                                                    <Text className="text-center mt-[5px] text-clickButton text-[12px] font-[500]">{item?.balance.toLocaleString('vi-VN')} vnđ</Text>
-                                                </View>
-                                            </TouchableOpacity>) : (
-                                                <TouchableOpacity className="w-[90%]  flex flex-row items-center" activeOpacity={0.8} onPress={() => { navigation.navigate("savingDetailScreen", { savingId: item?._id }) }}>
-                                                    <View style={styles.shadowS} className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
-                                                        <Image
-                                                            source={{ uri: `${item?.saving_image}` }}
-                                                            className="object-cover w-full h-full rounded-[100px]"
-                                                        />
-                                                    </View>
-                                                    <View className="ml-[10px] flex flex-col items-start w-[100%] ">
-                                                        <Text className="text-center text-textColor text-[16px] font-[600]">{item?.saving_name}</Text>
-                                                        <Text className="text-center mt-[2px] text-primaryColor text-[12px] font-[500]">{item?.current_amount.toLocaleString('vi-VN')} vnđ</Text>
-                                                        <WidthCurrentSavingAmount
-                                                            styleChildren="h-[4px] "
-                                                            styleParent="w-[85%] h-[4px] mt-[2px]"
-                                                            goal_amount={item?.goal_amount}
-                                                            current_amount={item?.current_amount}
-                                                        />
-                                                    </View>
+                        {
+                            loading ? (
+                                <View className="mt-[100px]">
+                                    <Loading />
+                                </View>
+                            ) : currentTab === "Tài khoản" && accounts.length === 0 ? (
+                                <View className="w-[100%] h-[200px] flex justify-center items-center">
+                                    <Text className="text-[18px] font-[600] text-iconColor text-center">Không có dữ liệu!</Text>
+                                </View>
+                            ) : currentTab === "Tích lũy" && savings.length === 0 ? (
+                                <View className="w-[100%] h-[200px] flex justify-center items-center">
+                                    <Text className="text-[18px] font-[600] text-iconColor text-center">Không có dữ liệu!</Text>
+                                </View>
+                            ) : (
+                                <FlatList
+                                    data={currentTab === "Tài khoản" ? accounts : savings}
+                                    renderItem={({ item }) => {
+                                        return (
+                                            <View className="flex flex-row justify-between items-center mt-[10px]">
+                                                {currentTab === "Tài khoản" ? (
+                                                    <TouchableOpacity
+                                                        activeOpacity={0.8}
+                                                        onPress={() => {
+                                                            navigation.navigate("accountDetailScreen", { accountId: item?._id });
+                                                        }}
+                                                        className="flex flex-row items-center"
+                                                    >
+                                                        <View style={styles.shadowS} className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
+                                                            <Image
+                                                                source={{ uri: `${item?.accountType?.account_type_image}` }}
+                                                                className="object-cover w-full h-full rounded-[100px]"
+                                                            />
+                                                        </View>
+                                                        <View className="ml-[10px] flex flex-col items-start">
+                                                            <Text className="text-center text-textColor text-[16px] font-[600]">{item?.account_name}</Text>
+                                                            <Text className="text-center mt-[5px] text-clickButton text-[12px] font-[500]">{item?.balance.toLocaleString('vi-VN')} vnđ</Text>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                ) : (
+                                                    <TouchableOpacity
+                                                        className="w-[90%] flex flex-row items-center"
+                                                        activeOpacity={0.8}
+                                                        onPress={() => {
+                                                            navigation.navigate("savingDetailScreen", { savingId: item?._id });
+                                                        }}
+                                                    >
+                                                        <View style={styles.shadowS} className="w-[50px] h-[50px] border border-[#b2b2b2] rounded-[100px] ">
+                                                            <Image
+                                                                source={{ uri: `${item?.saving_image}` }}
+                                                                className="object-cover w-full h-full rounded-[100px]"
+                                                            />
+                                                        </View>
+                                                        <View className="ml-[10px] flex flex-col items-start w-[100%] ">
+                                                            <Text className="text-center text-textColor text-[16px] font-[600]">{item?.saving_name}</Text>
+                                                            <Text className="text-center mt-[2px] text-primaryColor text-[12px] font-[500]">{item?.current_amount.toLocaleString('vi-VN')} vnđ</Text>
+                                                            <WidthCurrentSavingAmount
+                                                                styleChildren="h-[4px] "
+                                                                styleParent="w-[85%] h-[4px] mt-[2px]"
+                                                                goal_amount={item?.goal_amount}
+                                                                current_amount={item?.current_amount}
+                                                            />
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                )}
+                                                <TouchableOpacity
+                                                    activeOpacity={0.8}
+                                                    onPress={() => {
+                                                        setSelectId(item?._id);
+                                                        setModalVisible(true);
+                                                    }}
+                                                >
+                                                    <Icon name="ellipsis-v" size={25} color="#AAAAAA" />
                                                 </TouchableOpacity>
-                                            )
-                                        }
-                                        <View className="">
-                                            <Icon name="ellipsis-v" size={25} color="#AAAAAA" />
-                                        </View>
-                                    </View>
-                                )
-                            }}
-                            keyExtractor={item => item?._id.toString()}
-                        />
+                                            </View>
+                                        );
+                                    }}
+                                    keyExtractor={(item) => item?._id ? item._id.toString() : Math.random().toString()}
+                                />
+                            )
+                        }
                     </View>
-
                 </View>
             </View>
+            
         </View>
     )
 }

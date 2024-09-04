@@ -13,11 +13,11 @@ import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import Loading from '../../components/Loading'
 import { SelectCountry } from 'react-native-element-dropdown'
-import { createTranExpense, createTranIncome, getAllAccount, getAllCatExpense, getAllCatIncome } from '../../data/Api'
+import { createTranExpense, createTranIncome, getAllCatExpense, getAllCatIncome } from '../../data/Api'
 import { showToastU } from '../../utils/toast'
 import { format } from 'date-fns'
 import { vi } from 'date-fns/locale'
-import { toggleRefresh } from '../../redux/accountSlice'
+import { selectAccounts, toggleRefresh } from '../../redux/accountSlice'
 
 const selectFun = [
     { id: 0, title: "Chi tiền", nameIcon: "minus" },
@@ -26,6 +26,7 @@ const selectFun = [
 const validationSchema = Yup.object().shape({})
 
 export default function TransactionScreen() {
+    const accounts=useSelector(selectAccounts)
     const token = useSelector(selectToken)
     const dispatch=useDispatch()
     const user = useSelector(selectUser)
@@ -39,7 +40,6 @@ export default function TransactionScreen() {
     const [focusDesc, setFocusDesc] = useState(false)
     const [focusAmount, setFocusAmount] = useState(false)
     const [hiddenModal, setHiddenModal] = useState(false)
-    const [accounts, setAccounts] = useState([])
     const [nameCat, setNameCat] = useState('')
     const [nameAccount, setNameAccount] = useState('')
     const [valueSelected, setValueSelected] = useState("")
@@ -81,30 +81,8 @@ export default function TransactionScreen() {
         }
         setShowDatePicker(false)
     }
-
     //fetch cat expense and income and account
     useEffect(() => {
-        //fetching all Account
-        const getAllAccounts = async () => {
-            setLoading(true)
-            try {
-                const response = await getAllAccount(user?.id, {
-                    headers: {
-                        token: `bearer ${token}`
-                    }
-                })
-                if (response.status === 200) {
-                    const formatAccount = formatAccounts(response.data.allAccountByUser)
-                    setAccounts(formatAccount)
-                    if (formatAccount.length > 0) {
-                        setNameAccount(formatAccount[0].value)
-                        setValueSelectedAccount(formatAccount[0].id)
-                    }
-                }
-            } catch (err) {
-                console.log(err)
-            }
-        }
         //fetching All Categories Expenses
         const getAllCategoriesExpenses = async () => {
             setLoading(true)
@@ -151,13 +129,17 @@ export default function TransactionScreen() {
                 console.log(err)
             }
         }
+        const formattedCategories=formatAccounts(accounts)
+        if (formattedCategories.length>0) {
+            setNameAccount(formattedCategories[0].value)
+            setValueSelectedAccount(formattedCategories[0].id)
+        }
         if (token && func === "Chi tiền") {
             getAllCategoriesExpenses()
-
         } else {
             getAllCategoriesIncomes()
         }
-        getAllAccounts()
+
     }, [token, func])
     //handle create expense
     const handleSubmitExpense = async (values) => {
@@ -211,7 +193,6 @@ export default function TransactionScreen() {
             console.log(err)
         }
     }
-
     return (
         <View className="flex-1">
             <AbstractCircle />
@@ -348,7 +329,7 @@ export default function TransactionScreen() {
                                                         iconStyle={styles.iconStyle}
                                                         maxHeight={200}
                                                         value={nameAccount}
-                                                        data={accounts}
+                                                        data={formatAccounts(accounts)}
                                                         valueField="value"
                                                         labelField="label"
                                                         imageField="image"
@@ -487,7 +468,7 @@ export default function TransactionScreen() {
                                                             iconStyle={styles.iconStyle}
                                                             maxHeight={200}
                                                             value={nameAccount}
-                                                            data={accounts}
+                                                            data={formatAccounts(accounts)}
                                                             valueField="value"
                                                             labelField="label"
                                                             imageField="image"

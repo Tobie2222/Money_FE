@@ -1,5 +1,5 @@
 import { View, StyleSheet, Image, Text, StatusBar, ScrollView, TouchableOpacity, Modal } from 'react-native'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import BottomSheetCom from '../../components/BottomSheetCom'
 import HeaderAdmin from '../../components/HeaderAdmin'
@@ -12,12 +12,13 @@ import ButtonCom from '../../components/ButtonCom'
 import { Dropdown } from 'react-native-element-dropdown'
 import * as ImagePicker from "expo-image-picker"
 import { createUser } from '../../data/Api'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectToken } from '../../redux/authSlice'
 import { showToastU } from '../../utils/toast'
 import Loading from '../../components/Loading'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
+import { toggleRefresh } from '../../redux/accountSlice'
 
 
 const validationSchema = Yup.object().shape({})
@@ -26,7 +27,7 @@ export default function CreateUserScreen() {
     const { t } = useTranslation()
     const [hiddenBottomSheet, setHiddenBottomSheet] = useState(false)
     const [avatar, setAvatar] = useState("https://img.freepik.com/vetores-premium/icone-de-camera-escuro-em-um-dispositivo-de-adesivo-de-cartao-de-vetor-de-simbolo-de-arte-plana-simples-branco_775175-276.jpg")
-
+    const dispatch=useDispatch()
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
     const [error, setError] = useState(false)
@@ -89,14 +90,12 @@ export default function CreateUserScreen() {
                 }
             })
             if (response.status === 200) {
-                console.log("thành công", response.data)
                 showToastU(response.data.message, "#0866ff", "check", 3000)
                 setLoading(false)
                 setSelectedValue(t("gender"))
                 setAvatar("https://img.freepik.com/vetores-premium/icone-de-camera-escuro-em-um-dispositivo-de-adesivo-de-cartao-de-vetor-de-simbolo-de-arte-plana-simples-branco_775175-276.jpg")
+                dispatch(toggleRefresh())
             }
-            console.log("hello word", values)
-
         } catch (err) {
             setLoading(false)
             setError(true)

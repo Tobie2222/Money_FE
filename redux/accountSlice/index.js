@@ -4,29 +4,31 @@ import { createSlice } from '@reduxjs/toolkit'
 const accountSlice = createSlice({
     name: 'account',
     initialState: {
-        balance: 0,
         refresh: true,
-        accounts: []
+        accounts: [],
+        tranThisMonth: {
+            tranExpense:0,
+            tranIncome:0,
+        }
     },
     reducers: {
-        getBalances (state,action) {
-            state.balance=action.payload.balance
-        },
         toggleRefresh(state) {
             state.refresh = !state.refresh 
         },
         getAccounts(state,action) {
             state.accounts=action.payload.accounts
+        },
+        getTranThisMount(state,action) {
+            state.tranThisMonth=action.payload.tranThisMonth
         }
     }
 })
 
-export const { getBalances,toggleRefresh,getAccounts} = accountSlice.actions
+export const { toggleRefresh,getAccounts,getTranThisMount} = accountSlice.actions
 
 //selector
-
-export const selectBalance = (state) => state.account.balance
 export const selectRefresh = (state) => state.account.refresh
 export const selectAccounts = (state) => state.account.accounts
+export const selectTranThisMonth = (state) => state.account.tranThisMonth
 
 export default accountSlice.reducer

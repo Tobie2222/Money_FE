@@ -14,7 +14,6 @@ import { changePassword } from '../../data/Api'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
-import { removeData } from '../../utils/storage'
 
 const validationSchema = Yup.object().shape({
     newPassword: Yup.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự').required('Mật khẩu là bắt buộc'),
