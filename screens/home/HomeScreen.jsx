@@ -140,7 +140,10 @@ export default function HomeScreen() {
             <ScrollView>
                 <View className="flex-row items-center w-full justify-between mt-[70px] px-[20px]">
                     <Text className="text-white text-[24px] leading-[33px] font-[700] ">{balance.toLocaleString('vi-VN')} đ</Text>
-                    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("notificationScreen")}>
+                    <TouchableOpacity className="relative" activeOpacity={0.8} onPress={() => navigation.navigate("notificationScreen")}>
+                        <View className="absolute w-[20px] h-[20px] bg-warningColor z-20 flex flex-row justify-center items-center rounded-[20px] top-[-10px] right-[-10px]">
+                            <Text className="text-[12px] text-[#fff] font-[600]">1</Text>
+                        </View>
                         <Icon name={"bell"} size={25} color="#fff" />
                     </TouchableOpacity>
                 </View>
