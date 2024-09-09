@@ -35,7 +35,7 @@ export const createCatExpense=(userId,payload,config)=>HTTP.post(`categories/cre
 //delete expense
 export const deleteCatExpense=(catId,userId,config)=>HTTP.delete(`categories/deleteCat/${catId}/${userId}`,config)
 //update expense
-export const updateCatExpense=(userId,config)=>HTTP.put(`categories/getAllCat/${userId}`,config)
+export const updateCatExpense=(catId,userId,payload,config)=>HTTP.put(`categories/updateCat/${catId}/${userId}`,payload,config)
 
 //categories income
 //getAll income
@@ -45,7 +45,7 @@ export const createCatIncome=(userId,payload,config)=>HTTP.post(`incomeType/crea
 //delete income
 export const deleteCatIncome=(inComeId,userId,config)=>HTTP.delete(`incomeType/deleteIncomeType/${inComeId}/${userId}`,config)
 //update income
-export const updateCatIncome=(userId,config)=>HTTP.put(`incomeType/getAllCat/${userId}`,config)
+export const updateCatIncome=(catId,userId,payload,config)=>HTTP.put(`incomeType/updateIncomeType/${catId}/${userId}`,payload,config)
 
 //account
 //getAll Account 
@@ -57,7 +57,7 @@ export const createAccount=(id_accountType,userId,payload,config)=>HTTP.post(`ac
 //delete Account
 export const deleteAccount=(accountId,userId,config)=>HTTP.delete(`account/deleteAccount/${accountId}/${userId}`,config)
 //update Account
-export const updateAccount=(accountId,userId,config)=>HTTP.put(`account/updateAccount/${accountId}/${userId}`,config)
+export const updateAccount=(accountId,userId,payload,config)=>HTTP.put(`account/updateAccount/${accountId}/${userId}`,payload,config)
 
 export const getBalance=(userId,config)=>HTTP.get(`account/getBalance/${userId}`,config)
 
@@ -106,11 +106,21 @@ export const getAllAccountType=(userId,payload)=>HTTP.get(`/accountType/getAllTy
 // //analysis
 
 //get sum In this Month and prev month
-export const getAvgTranMonth=(year,month,userId,config)=>HTTP.get(`/transaction/getSumTranInMonth/${userId}?year=${year}&month=${month}`,config)
+export const getAvgTranMonth=(slug_user,year,month,userId,config)=>HTTP.get(`/transaction/getAvgTranInMonth/${userId}/${slug_user}?year=${year}&month=${month}`,config)
 
 // /spread All sum transactions by month by year
-export const getSumTranInYear=(year,userId,config)=>HTTP.get(`/transaction/getSumTranByMonth/${userId}?year=${year}`,config)
+export const getSumTranInYear=(slug_user,year,userId,config)=>HTTP.get(`/transaction/getSumTranByMonth/${userId}/${slug_user}?year=${year}`,config)
 
 //spread All avg transactions by month by year
-export const getAvgTranInYear=(year,userId,config)=>HTTP.get(`/transaction/getAvgTranByMonth/${userId}?year=${year}`,config)
+export const getAvgTranInYear=(slug_user,year,userId,config)=>HTTP.get(`/transaction/getAvgTranByMonth/${userId}/${slug_user}?year=${year}`,config)
 
+
+//notification
+
+export const createNotification=(userId,payload,config)=>HTTP.post(`/notification/createNotification/${userId}`,payload,config)
+
+export const getAllNotification=(userId,config)=>HTTP.get(`/notification/getNotification/${userId}`,config)
+
+export const deleteNotification=(notificationId,userId,config)=>HTTP.delete(`/notification/deleteNotification/${notificationId}/${userId}`,config)
+
+export const tickNotification=(notificationId,userId,config)=>HTTP.put(`/notification/tick/${notificationId}/${userId}`,config)

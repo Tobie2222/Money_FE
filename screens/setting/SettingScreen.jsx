@@ -7,7 +7,7 @@ import ButtonCom from '../../components/ButtonCom'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, selectToken, selectUser } from '../../redux/authSlice'
-import { removeData } from '../../utils/storage'
+import { removeAllData, removeData } from '../../utils/storage'
 import Loading from '../../components/Loading'
 import { useTranslation } from 'react-i18next'
 
@@ -17,7 +17,6 @@ const func = [
     { nameIcon: "user", title: "Đăng xuất", typeFunc: "Logout" },
     { nameIcon: "user", title: "Đổi mật khẩu", typeFunc: "ChangePassword" },
     { nameIcon: "user", title: "Thay đổi ngôn ngữ", typeFunc: "ChangeLanguage" },
-    { nameIcon: "user", title: "Chọn loại tiền tệ", typeFunc: "ChangeMoney" },
     { nameIcon: "user", title: "Danh mục chi tiêu", typeFunc: "ChangeCategoriesExpense" },
     { nameIcon: "user", title: "Danh mục thu nhập", typeFunc: "ChangeCategoriesIncome" },
     { nameIcon: "bell", title: "Trang quản trị", typeFunc: "navigateAdminPage" },
@@ -51,7 +50,7 @@ export default function SettingScreen() {
     const handleLogout = async () => {
         try {
             dispatch(logout())
-            await removeData("dataSave") 
+            await removeAllData()
             setLoading(true)
             navigation.navigate('startScreen')
         } catch (err) {
@@ -68,9 +67,6 @@ export default function SettingScreen() {
         },
         ChangeLanguage: () => {
             navigation.navigate('selectLanguageScreen')
-        },
-        ChangeMoney: () => {
-            //navigation.navigate('ChangeMoney')
         },
         ChangeCategoriesExpense: () => {
             navigation.navigate('expenseTypeScreen')

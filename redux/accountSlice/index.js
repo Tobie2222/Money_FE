@@ -7,8 +7,14 @@ const accountSlice = createSlice({
         refresh: true,
         accounts: [],
         tranThisMonth: {
-            tranExpense:0,
-            tranIncome:0,
+            tranExpense:{
+                type:"expense",
+                amount: 0
+            },
+            tranIncome:{
+                type:"expense",
+                amount: 0
+            },
         }
     },
     reducers: {

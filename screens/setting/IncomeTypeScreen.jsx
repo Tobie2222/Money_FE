@@ -8,19 +8,22 @@ import ButtonCom from '../../components/ButtonCom'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectToken, selectUser } from '../../redux/authSlice'
-import { deleteCatIncome, getAllCatIncome } from '../../data/Api'
+import { deleteCatIncome, getAllCatIncome, updateCatIncome } from '../../data/Api'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import BottomSheetCom from '../../components/BottomSheetCom'
 import { showToastU } from '../../utils/toast'
 import { selectRefresh } from '../../redux/accountSlice'
+import { TextInput } from 'react-native-gesture-handler'
+
 
 export default function IncomeTypeScreen() {
     const user = useSelector(selectUser)
     const token = useSelector(selectToken)
     const [loading, setLoading] = useState(false)
-    const refresh=useSelector(selectRefresh)
-    const [message, setMessage] = useState("")
+    const [modalVisibleUpdate, setModalVisibleUpdate] = useState(false)
+    const [updateCat, setUpdateCat] = useState("")
+    const refresh = useSelector(selectRefresh)
     const [idCatIncomeType, setIdCatIncomeType] = useState("")
     const [modalVisible, setModalVisible] = useState(false)
     const [catIncomes, setCatIncomes] = useState([])
@@ -28,7 +31,60 @@ export default function IncomeTypeScreen() {
     const [hiddenBottomSheetDelete, setHiddenBottomSheetDelete] = useState(false)
     const navigation = useNavigation()
     const { t } = useTranslation()
+    console.log(updateCat)
+    const handleUpdateCatIncome = async () => {
+        setModalVisibleUpdate(false)
+        setLoading(true)
+        try {
+            const response = await updateCatIncome(idCatIncomeType, user?.id, {
+                income_type_name: updateCat
+            }, {
+                headers: {
+                    token: `Bearer ${token}`
+                }
+            })
+            if (response.status === 200) {
+                showToastU(response.data.message, "#316896", "check", 3000)
+                setUpdateCat("")
+                setLoading(false)
+                setFetchingCatIncomeType(!fetchingCatIncomeType)
+            }
+        } catch (err) {
+            setLoading(false)
+            if (err.response) {
+                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
+            }
+        }
+    }
 
+
+
+
+    // fetching CatIncomeType
+    useEffect(() => {
+        const getAllCategoriesIncomes = async () => {
+            setLoading(true)
+            try {
+                const response = await getAllCatIncome(user?.id, {
+                    headers: {
+                        token: `bearer ${token}`
+                    }
+                })
+                if (response.status === 200) {
+                    setLoading(false)
+                    setCatIncomes(response.data.allInComeType)
+
+                }
+            } catch (err) {
+                setLoading(false)
+                console.log(err)
+            }
+        }
+        if (token || refresh) {
+            getAllCategoriesIncomes()
+        }
+    }, [token, fetchingCatIncomeType, refresh])
+    //handleDelete
     const handleDeleteCatInComeType = async () => {
         setModalVisible(false)
         setLoading(true)
@@ -53,34 +109,6 @@ export default function IncomeTypeScreen() {
     }
 
 
-    // fetching CatIncomeType
-    useEffect(() => {
-        const getAllCategoriesIncomes = async () => {
-            setLoading(true)
-            try {
-                const response = await getAllCatIncome(user?.id, {
-                    headers: {
-                        token: `bearer ${token}`
-                    }
-                })
-                if (response.status === 200) {
-                    setLoading(false)
-                    setCatIncomes(response.data.allInComeType)
-                    
-                }
-            } catch (err) {
-                setLoading(false)
-                console.log(err)
-            }
-        }
-        if (token || refresh) {
-            getAllCategoriesIncomes()
-        }
-    }, [token, fetchingCatIncomeType,refresh])
-    //handleDelete
-
-
-
     return (
         <View className="flex-1 relative">
             <StatusBar
@@ -100,6 +128,42 @@ export default function IncomeTypeScreen() {
                 </TouchableOpacity>
                 <Text className=" text-[22px] leading-[33px] font-[700] text-white text-center ml-[60px] ">Danh mục thu nhập</Text>
             </View>
+            {/* modal update */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisibleUpdate}
+            >
+                <View className="flex-1 justify-center items-center">
+                    {/* black overlay */}
+                    <View className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-50"></View>
+                    <View className="w-[300px] p-[20px] bg-white rounded-[18px] z-10">
+                        <Text className="text-center font-[600] text-[16px] text-textColor ">Bạn có sửa danh mục này ?</Text>
+                        <View className="">
+                            <TextInput
+                                placeholder='Tên danh mục thu nhập'
+                                className="border border-borderColor rounded-[6px] px-[12px] py-[8px] mt-[20px] text-textColor text-[14px]"
+                                value={updateCat}
+                                onChangeText={(text) => setUpdateCat(text)}
+                            />
+                        </View>
+                        <View className="flex flex-col mt-[20px] ">
+                            <ButtonCom
+                                text="Lưu"
+                                styleButton="w-full py-[13px] mx-auto bg-primaryColor rounded-[18px] "
+                                styleText="text-white text-[16px] leading-[24px] font-[700] text-center"
+                                onPress={handleUpdateCatIncome}
+                            />
+                            <ButtonCom
+                                text="Quay lại"
+                                styleButton="w-full py-[13px] mt-[10px]  mx-auto bg-warningColor rounded-[18px] "
+                                styleText="text-white text-[16px] leading-[24px] font-[700] text-center"
+                                onPress={() => setModalVisibleUpdate(false)}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -174,7 +238,7 @@ export default function IncomeTypeScreen() {
                         onCloseBottomSheet={() => setHiddenBottomSheetDelete(false)}
                         children={(
                             <View>
-                                <TouchableOpacity activeOpacity={0.8} onPress={() => { navigation.navigate("dashBroadScreen"); setHiddenBottomSheetDelete(false) }} className="flex-row items-center gap-[15px] px-[20px] py-[10px]">
+                                <TouchableOpacity activeOpacity={0.8} onPress={() => { setModalVisibleUpdate(true); setHiddenBottomSheetDelete(false) }} className="flex-row items-center gap-[15px] px-[20px] py-[10px]">
                                     <Icon name={`pencil`} size={30} color="#AAAAAA" />
                                     <Text className="text-[18px] text-[#AAAAAA] font-[500]">Sửa</Text>
                                 </TouchableOpacity>

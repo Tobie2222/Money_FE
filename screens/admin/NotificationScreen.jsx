@@ -8,26 +8,26 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useNavigation } from '@react-navigation/native'
-import { selectToken } from '../../redux/authSlice'
+import { selectToken, selectUser } from '../../redux/authSlice'
 import { showToastU } from '../../utils/toast'
 import Loading from '../../components/Loading'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { toggleRefresh } from '../../redux/accountSlice'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ButtonCom from '../../components/ButtonCom'
 import { Dropdown } from 'react-native-element-dropdown'
+import { createNotification } from '../../data/Api'
 
 
 const validationSchema = Yup.object().shape({})
 
 export default function NotificationScreen({ }) {
+  const user=useSelector(selectUser)
+  const dispatch=useDispatch()
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
-  const [error, setError] = useState(false)
   const token = useSelector(selectToken)
   const [focusEmail, setFocusEmail] = useState(false)
-  const [focusPassword, setFocusPassword] = useState(false)
   const [focusGender, setFocusGender] = useState(false)
   const [focusName, setFocusName] = useState(false)
   const [hiddenBottomSheet, setHiddenBottomSheet] = useState(false)
@@ -39,28 +39,31 @@ export default function NotificationScreen({ }) {
   const textInputRef = useRef()
   const { t } = useTranslation()
   const options = [
-    { label: 'Quan trọng', value: 'male', sex: 'male' },
-    { label: 'Bình thường', value: 'female', sex: 'female' }
+    { label: 'Quan trọng', value: 'important', sex: 'male' },
+    { label: 'Bình thường', value: 'low', sex: 'female' }
   ]
   const handleSubmit = async (values) => {
-    // setLoading(true)
-    // try {
-    //     const response = await createUser(formData, {
-    //         headers: {
-    //             token: `Bearer ${token}`
-    //         }
-    //     })
-    //     if (response.status === 200) {
-    //         showToastU(response.data.message, "#0866ff", "check", 3000)
-    //         setLoading(false)
-    //     }
-    // } catch (err) {
-    //     setLoading(false)
-    //     setError(true)
-    //     if (err.response) {
-    //         showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
-    //     }
-    // }
+    setLoading(true)
+    try {
+        console.log(values)
+        const response = await createNotification(user?.id,values, {
+            headers: {
+                token: `Bearer ${token}`
+            }
+        })
+        if (response.status === 200) {
+            showToastU(response.data.message, "#0866ff", "check", 3000)
+            console.log(response.data)
+            dispatch(toggleRefresh())
+        }
+    } catch (err) {
+        setError(true)
+        if (err.response) {
+            showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
+        }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -98,7 +101,7 @@ export default function NotificationScreen({ }) {
             <Text className="text-textColorAdmin text-[18px] font-[700] mb-[20px] ">Gửi thông báo</Text>
             <View className="">
               <Formik
-                initialValues={{ name: '', email: '', type: '' }}
+                initialValues={{ notification_name: '', desc_notification: '', priority: '' }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
               >
@@ -114,45 +117,43 @@ export default function NotificationScreen({ }) {
                                 ) : null} */}
                     <View className="w-full bg-white px-[20px] py-[40px] rounded-[12px] mb-[30px] shadow-lg mx-auto flex flex-col">
                       <View className="w-full flex flex-col gap-[10px] ">
-                        <Text className="text-[14px] text-[#232323] font-[400]">Tên người dùng</Text>
+                        <Text className="text-[14px] text-[#232323] font-[400]">Tên thông báo</Text>
                         <TextInput
-                          placeholder={t("name")}
-                          onChangeText={handleChange('name')}
+                          onChangeText={handleChange('notification_name')}
                           onBlur={() => {
-                            handleBlur('name')
+                            handleBlur('notification_name')
                             setFocusName(false)
                           }}
-                          value={values.name}
+                          value={values.notification_name}
                           className={`text-[16px] leading-[20px] w-full text-[#718EBF] border ${focusName ? "border-[#718EBF]" : "border-borderColor"}   px-[16px] py-[13px] rounded-[10px] `}
                           onFocus={() => setFocusName(true)}
                         />
                       </View>
                       <View className="w-full flex flex-col gap-[10px] mt-[10px]">
-                        <Text className="text-[14px] text-[#232323] font-[400]">Email</Text>
+                        <Text className="text-[14px] text-[#232323] font-[400]">Nội dung thông báo</Text>
                         <TextInput
-                          placeholder={t("email")}
-                          onChangeText={handleChange('email')}
+                          onChangeText={handleChange('desc_notification')}
                           onBlur={() => {
-                            handleBlur('email')
+                            handleBlur('desc_notification')
                             setFocusEmail(false)
                           }}
-                          value={values.email}
+                          value={values.desc_notification}
                           className={`text-[16px] leading-[20px] w-full text-[#718EBF] border ${focusEmail ? "border-[#718EBF]" : "border-borderColor"}   px-[16px] py-[13px] rounded-[10px] `}
                           onFocus={() => setFocusEmail(true)}
                         />
                       </View>
                       <View className="w-full flex flex-col gap-[10px] mt-[10px] mb-[2px]">
-                        <Text className="text-[14px] text-[#232323] font-[400]">Giới tính</Text>
+                        <Text className="text-[14px] text-[#232323] font-[400]">Mức độ thông báo</Text>
                         <View className={`w-full rounded-[14px] border ${focusGender ? "border-[#718EBF]" : " border-borderColor "}`}>
                           <Dropdown
                             style={styles.dropdown}
                             data={options}
                             labelField="label"
                             valueField="value"
-                            placeholder={t("gender")}
+                            placeholder={"Mức độ"}
                             value={selectedValue}
                             onChange={item => {
-                              setFieldValue('gender', item.value)
+                              setFieldValue('priority', item.value)
                               setSelectedValue(item.value)
                             }}
                             renderItem={item => (

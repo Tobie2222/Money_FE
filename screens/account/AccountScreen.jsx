@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { View, StyleSheet, Image, Text, StatusBar, TouchableOpacity, Modal, FlatList } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -6,29 +6,33 @@ import TabViews from '../../components/TabViews'
 import { useEffect, useState } from 'react'
 import { selectToken, selectUser } from '../../redux/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteAccount, deleteSaving, getAllSaving } from '../../data/Api'
+import { deleteAccount, deleteSaving, getAllSaving, updateAccount } from '../../data/Api'
 import Toast from 'react-native-toast-message'
 import CustomToast from '../../components/CutomToast'
 import { showToastU } from '../../utils/toast'
-import {  selectAccounts, selectRefresh, toggleRefresh } from '../../redux/accountSlice'
+import { selectAccounts, selectRefresh, toggleRefresh } from '../../redux/accountSlice'
 import WidthCurrentSavingAmount from '../../components/WidthCurrentSavingAmount'
 import { getBalance } from '../../redux/accountSelector'
 import Loading from '../../components/Loading'
 import ButtonCom from '../../components/ButtonCom'
-
+import { TextInput } from 'react-native-gesture-handler'
 
 export default function AccountScreen() {
     const [currentTab, setCurrentTab] = useState("Tài khoản")
-    const dispatch=useDispatch()
-    const refresh=useSelector(selectRefresh)
+    const dispatch = useDispatch()
+    const refresh = useSelector(selectRefresh)
     const balance = useSelector(getBalance)
-    const accounts=useSelector(selectAccounts)
+    const accounts = useSelector(selectAccounts)
     const [savings, setSavings] = useState([])
     const user = useSelector(selectUser)
     const token = useSelector(selectToken)
     const [modalVisible, setModalVisible] = useState(false)
-    const [selectId,setSelectId]=useState("")
+    const [modalVisibleEdit, setModalVisibleEdit] = useState(false)
+    const [selectId, setSelectId] = useState("")
     const [loading, setLoading] = useState(false)
+    const [updateNameTran, setUpdateNameTran] = useState("")
+    const [updateDescTran, setUpdateDescTran] = useState("")
+    const [updateAmount, setUpdateAmount] = useState(0)
     const navigation = useNavigation()
     const { t } = useTranslation()
     const handleTabs = (childData) => {
@@ -61,24 +65,24 @@ export default function AccountScreen() {
     }, [token, refresh, currentTab])
     //handle delete
     const handleDelete = async () => {
-        
+
         try {
             if (currentTab === "Tài khoản") {
-                const response=await deleteAccount(selectId,user?.id,{
-                    headers: {
-                        token: `Bearer ${token}`
-                    }
-                }) 
-                if (response.status===200) {
-                    showToastU(response.data.message, "#0866ff", "check", 3000)
-                }
-            } else {
-                const response=await deleteSaving(selectId,user?.id,{
+                const response = await deleteAccount(selectId, user?.id, {
                     headers: {
                         token: `Bearer ${token}`
                     }
                 })
-                if (response.status===200) {
+                if (response.status === 200) {
+                    showToastU(response.data.message, "#0866ff", "check", 3000)
+                }
+            } else {
+                const response = await deleteSaving(selectId, user?.id, {
+                    headers: {
+                        token: `Bearer ${token}`
+                    }
+                })
+                if (response.status === 200) {
                     showToastU(response.data.message, "#0866ff", "check", 3000)
                 }
             }
@@ -89,7 +93,35 @@ export default function AccountScreen() {
             console.log(err)
         }
     }
-    console.log(selectId)
+    const handleUpdateAccount = async () => {
+        setModalVisibleEdit(false)
+        setModalVisible(false)
+        setLoading(true)
+        try {
+            const payload = {
+                account_name: updateNameTran,
+                desc_account: updateDescTran,
+                balance: updateAmount
+            }
+            const response = await updateAccount(selectId, user?.id, payload, {
+                headers: {
+                    token: `Bearer ${token}`
+                }
+            })
+            if (response.status === 200) {
+                showToastU(response.data.message, "#0866ff", "check", 3000)
+                setUpdateNameTran("")
+                setUpdateDescTran("")
+                setUpdateAmount("")
+                console.log("Thành công")
+                dispatch(toggleRefresh())
+            }
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <View className="flex-1 ">
             <StatusBar
@@ -102,6 +134,52 @@ export default function AccountScreen() {
                     }}
                 />
             </View>
+            {/* modal update */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisibleEdit}
+            >
+                <View className="flex-1 justify-center items-center">
+                    {/* black overlay */}
+                    <View className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-50"></View>
+                    <View className="w-[300px] p-[20px] bg-white rounded-[18px] z-10">
+                        <Text className="text-center font-[600] text-[16px] text-textColor ">Bạn có muốn sửa khoản chi này</Text>
+                        <View className="flex flex-col mt-[20px] ">
+                            <TextInput
+                                placeholder='Tên tài khoản'
+                                className="border border-borderColor rounded-[6px] px-[12px] py-[8px] mt-[10px] text-textColor text-[14px]"
+                                value={updateNameTran}
+                                onChangeText={(text) => setUpdateNameTran(text)}
+                            />
+                            <TextInput
+                                placeholder='Mô tả tài khoản'
+                                className="border border-borderColor rounded-[6px] px-[12px] py-[8px] my-[20px] text-textColor text-[14px]"
+                                value={updateDescTran}
+                                onChangeText={(text) => setUpdateDescTran(text)}
+                            />
+                            <TextInput
+                                placeholder='Số tiền'
+                                className="border border-borderColor rounded-[6px] px-[12px] py-[8px] mb-[15px] text-textColor text-[14px]"
+                                value={updateAmount}
+                                onChangeText={(text) => setUpdateAmount(text)}
+                            />
+                            <ButtonCom
+                                text="Lưu"
+                                styleButton="w-full py-[13px] mx-auto bg-[#0084ff] rounded-[18px] "
+                                styleText="text-white text-[16px] leading-[24px] font-[700] text-center"
+                                onPress={() => handleUpdateAccount()}
+                            />
+                            <ButtonCom
+                                text="Quay lại"
+                                styleButton="w-full py-[13px] mt-[10px]  mx-auto bg-primaryColor rounded-[18px] "
+                                styleText="text-white text-[16px] leading-[24px] font-[700] text-center"
+                                onPress={() => setModalVisibleEdit(false)}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -111,8 +189,14 @@ export default function AccountScreen() {
                     {/* black overlay */}
                     <View className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-50"></View>
                     <View className="w-[300px] p-[20px] bg-white rounded-[18px] z-10">
-                        <Text className="text-center font-[600] text-[16px] text-textColor ">{currentTab==="Tài khoản"?"Bạn có muốn xóa tài khoản này ?":"Bạn có muốn xóa tích lũy này ?"}</Text>
+                        <Text className="text-center font-[600] text-[16px] text-textColor ">{currentTab === "Tài khoản" ? "Chức năng ?" : "Bạn có muốn xóa tích lũy này ?"}</Text>
                         <View className="flex flex-col mt-[20px] ">
+                            {currentTab === "Tài khoản" ? (<ButtonCom
+                                text="Sửa"
+                                styleButton="w-full py-[13px] mx-auto bg-[#0866ff] mb-[15px] rounded-[18px] "
+                                styleText="text-white text-[16px] leading-[24px] font-[700] text-center"
+                                onPress={() => setModalVisibleEdit(true)}
+                            />) : null}
                             <ButtonCom
                                 text="xóa"
                                 styleButton="w-full py-[13px] mx-auto bg-warningColor rounded-[18px] "
@@ -243,7 +327,7 @@ export default function AccountScreen() {
                     </View>
                 </View>
             </View>
-            
+
         </View>
     )
 }
