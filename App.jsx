@@ -1,4 +1,4 @@
-import {   View } from 'react-native'
+import { View } from 'react-native'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import StackTab from './navigation/StackTab'
