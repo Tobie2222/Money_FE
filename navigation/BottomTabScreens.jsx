@@ -4,6 +4,9 @@ import  HomeStackScreen  from './HomeStackScreen'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import TransactionStackScreen from './TransactionStackScreen'
 import SettingStackScreen from './SettingStackScreen'
+import AccountStackScreen from './AccountStackScreen'
+import AnalysisStackScreen from './AnalysisStackScreen'
+
 
 const Tab=createMaterialBottomTabNavigator()
 
@@ -25,7 +28,7 @@ export default function BottomTabScreens() {
             screenOptions={{
                 tabBarColor: 'red'
             }}
-        >
+            >
             <Tab.Screen 
                 name="homeStack" 
                 component={HomeStackScreen}
@@ -36,6 +39,26 @@ export default function BottomTabScreens() {
                     ),
                 }}
             />
+              <Tab.Screen 
+                name="analysisStack" component={AnalysisStackScreen}
+                options={{
+                    tabBarLabel: null,
+                    tabBarIcon: ({ color }) => (
+                        <Icon name="bar-chart" color={color} size={26} />
+                    )
+                }}
+            />
+
+            <Tab.Screen 
+                name="accountStack" component={AccountStackScreen}
+                options={{
+                    tabBarLabel: null,
+                    tabBarIcon: ({ color }) => (
+                        <Icon name="credit-card" color={color} size={26} />
+                    )
+                }}
+            />
+
             <Tab.Screen 
                 name="transactionStack" component={TransactionStackScreen}
                 options={{
