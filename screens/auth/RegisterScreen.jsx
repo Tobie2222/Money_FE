@@ -16,11 +16,11 @@ const validationSchema = Yup.object().shape({
     email: Yup.string().email('Email không hợp lệ').required('Email là bắt buộc'),
     password: Yup.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự').required('Mật khẩu là bắt buộc'),
     confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận không khớp').required('Mật khẩu xác nhận là bắt buộc'),
-    sex: Yup.string().required('Giới tính là bắt buộc')
+    gender: Yup.string().required('Giới tính là bắt buộc')
 })
 const options = [
-    { label: 'Male', value: 'male',sex: 'male' },
-    { label: 'Female', value: 'female',sex: 'female' }
+    { label: 'Male', value: 'male',gender: 'male' },
+    { label: 'Female', value: 'female',gender: 'female' }
 ]
 
 export default function RegisterScreen() {
@@ -42,6 +42,7 @@ export default function RegisterScreen() {
         setLoading(true)
         try {
             const response = await register(values)
+            console.log(response)
             if (response.status === 200) {
                 setMessage(response.data.message)
                 navigation.navigate("loginScreen", { registrationSuccess: true ,messageR:response.data.message})
@@ -82,16 +83,16 @@ export default function RegisterScreen() {
                     />
                     <Text className="mx-auto mt-[10px] text-center font-[700] leading-[39px] text-[26px] text-primaryColor w-[300px]"><Text className="text-[#FBBE4A]">M</Text>.app</Text>
                     <Formik
-                        initialValues={{name: '', email: '' ,password:'',confirmPassword: '',sex:''}}
+                        initialValues={{name: '', email: '' ,password:'',confirmPassword: '',gender:''}}
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                     >
                         {({ handleChange, handleBlur, handleSubmit,setFieldValue, values, errors, touched }) => (
                             <View className="w-[330px] flex-col mt-[60px] mx-auto ">
-                                {(touched.name && errors.name) || (touched.email && errors.email) || (touched.password && errors.password) || (touched.confirmPassword && errors.confirmPassword) || (touched.sex && errors.sex) || (err && message) ? (
+                                {(touched.name && errors.name) || (touched.email && errors.email) || (touched.password && errors.password) || (touched.confirmPassword && errors.confirmPassword) || (touched.gender && errors.gender) || (err && message) ? (
                                     <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
                                         <Icon name="exclamation-circle" size={20} color="#EF4E4E" />
-                                        <Text className="text-warningColor ml-[10px]">{errors.name || errors.email || errors.password || errors.confirmPassword || errors.sex || message}</Text>
+                                        <Text className="text-warningColor ml-[10px]">{errors.name || errors.email || errors.password || errors.confirmPassword || errors.gender || message}</Text>
                                     </View>
                                 ):null}
                                 <View className={`w-full flex-row items-center ${focusName===true?"border border-primaryColor ":"border border-borderColor "} px-[16px] py-[16px] bg-[#F5F6F7] rounded-[14px] `}>
@@ -168,12 +169,12 @@ export default function RegisterScreen() {
                                         placeholder={t("gender")}
                                         value={selectedValue}
                                         onChange={item => {
-                                            setFieldValue('sex', item.value)
+                                            setFieldValue('gender', item.value)
                                             setSelectedValue(item.value)
                                         }}
                                         renderItem={item => (
                                             <View className="flex-row items-center gap-[10px] px-[20px] py-[12px] rounded-[14px]">
-                                                <Icon name={`${item.sex}`} size={30} color="#666666" />
+                                                <Icon name={`${item.gender}`} size={30} color="#666666" />
                                                 <Text className="text-textColor ">{item.label}</Text>
                                             </View>
                                         )}

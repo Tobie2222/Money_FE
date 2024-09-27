@@ -69,42 +69,40 @@ export default function CreateUserScreen() {
 
 
     const handleSubmit = async (values) => {
-        setLoading(true)
+        setLoading(true);
         try {
-            const formData = new FormData()
-            formData.append("name", values?.name)
-            formData.append("email", values?.email)
-            formData.append("sex", values?.gender)
-            formData.append("password", values?.password)
-            if (avatar) {
-                formData.append("image", {
-                    uri: avatar,
-                    name: 'image.jpg',
-                    type: 'image/jpeg',
-                })
-            }
-            const response = await createUser(formData, {
+            // Prepare the data in JSON format
+            const data = {
+                name: values.name,
+                email: values.email,
+                sex: values.gender,
+                password: values.password
+            };
+    
+            // API call to create user with JSON data
+            const response = await createUser(data, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    token: `Bearer ${token}`
+                    'Content-Type': 'application/json',
+                    token: `Bearer ${token}`,
                 }
-            })
+            });
+    
             if (response.status === 200) {
-                showToastU(response.data.message, "#0866ff", "check", 3000)
-                setLoading(false)
-                setSelectedValue(t("gender"))
-                setAvatar("https://img.freepik.com/vetores-premium/icone-de-camera-escuro-em-um-dispositivo-de-adesivo-de-cartao-de-vetor-de-simbolo-de-arte-plana-simples-branco_775175-276.jpg")
-                dispatch(toggleRefresh())
+                showToastU(response.data.message, "#0866ff", "check", 3000);
+                setLoading(false);
+                setSelectedValue(t("gender"));
+                setAvatar("https://img.freepik.com/vetores-premium/icone-de-camera-escuro-em-um-dispositivo-de-adesivo-de-cartao-de-vetor-de-simbolo-de-arte-plana-simples-branco_775175-276.jpg");
+                dispatch(toggleRefresh());
             }
         } catch (err) {
-            setLoading(false)
-            setError(true)
+            setLoading(false);
+            setError(true);
             if (err.response) {
-                setMessage(err.response.data.message)
-                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
+                setMessage(err.response.data.message);
+                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000);
             }
         }
-    }
+    };
     return (
         <View className="flex-1 bg-bgAdmin">
             <StatusBar

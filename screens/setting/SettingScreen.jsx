@@ -31,10 +31,14 @@ export default function SettingScreen() {
     const [admin, setAdmin] = useState(false)
 
     useEffect(() => {
+        console.log("tesst")
+        console.log(token)
         if ( token) {
             const decoded = jwtDecode(token)
+            console.log(decoded)
             setAdmin(decoded.isAdmin)
         }
+    
     },[token])
 
     useEffect(() => {

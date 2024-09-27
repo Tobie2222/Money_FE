@@ -36,15 +36,14 @@ export default function CreateAccountScreen() {
 
     const [accountType, setAccountType] = useState('')
     const [valueSelected, setValueSelected] = useState("")
-    console.log(valueSelected)
 
     const formatAccountType = (accTypes) => {
         return accTypes.map((accType) => (
             {
-                id: accType._id,
-                value: accType.account_type_name,
-                label: accType.account_type_name,
-                image: { uri: accType.account_type_image }
+                id: accType.account_types_id,
+                value: accType.account_types_name,
+                label: accType.account_types_name,
+                image: { uri: accType.account_types_image }
             }
         ))
     }
@@ -54,15 +53,13 @@ export default function CreateAccountScreen() {
     useEffect(() => {
         const getAllAccountsTypes = async () => {
             try {
-                const response = await getAllAccountType(user?.id, {
+                const response = await getAllAccountType(user?.user_id, {
                     headers: {
                         token: `bearer ${token}`
                     }
                 })
                 if (response.status === 200) {
-                    console.log(response.data)
                     const formattedAccountType = formatAccountType(response.data.allAccountType)
-                    console.log(formattedAccountType)
                     setAllAccountTypes(formattedAccountType)
                     if (formattedAccountType.length > 0) {
                         setAccountType(formattedAccountType[0].value)
@@ -83,8 +80,7 @@ export default function CreateAccountScreen() {
     const handleSubmit = async (values) => {
         setLoading(true)
         try {
-            console.log(values)
-            const response = await createAccount(valueSelected, user?.id, values,{
+            const response = await createAccount(valueSelected, user?.user_id, values,{
                 headers: {
                     token: `Bearer ${token}`
                 }
@@ -104,6 +100,7 @@ export default function CreateAccountScreen() {
             }
             console.log(err)
         }
+        
     }
 
     return (
@@ -138,14 +135,6 @@ export default function CreateAccountScreen() {
                             {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
                                 <View className="">
                                     <View className="w-full flex-col bg-white rounded-[14px] py-[30px] px-[20px] ">
-                                        {/* {(touched.newPassword && errors.newPassword) || (touched.confirmNewPassword && errors.confirmNewPassword) || (error && message) ? (
-                                        <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
-                                            <Icon name="exclamation-circle" size={20} color="#EF4E4E" />
-                                            <Text className="text-warningColor ml-[10px]">
-                                                {errors.newPassword || errors.confirmNewPassword || message}
-                                            </Text>
-                                        </View>
-                                    ) : null} */}
                                         <View className="w-full flex-col gap-[10px] mt-[5px]">
                                             <Text className="text-[15px] leading-[22px] text-textColor font-[500] ">Tên ví</Text>
                                             <View className={`w-full my-[20px] flex-row  items-center ${focusAccount === true ? "border border-primaryColor " : "border border-borderColor "} px-[16px] py-[12px] bg-white rounded-[8px]`}>

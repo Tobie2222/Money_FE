@@ -8,11 +8,11 @@ const accountSlice = createSlice({
         accounts: [],
         tranThisMonth: {
             tranExpense:{
-                type:"expense",
+                transactions_type:"expense",
                 amount: 0
             },
             tranIncome:{
-                type:"expense",
+                transactions_type:"expense",
                 amount: 0
             },
         }

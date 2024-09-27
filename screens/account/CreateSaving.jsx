@@ -54,65 +54,43 @@ export default function CreateSaving() {
         }
         setShowDatePickerEnd(false)
     }
-    const upLoadImage = async () => {
-        try {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
-            if (status !== 'granted') {
-                return
-            }
-            const result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 1,
-            })
-            if (!result.canceled) {
-                setAvatar(result.assets[0].uri)
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }
     const handleSubmit = async (values) => {
         setLoading(true)
         try {
-            const formData = new FormData()
-            formData.append("saving_name", values.saving_name)
-            formData.append("desc_saving", values.desc_saving)
-            formData.append("goal_amount", values.goal_amount)
-            formData.append("deadline", selectedDateEnd.toISOString())
-            formData.append("saving_date", selectedDateStart.toISOString())
-            if (avatar) {
-                formData.append("image", {
-                    uri: avatar,
-                    name: 'image.jpg',
-                    type: 'image/jpeg',
-                })
-            }
-            const response = await createSaving(user?.id,formData,  {
+            // Prepare the data in JSON format
+            const data = {
+                saving_name: values.saving_name,
+                desc_saving: values.desc_saving,
+                goal_amount: values.goal_amount,
+                deadline: selectedDateEnd.toISOString(),
+                saving_date: selectedDateStart.toISOString(),
+            };
+                
+            // Send the data in JSON format without using FormData
+            const response = await createSaving(user?.user_id, data, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    token: `Bearer ${token}`
+                    'Content-Type': 'application/json',
+                    token: `Bearer ${token}`,
                 }
-            })
+            });
+            
             if (response.status === 200) {
-
-                console.log(response.data.message)
-                showToastU(response.data.message, "#0866ff", "check", 3000)
-                setLoading(false)
-                dispatch(toggleRefresh())
+                console.log(response.data.message);
+                showToastU(response.data.message, "#0866ff", "check", 3000);
+                setLoading(false);
+                dispatch(toggleRefresh());
             }
-            console.log(values)
+            
         } catch (err) {
-            setLoading(false)
-            setError(true)
+            setLoading(false);
+            setError(true);
             if (err.response) {
-                setMessage(err.response.data.message)
-                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
+                setMessage(err.response.data.message);
+                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000);
             }
-            console.log(err)
+            console.log(err);
         }
-    }
+    };
 
     return (
         <View className="flex-1">
@@ -140,21 +118,14 @@ export default function CreateSaving() {
                         <Loading />
                     </View>) : (<View className="px-[20px] mt-[30px] ">
                         <Formik
-                            initialValues={{ saving_name: '', desc_saving: '', goal_amount: '', deadline: '', saving_date: '', image: null }}
+                            initialValues={{ saving_name: '', desc_saving: '', goal_amount: '', deadline: '', saving_date: '' }}
                             validationSchema={validationSchema}
                             onSubmit={(values) => handleSubmit(values)}
                         >
                             {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
                                 <View className="">
                                     <View className="w-full flex-col bg-white rounded-[14px] py-[30px] px-[20px] ">
-                                        {/* {(touched.newPassword && errors.newPassword) || (touched.confirmNewPassword && errors.confirmNewPassword) || (error && message) ? (
-                                        <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
-                                            <Icon name="exclamation-circle" size={20} color="#EF4E4E" />
-                                            <Text className="text-warningColor ml-[10px]">
-                                                {errors.newPassword || errors.confirmNewPassword || message}
-                                            </Text>
-                                        </View>
-                                    ) : null} */}
+
                                         <View className="w-full flex-col gap-[10px] ">
                                             <Text className="text-[15px] leading-[22px] text-textColor font-[500] ">Tên tích lũy</Text>
                                             <View className={`w-full my-[20px] flex-row  items-center ${focusSavingName === true ? "border border-primaryColor " : "border border-borderColor "} px-[16px] py-[12px] bg-white rounded-[8px]`}>
@@ -247,17 +218,6 @@ export default function CreateSaving() {
                                                     onChange={onDateChangeEnd}
                                                 />
                                             )}
-                                        </View>
-
-                                        <View className="w-full flex-col gap-[10px] mt-[10px] ">
-                                            <Text className="text-[15px] leading-[22px] text-textColor font-[500] ">Ảnh </Text>
-                                            <TouchableOpacity activeOpacity={0.8} onPress={upLoadImage} className="w-full h-auto border-[4px] border-primaryColor py-[30px] rounded-[25px] flex-row items-center justify-center">
-                                                <View className="w-[100px] h-[100px]">
-                                                    {
-                                                        avatar !== "" ? (<Image source={{ uri: `${avatar}` }} className="w-full h-full object-cover " />) : (<Icon name='chevron-left' color={"#fff"} size={22} />)
-                                                    }
-                                                </View>
-                                            </TouchableOpacity>
                                         </View>
                                     </View>
                                     <ButtonCom

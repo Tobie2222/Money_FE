@@ -35,22 +35,25 @@ export default function HomeScreen() {
     const [tranExpenseRecent, setTranExpenseRecent] = useState([])
     const [sumTranPrevInMonth, setSumTranPrevInMonth] = useState({
         tranExpense: {
-            type: "expense",
+            transactions_type: "expense",
             amount: 0
         },
         tranIncome: {
-            type: "income",
+            transactions_type: "income",
             amount: 0
         },
     })
     const CompareTran = () => {
-        if (tab === "Tháng này") {
-            return tranThisMonth?.tranExpense?.amount > tranThisMonth?.tranIncome?.amount ? "expense" : "income"
-        } else {
-            return sumTranPrevInMonth?.tranExpense?.amount > sumTranPrevInMonth?.tranIncome?.amount ? "expense" : "income"
-        }
-
-    }
+        const isCurrentMonth = tab === "Tháng này";
+        const currentTran = isCurrentMonth ? tranThisMonth : sumTranPrevInMonth;
+    
+        if (!currentTran) return null; // Trả về null nếu không có dữ liệu
+    
+        const expenseAmount = currentTran.tranExpense.amount;
+        const incomeAmount = currentTran.tranIncome.amount;
+    
+        return expenseAmount > incomeAmount ? "expense" : "income";
+    };
     console.log(CompareTran())
     const maxValue = Math.max(sumTranPrevInMonth.tranExpense.amount, sumTranPrevInMonth.tranIncome.amount)
     const minValue = Math.min(sumTranPrevInMonth.tranExpense.amount, sumTranPrevInMonth.tranIncome.amount)
@@ -60,8 +63,11 @@ export default function HomeScreen() {
         return Array.from({ length: numLabels }, (_, index) => index * interval)
     }
     const calculatePreMonthHeightCol = (minValue, maxValue) => {
-        if (minValue === 0 || maxValue == 0) return 0
-        return minValue / maxValue * 100
+        // Nếu minValue hoặc maxValue bằng 0, trả về 0
+        if (minValue <= 0 || maxValue <= 0) return 0;
+    
+        // Tính toán tỷ lệ chiều cao cột
+        return (minValue / maxValue) * 100;
     };
 
 
@@ -82,11 +88,13 @@ export default function HomeScreen() {
         //get all account
         const getAllAccounts = async () => {
             try {
-                const response = await getAllAccount(user?.id, {
+                const response = await getAllAccount(user?.user_id, {
                     headers: {
                         token: `bearer ${token}`
                     }
                 })
+                console.log('a')
+                console.log(response)
                 if (response.status === 200) {
                     dispatch(getAccounts({
                         accounts: response.data.allAccountByUser
@@ -215,10 +223,10 @@ export default function HomeScreen() {
                             </View>
                             <View className="flex-row justify-between items-center mt-[10px] ">
                                 <View className="flex-row items-center gap-[10px] ">
-                                    <Image
-                                        source={{ uri: `${accounts[0]?.accountType.account_type_image}` }}
-                                        className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor "
-                                    />
+                                <Image
+                                    source={{ uri: accounts[0]?.accountType?.account_types_image || 'https://png.pngtree.com/element_our/20200702/ourmid/pngtree-bank-card-icon-image_2292633.jpg' }}  // Thay 'defaultImageURL' bằng URL hình ảnh mặc định nếu không có hình ảnh
+                                    className="w-[35px] h-[35px] rounded-[100px] object-cover border border-borderColor"
+                                />
                                     <Text className="text-textColor text-[14px] leading-[18px] font-[500]">{t('cash')}</Text>
                                 </View>
                                 <Text className="text-textColor text-[16px] leading-[24px] font-[500]">{accounts[0]?.balance.toLocaleString('vi-VN')} đ</Text>

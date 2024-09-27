@@ -49,17 +49,17 @@ export default function TransactionScreen() {
         return categories.map((cat) => {
             if (func === "Thu tiền") {
                 return {
-                    id: cat._id,
-                    value: cat.income_type_name,
-                    label: cat.income_type_name,
-                    image: { uri: cat.income_type_image }
+                    id: cat.category_id,
+                    value: cat.category_name,
+                    label: cat.category_name,
+                    image: { uri: cat.image }
                 }
             } else {
                 return {
-                    id: cat._id,
-                    value: cat.categories_name,
-                    label: cat.categories_name,
-                    image: { uri: cat.categories_image }
+                    id: cat.category_id,
+                    value: cat.category_name,
+                    label: cat.category_name,
+                    image: { uri: cat.image }
                 }
             }
         })
@@ -67,10 +67,10 @@ export default function TransactionScreen() {
     const formatAccounts = (accounts) => {
         return accounts.map((acc) => (
             {
-                id: acc._id,
+                id: acc.account_id,
                 value: acc.account_name,
                 label: acc.account_name,
-                image: { uri: acc.accountType.account_type_image }
+                //image: { uri: acc.accountType.account_type_image }
             }
         ))
     }
@@ -87,14 +87,14 @@ export default function TransactionScreen() {
         const getAllCategoriesExpenses = async () => {
             setLoading(true)
             try {
-                const response = await getAllCatExpense(user?.id, {
+                const response = await getAllCatExpense(user?.user_id, {
                     headers: {
                         token: `bearer ${token}`
                     }
                 })
                 if (response.status === 200) {
                     setLoading(false)
-                    const formattedCategories = formatCategories(response.data.allCategories)
+                    const formattedCategories = formatCategories(response.data.categories)
                     setCats(formattedCategories)
                     if (formattedCategories.length > 0) {
                         setNameCat(formattedCategories[0].value)
@@ -110,7 +110,8 @@ export default function TransactionScreen() {
         const getAllCategoriesIncomes = async () => {
             setLoading(true)
             try {
-                const response = await getAllCatIncome(user?.id, {
+                console.log("cat")
+                const response = await getAllCatIncome(user?.user_id, {
                     headers: {
                         token: `bearer ${token}`
                     }
@@ -147,7 +148,7 @@ export default function TransactionScreen() {
         try {
             values.transaction_date = selectedDate.toISOString()
             console.log(values)
-            const response = await createTranExpense(valueSelectedAccount,user?.id,valueSelected,values,{
+            const response = await createTranExpense(valueSelectedAccount,user?.user_id,valueSelected,values,{
                 headers: {
                     token: `Bearer ${token}`,
                 }
@@ -173,7 +174,7 @@ export default function TransactionScreen() {
             values.amount = parseFloat(values.amount)
             console.log(typeof values.amount)
             console.log(values)
-            const response = await createTranIncome(valueSelectedAccount,user?.id,valueSelected,values,{
+            const response = await createTranIncome(valueSelectedAccount,user?.user_id,valueSelected,values,{
                 headers: {
                     token: `Bearer ${token}`,
                 }
@@ -247,14 +248,6 @@ export default function TransactionScreen() {
                                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                                     <View className="w-[358px] mt-[45px] mx-auto rounded-[14px] ">
                                         <View className="w-full flex-col bg-white rounded-[14px] py-[30px] px-[20px] ">
-                                            {/* {(touched.email && errors.email) || (touched.password && errors.password) || (error && message) ? (
-                                        <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
-                                            <Icon name="exclamation-circle" size={20} color="#EF4E4E" />
-                                            <Text className="text-warningColor ml-[10px]">
-                                                {errors.email || errors.password || message}
-                                            </Text>
-                                        </View>
-                                    ) : null} */}
                                             <View className="w-full flex-col gap-[10px] ">
                                                 <Text className="text-[15px] leading-[22px] text-textColor font-[500] ">Tên khoản chi</Text>
                                                 <TextInput

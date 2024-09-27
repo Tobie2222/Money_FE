@@ -66,7 +66,7 @@ export default function DepositMoneySavingScreen() {
             values.transaction_date = selectedDate.toISOString()
             values.amount = parseFloat(values.amount)
             console.log(values)
-            const response = await depositsSaving(savingId,valueSelectedAccount,user?.id,values,{
+            const response = await depositsSaving(savingId,valueSelectedAccount,user?.user_id,values,{
                 headers: {
                     token:`Bearer ${token}`
                 }

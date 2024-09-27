@@ -75,7 +75,7 @@ export default function LoginScreen() {
             })
         }
     },[token,user])
-
+    
     
     return (
         <View className="flex-1 bg-white">

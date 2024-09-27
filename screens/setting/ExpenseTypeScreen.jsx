@@ -58,11 +58,14 @@ export default function ExpenseTypeScreen() {
         const getAllCategoriesExpenses = async () => {
             setLoading(true)
             try {
-                const response = await getAllCatExpense(user?.id, {
+                console.log('Loading');
+                const response = await getAllCatExpense(user?.user_id, {
                     headers: {
                         token: `bearer ${token}`
                     }
                 })
+                console.log('a')
+                console.log(response.data.allCategories)
                 if (response.status === 200) {
                     setLoading(false)
                     setCatExpense(response.data.allCategories)
@@ -198,7 +201,7 @@ export default function ExpenseTypeScreen() {
                                                 <View className="flex-row items-center  gap-[15px] ">
                                                     <View className="w-[50px] h-[50px] rounded-[100px] border border-borderColor" >
                                                         <Image
-                                                            source={{ uri: `${item?.categories_image}` }}
+                                                            source={{ uri: `${item?.image}` }}
                                                             className="w-full h-full rounded-[100px] "
                                                         />
                                                     </View>

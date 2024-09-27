@@ -41,8 +41,8 @@ export default function ProfileScreen() {
   const navigation = useNavigation()
 
   const options = [
-    { label: 'Male', value: 'male', sex: 'male' },
-    { label: 'Female', value: 'female', sex: 'female' }
+    { label: 'Male', value: 'male', gender: 'male' },
+    { label: 'Female', value: 'female', gender: 'female' }
   ]
 
 
@@ -65,46 +65,41 @@ export default function ProfileScreen() {
       console.log(err)
     }
   }
-
-
   const handleSubmit = async (values) => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const formData = new FormData()
-      formData.append("name", values?.name)
-      formData.append("email", values?.email)
-      formData.append("sex", values?.sex)
-      if (avatar) {
-        formData.append("image", {
-          uri: avatar,
-          name: 'image.jpg',
-          type: 'image/jpeg',
-        })
-      }
-      const response = await updateUser(user?.id, formData, {
+      const updatedData = {
+        name: values?.name,
+        email: values?.email,
+        gender: values?.gender,
+        avatar: avatar ? avatar : null
+      };
+  
+      const response = await updateUser(user?.user_id, updatedData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           token: `Bearer ${token}`,
         },
-      })
+      });
+  
       if (response.status === 200) {
-        setLoading(false)
-        showToastU(response.data.message, "#0866ff", "check", 3000)
+        setLoading(false);
+        showToastU(response.data.message, "#0866ff", "check", 3000);
         dispatch(updateTsAuth({
           user: response.data.updateUser,
-          token: token
-        }))
-        setAvatar(response.data.updateUser.avatar)
+          token: token,
+        }));
+        setAvatar(response.data.updateUser.avatar);
       }
     } catch (err) {
-      setLoading(false)
-      setError(true)
+      setLoading(false);
+      setError(true);
       if (err.response) {
-        setMessage(err.response.data.message)
-        showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
+        setMessage(err.response.data.message);
+        showToastU(err.response.data.message, "#EF4E4E", "warning", 3000);
       }
     }
-  }
+  };
 
   return (
     <View className="flex-1">
@@ -147,7 +142,7 @@ export default function ProfileScreen() {
               </View>
               <View className="px-[20px] mt-[30px] ">
                 <Formik
-                  initialValues={{ email: '', name: '', sex: '', image: null }}
+                  initialValues={{ email: '', name: '', gender: '', image: null }}
                   validationSchema={validationSchema}
                   onSubmit={(values) => handleSubmit(values)}
                 >
@@ -195,12 +190,12 @@ export default function ProfileScreen() {
                               placeholder={t("gender")}
                               value={selectedValue}
                               onChange={item => {
-                                setFieldValue('sex', item.value)
+                                setFieldValue('gender', item.value)
                                 setSelectedValue(item.value)
                               }}
                               renderItem={item => (
                                 <View className="flex-row items-center gap-[10px] px-[20px] py-[12px] rounded-[14px]">
-                                  <Icon name={`${item.sex}`} size={30} color="#666666" />
+                                  <Icon name={`${item.gender}`} size={30} color="#666666" />
                                   <Text className="text-textColor ">{item.label}</Text>
                                 </View>
                               )}

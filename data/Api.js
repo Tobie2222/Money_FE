@@ -53,7 +53,7 @@ export const getAllAccount=(userId,config)=>HTTP.get(`account/getAllAccount/${us
 //get Account
 export const getAccount=(accountId,userId,config)=>HTTP.get(`account/getDetailAccount/${accountId}/${userId}`,config)
 //create Account
-export const createAccount=(id_accountType,userId,payload,config)=>HTTP.post(`account/createAccount/${id_accountType}/${userId}`,payload,config)
+export const createAccount=(id_accountType,userId,payload,config)=>HTTP.post(`account/creatAccounts/${id_accountType}/${userId}`,payload,config)
 //delete Account
 export const deleteAccount=(accountId,userId,config)=>HTTP.delete(`account/deleteAccount/${accountId}/${userId}`,config)
 //update Account
@@ -65,7 +65,7 @@ export const getBalance=(userId,config)=>HTTP.get(`account/getBalance/${userId}`
 //getAll TranExpense 
 export const getAllTranExpense=(userId,config)=>HTTP.get(`transaction/allTranExpense/${userId}`,config)
 //create TranExpense
-export const createTranExpense=(accountId,userId,catExpenseId,payload,config)=>HTTP.post(`transaction/createExpenseTrans/${accountId}/${userId}/${catExpenseId}`,payload,config)
+export const createTranExpense=(accountId,userId,catExpenseId,payload,config)=>HTTP.post(`transactions/createExpenseTrans/${accountId}/${userId}/${catExpenseId}`,payload,config)
 
 
 //getAll Tran recent

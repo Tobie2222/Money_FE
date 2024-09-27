@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
 
 export default function CreateExpenseTypeScreen() {
     const dispatch=useDispatch()
-    const [avatar, setAvatar] = useState("https://timo.vn/wp-content/uploads/cach-chi-tieu-hop-ly-voi-muc-luong-6-trieu.jpg")
+    const [avatar, setAvatar] = useState("")
     const navigation = useNavigation()
     const user = useSelector(selectUser)
     const token = useSelector(selectToken)
@@ -57,37 +57,33 @@ export default function CreateExpenseTypeScreen() {
 
 
     const handleSubmit = async (values) => {
-        setLoading(true)
+        setLoading(true);
         try {
-            const formData = new FormData()
-            formData.append("categories_name", values?.categories_name)
-            if (avatar) {
-                formData.append("image", {
-                    uri: avatar,
-                    name: 'image.jpg',
-                    type: 'image/jpeg',
-                })
-            }
-            const response = await createCatExpense(user?.id, formData, {
+            const formData = {
+                categories_name: values?.categories_name,
+            };
+    
+            const response = await createCatExpense(user?.user_id, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/json', // JSON request
                     token: `Bearer ${token}`,
                 },
-            })
+            });
+    
             if (response.status === 200) {
-                setLoading(false)
-                showToastU(response.data.message, "#0866ff", "check", 3000)
-                setAvatar("https://timo.vn/wp-content/uploads/cach-chi-tieu-hop-ly-voi-muc-luong-6-trieu.jpg")
-                dispatch(toggleRefresh())
+                setLoading(false);
+                showToastU(response.data.message, "#0866ff", "check", 3000);
+                setAvatar("https://timo.vn/wp-content/uploads/cach-chi-tieu-hop-ly-voi-muc-luong-6-trieu.jpg");
+                dispatch(toggleRefresh());
             }
         } catch (err) {
-            setLoading(false)
+            setLoading(false);
             if (err.response) {
-                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
+                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000);
             }
-            console.log(err)
+            console.log(err);
         }
-    }
+    };
 
     return (
         <View className="flex-1">
@@ -119,14 +115,6 @@ export default function CreateExpenseTypeScreen() {
                         {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
                             <View className="">
                                 <View className="w-full flex-col bg-white rounded-[14px] py-[30px] px-[20px] ">
-                                    {/* {(touched.newPassword && errors.newPassword) || (touched.confirmNewPassword && errors.confirmNewPassword) || (error && message) ? (
-                                    <View className="w-full flex-row items-center justify-center bg-backGroundColorWarning mb-[15px] py-[10px] rounded-[12px]">
-                                        <Icon name="exclamation-circle" size={20} color="#EF4E4E" />
-                                        <Text className="text-warningColor ml-[10px]">
-                                            {errors.newPassword || errors.confirmNewPassword || message}
-                                        </Text>
-                                    </View>
-                                ) : null} */}
                                     <View className="w-full flex-col gap-[10px] mt-[5px]">
                                         <Text className="text-[15px] leading-[22px] text-textColor font-[500] ">Tên danh mục chi tiêu</Text>
                                         <View className={`w-full my-[20px] flex-row  items-center ${focusExpenseType === true ? "border border-primaryColor " : "border border-borderColor "} px-[16px] py-[12px] bg-white rounded-[8px]`}>
@@ -142,14 +130,6 @@ export default function CreateExpenseTypeScreen() {
                                             />
                                         </View>
                                     </View>
-                                    <TouchableOpacity activeOpacity={0.8} onPress={upLoadImage} className="w-full h-auto border-[4px] border-primaryColor py-[30px] rounded-[25px] flex-row items-center justify-center">
-                                        <View className="w-[100px] h-[100px]">
-                                            {
-                                                avatar !== "" ? (<Image source={{ uri: `${avatar}` }} className="w-full h-full object-cover " />) : (<Icon name='chevron-left' color={"#fff"} size={22} />)
-                                            }
-                                        </View>
-
-                                    </TouchableOpacity>
                                 </View>
 
                                 <ButtonCom

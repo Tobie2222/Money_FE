@@ -24,43 +24,41 @@ const validationSchema = Yup.object().shape({
 
 export default function CreateIncomeTypeScreen() {
     const [loading, setLoading] = useState(false)
-    const [avatar, setAvatar] = useState("https://timo.vn/wp-content/uploads/cach-chi-tieu-hop-ly-voi-muc-luong-6-trieu.jpg")
+    const [avatar, setAvatar] = useState("")
     const token = useSelector(selectToken)
     const user = useSelector(selectUser)
     const navigation = useNavigation()
     const [focusIncomeType, setFocusIncomeType] = useState(false)
     const handleSubmit = async (values) => {
-        setLoading(true)
+        setLoading(true);
         try {
-            const formData = new FormData()
-            formData.append("income_type_name", values?.income_type_name)
-            if (avatar) {
-                formData.append("image", {
-                    uri: avatar,
-                    name: 'image.jpg',
-                    type: 'image/jpeg',
-                })
-            }
-            const response = await createCatIncome(user?.id, formData, {
+            // Create the data object directly without using FormData
+            const data = {
+                income_type_name: values?.income_type_name,
+            };
+    
+            // Send the request with the data as JSON
+            const response = await createCatIncome(user?.user_id, data, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/json', // Use JSON for the request
                     token: `Bearer ${token}`,
                 },
-            })
+            });
+    
             if (response.status === 200) {
-                setLoading(false)
-                console.log(response.data)
-                showToastU(response.data.message, "#0866ff", "check", 3000)
-                setAvatar("https://timo.vn/wp-content/uploads/cach-chi-tieu-hop-ly-voi-muc-luong-6-trieu.jpg")
+                setLoading(false);
+                console.log(response.data);
+                showToastU(response.data.message, "#0866ff", "check", 3000);
+                setAvatar(""); // Reset the avatar
             }
         } catch (err) {
-            setLoading(false)
+            setLoading(false);
             if (err.response) {
-                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000)
+                showToastU(err.response.data.message, "#EF4E4E", "warning", 3000);
             }
-            console.log(err)
+            console.log(err);
         }
-    }
+    };
 
 
 
@@ -136,13 +134,6 @@ export default function CreateIncomeTypeScreen() {
                                             />
                                         </View>
                                     </View>
-                                    <TouchableOpacity activeOpacity={0.8} onPress={upLoadImage} className="w-full h-auto border-[4px] border-primaryColor py-[30px] rounded-[25px] flex-row items-center justify-center">
-                                        <View className="w-[100px] h-[100px]">
-                                            {
-                                                avatar !== "" ? (<Image source={{ uri: `${avatar}` }} className="w-full h-full object-cover " />) : (<Icon name='chevron-left' color={"#fff"} size={22} />)
-                                            }
-                                        </View>
-                                    </TouchableOpacity>
                                 </View>
 
                                 <ButtonCom

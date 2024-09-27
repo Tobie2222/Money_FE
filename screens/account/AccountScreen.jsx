@@ -38,7 +38,6 @@ export default function AccountScreen() {
     const handleTabs = (childData) => {
         setCurrentTab(childData)
     }
-    console.log(savings)
     //fetching data
     useEffect(() => {
         const fetchData = async () => {
@@ -46,13 +45,13 @@ export default function AccountScreen() {
             setLoading(true)
             try {
                 if (currentTab === "Tích lũy") {
-                    const savingsResponse = await getAllSaving(user?.id, {
+                    const savingsResponse = await getAllSaving(user?.user_id, {
                         headers: {
                             token: `bearer ${token}`
                         }
                     })
                     if (savingsResponse.status === 200) {
-                        setSavings(savingsResponse.data.allSaving)
+                        setSavings(savingsResponse.data.savings)
                     }
                 }
             } catch (err) {
@@ -253,7 +252,7 @@ export default function AccountScreen() {
                                 <View className="w-[100%] h-[200px] flex justify-center items-center">
                                     <Text className="text-[18px] font-[600] text-iconColor text-center">Không có dữ liệu!</Text>
                                 </View>
-                            ) : currentTab === "Tích lũy" && savings.length === 0 ? (
+                            ) : currentTab === "Tích lũy" && savings.length===0 ? (
                                 <View className="w-[100%] h-[200px] flex justify-center items-center">
                                     <Text className="text-[18px] font-[600] text-iconColor text-center">Không có dữ liệu!</Text>
                                 </View>
@@ -279,7 +278,9 @@ export default function AccountScreen() {
                                                         </View>
                                                         <View className="ml-[10px] flex flex-col items-start">
                                                             <Text className="text-center text-textColor text-[16px] font-[600]">{item?.account_name}</Text>
-                                                            <Text className="text-center mt-[5px] text-clickButton text-[12px] font-[500]">{item?.balance.toLocaleString('vi-VN')} vnđ</Text>
+                                                            <Text className="text-center mt-[5px] text-clickButton text-[12px] font-[500]">
+                                                                {(item?.goal_amount ?? 0).toLocaleString('vi-VN')} vnđ
+                                                            </Text>
                                                         </View>
                                                     </TouchableOpacity>
                                                 ) : (
